@@ -1,14 +1,14 @@
 package ec.edu.ups.coopjam.model;
 
 import java.beans.Transient;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Cliente { 
-	
+public class Cliente implements Serializable { 
 	@Id
 	private String cedula; 
 	private String nombre; 
