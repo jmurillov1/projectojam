@@ -1,11 +1,13 @@
 package ec.edu.ups.coopjam.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Empleado {
+public class Empleado implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +24,9 @@ public class Empleado {
 	private String usuario;
 	private String contrasena;
 
-	
+	public Empleado() {
+		super();
+	}
 	public String getRol() {
 		return rol;
 	}
