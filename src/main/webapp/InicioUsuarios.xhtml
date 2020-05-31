@@ -16,21 +16,18 @@
 			<h:form role="form">
 				<fieldset>
 					<div class="form-group">
-						<h:inputText class="form-control" value="#{loginBean.usuario}" name="email" />
+						<h:inputText class="form-control" value="#{loginBean.usuario}"
+							name="email" />
 					</div>
 					<div class="form-group">
-						<h:inputText class="form-control"  value="#{loginBean.contrasena}" name="password" type="password"/>
+						<h:inputText class="form-control" value="#{loginBean.contrasena}"
+							name="password" type="password" />
 					</div>
-					<div class="checkbox">
-						<label> <input name="remember" type="checkbox"
-							value="Remember Me" />Remember Me
-						</label>
-					</div>
-					<h:commandButton action="#{loginBean.validarUsuario()}" value="INGRESAR" class="btn btn-lg btn-success btn-block"/>
+					<h:commandButton action="#{loginBean.validarUsuario()}"
+						value="INGRESAR" class="btn btn-lg btn-success btn-block" />
+
 				</fieldset>
 			</h:form>
-
-
 		</ui:define>
 	</ui:composition>
 

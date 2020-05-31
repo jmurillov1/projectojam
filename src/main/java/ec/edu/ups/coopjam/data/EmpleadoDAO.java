@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -47,13 +48,19 @@ public class EmpleadoDAO {
 
     }
 	
-	public Empleado obtenerUsuario(String usuario,String contra) {
-		String jpl = "select p from Empleado p Where p.usuario =:usu AND p.contrasena =:contr";
-		Query q = con.createQuery(jpl, Empleado.class);
-		q.setParameter("usu", usuario);
-		q.setParameter("contr", contra);
-		return (Empleado)q.getSingleResult();
-	
+	public Empleado obtenerUsuario(String usuario,String contra) throws Exception {
+		try {
+			String jpl = "select p from Empleado p Where p.usuario =:usu AND p.contrasena =:contr";
+			Query q = con.createQuery(jpl, Empleado.class);
+			q.setParameter("usu", usuario);
+			q.setParameter("contr", contra);
+			return (Empleado)q.getSingleResult();
+			
+		} catch (NoResultException e) {
+			//System.out.println(e.getMessage());
+			 throw new Exception("Credenciaales Inocorrectas"); 
+		}
+		//return null;
 	}
 
 

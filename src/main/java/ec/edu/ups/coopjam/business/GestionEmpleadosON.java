@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.model.Empleado;
@@ -80,10 +81,18 @@ public class GestionEmpleadosON {
 		return empleadoDAO.obtener();
 	}
 	
-	public Empleado usuario(String usuario,String contra) {
-		return empleadoDAO.obtenerUsuario(usuario, contra);
+	public Empleado usuario(String usuario,String contra) throws Exception {
+		try {
+			Empleado em = empleadoDAO.obtenerUsuario(usuario, contra);
+			if (em != null) {
+				return em;
+			}
+		} catch (NoResultException e) {
+			throw new Exception("Credenciales Incorrectas");
+		}
+		return null;
+		
 	}
-	
 	
 
 }
