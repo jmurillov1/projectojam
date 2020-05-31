@@ -46,6 +46,15 @@ public class EmpleadoDAO {
 		con.remove(p);
 
     }
+	
+	public Empleado obtenerUsuario(String usuario,String contra) {
+		String jpl = "select p from Empleado p Where p.usuario =:usu AND p.contrasena =:contr";
+		Query q = con.createQuery(jpl, Empleado.class);
+		q.setParameter("usu", usuario);
+		q.setParameter("contr", contra);
+		return (Empleado)q.getSingleResult();
+	
+	}
 
 
 }

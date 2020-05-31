@@ -79,5 +79,11 @@ public class GestionEmpleadosON {
 	public List<Empleado> listadoEmpleados(){
 		return empleadoDAO.obtener();
 	}
+	
+	public Empleado usuario(String usuario,String contra) {
+		return empleadoDAO.obtenerUsuario(usuario, contra);
+	}
+	
+	
 
 }

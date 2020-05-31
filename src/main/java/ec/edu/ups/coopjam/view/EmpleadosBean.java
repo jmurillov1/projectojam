@@ -26,7 +26,7 @@ public class EmpleadosBean {
 
 	private boolean ced;
 	
-	private List<Empleado> listaEmpleados;
+	private List<Empleado> listaEmpleados;	
 
 	@PostConstruct
 	public void init() {
@@ -82,7 +82,7 @@ public class EmpleadosBean {
 	public void setListaEmpleados(List<Empleado> listaEmpleados) {
 		this.listaEmpleados = listaEmpleados;
 	}
-
+	
 	public String guardarDatos() {
 
 		System.out.println(this.empleado.getCedula() + "   " + this.empleado.getNombre() + cajero + jefeCredito);
@@ -135,5 +135,6 @@ public class EmpleadosBean {
 	public void loadData() {
 		listaEmpleados = empleadoON.listadoEmpleados();
 	}
+	
 
 }
