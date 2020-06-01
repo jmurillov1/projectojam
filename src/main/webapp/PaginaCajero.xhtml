@@ -34,7 +34,7 @@
 											<label>Ingrese Cedula</label>
 											<h:inputText value="#{cajeroBean.cliente.cedula}"
 												maxlength="10" class="form-control">
-												<f:ajax event="blur" render="Datos panel" execute="dep ret #{cajeroBean.cargarTransacciones()}" />
+												<f:ajax event="blur" render="Datos" execute="dep ret" />
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
 											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
