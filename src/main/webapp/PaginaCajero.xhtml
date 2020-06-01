@@ -20,34 +20,36 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
-									<h:form role="form">
+									<h:form role="form" onkeypress="if (event.keyCode == 13) { return false; }">
 										<div class="form-group">
-											<label>Seleccione Tipo de Transaccion</label><br /> <label
-												class="checkbox-inline"> <h:selectBooleanCheckbox
-													value="" />Deposito
-											</label><br /> <label class="checkbox-inline"> <h:selectBooleanCheckbox
-													value="" />Retiro
+											<label>Seleccione Tipo de Transaccion</label><br />
+											 <label	class="checkbox-inline"> 
+											 	<h:selectBooleanCheckbox id="dep" value="#{cajeroBean.deposito}" />Deposito 
+											 </label><br /> 
+											 <label class="checkbox-inline"> 
+											 	<h:selectBooleanCheckbox id="ret" value="#{cajeroBean.retiro}" />Retiro
 											</label><br />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
-											<h:inputText value="#{loginBean.cliente.cedula}"
-												maxlength="10" class="form-control">
-												<f:ajax event="blur" render="Datos" />
+											<h:inputText value="#{cajeroBean.cliente.cedula}"
+												maxlength="10" class="form-control" >
+												<f:ajax event="blur" render="Datos" execute="dep ret" />
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
-											<h:outputText id="Datos" value="#{loginBean.valCedula()}" />
+											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Monto</label>
-											<h:inputText value="#{loginBean.monto}"
+											<h:inputText value="#{cajeroBean.monto}"
 												type="Number" class="form-control">
 												<f:ajax event="blur" render="Monto" />
 											</h:inputText>
-											<br /> <label>Cliente:</label><br />
-											<h:outputText id="Monto" value="#{loginBean.valCedula()}" />
+											<br /> <label>Saldo Cuenta:</label><br />
+											<h:outputText id="Monto" value="#{cajeroBean.valMonto()}" />
 										</div>
-
+										<h:commandButton action="#{cajeroBean.registrar()}" value="REGISTRAR" class="btn btn-default"/>
+										<button type="reset" class="btn btn-default">Limpiar</button>
 									</h:form>
 								</div>
 							</div>
