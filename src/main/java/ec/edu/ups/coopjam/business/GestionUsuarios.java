@@ -1,17 +1,23 @@
 package ec.edu.ups.coopjam.business;
 
+import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import ec.edu.ups.coopjam.data.ClienteDAO;
+import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 
 @Stateless
 public class GestionUsuarios { 
 	@Inject 
 	private ClienteDAO clienteDAO;  
+	@Inject  
+	private CuentaDeAhorroDAO cuentaDeAhorroDAO;
 	
 	public boolean verificarCedula(String ced) {
 		int longitud = 0;
@@ -113,34 +119,49 @@ public class GestionUsuarios {
 		} else {
 			return false;
 		}
-	}
+	} 
 	
-	public void guardarCliente(Cliente c) throws Exception {
+	public String generarNumeroDeCuenta() { 
+	    int numeroInicio= 4040;  
+		List<CuentaDeAhorro> listaCuentas = listaCuentaDeAhorros(); 
+		int numero = listaCuentas.size()+1;
+		String resultado = String.format("%08d",numero);  
+		String resultadoFinal = String.valueOf(numeroInicio) + resultado;
+		return resultadoFinal;
+	} 
+	
+	public static String getUsuario(String cedula, String nombre, String apellido) {
+        String ud = cedula.substring(cedula.length() - 1);
+        String pln = nombre.substring(0, 1);
+        int it = 0;
+        for (int i = 0; i < apellido.length(); i++) {
+            if (apellido.charAt(i) == 32) {
+                it = i;
+            }
+        }
+        String a = apellido.substring(0, it);
+        return pln.toLowerCase() + a.toLowerCase() + ud;
+    }
 
-		if (verificarCedula(c.getCedula())) {
-			try {
-				Cliente cliente = clienteDAO.read(c.getCedula());
-				if (cliente != null) {
-					clienteDAO.update(c);
-				} else {
-					clienteDAO.insert(c);
-				}
-				System.out.println("Insertado");
-			} catch (Exception e) {
-				throw new Exception(e);
-			}
-		} else {
-			throw new Exception("Cedula es incorrecta");
-		}
+    public static String getContraseña() {
+        String simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefjhijklmnopqrstuvwxyz0123456789!#$%&()*+,-./:;<=>?@_";
+
+        int tam = simbolos.length();
+        String clave = "";
+        for (int i = 0; i < 10; i++) {
+            int v = (int) Math.floor(Math.random() * tam + 1);
+            clave += simbolos.charAt(v);
+        }
+        return clave;
+    }
+	
+	public void guardarCliente(Cliente c)  { 
+		clienteDAO.insert(c);
 
 	} 
 	
-	public Cliente buscarCliente(String cedulaCliente)throws Exception {
+	public Cliente buscarCliente(String cedulaCliente) {
 		Cliente cliente = clienteDAO.read(cedulaCliente);
-		if (cliente == null) {
-			throw new Exception("Esta cedula no se encuentra registrada en la base");
-		}
-
 		return cliente;
 	}  
 	 
@@ -153,6 +174,31 @@ public class GestionUsuarios {
 	
 	public List<Cliente> listaClientes(){ 
 		List<Cliente> clientes = clienteDAO.getClientes(); 
+		return clientes;
+	}  
+	
+	public void guardarCuentaDeAhorros(CuentaDeAhorro c) throws Exception { 
+		Cliente cli = c.getCliente();  
+		cli.setUsuario(getUsuario(cli.getCedula(), cli.getNombre(), cli.getApellido())); 
+		cli.setClave(getContraseña()); 
+		c.setCliente(cli);
+		cuentaDeAhorroDAO.insert(c);
+	} 
+	
+	public CuentaDeAhorro buscarCuentaDeAhorro (String numeroCuentaDeAhorro) {
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuentaDeAhorro);
+		return cuentaDeAhorro;
+	}  
+	 
+	public void eliminarCuentaDeAhorro(String numeroCuentaDeAhorro) { 
+		cuentaDeAhorroDAO.delete(numeroCuentaDeAhorro);
+	}
+	public void actualizarCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {  
+		cuentaDeAhorroDAO.update(cuentaDeAhorro);
+	} 
+	
+	public List<CuentaDeAhorro> listaCuentaDeAhorros(){ 
+		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros(); 
 		return clientes;
 	} 
 	
