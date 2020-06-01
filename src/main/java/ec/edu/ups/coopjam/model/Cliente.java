@@ -4,12 +4,14 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class Cliente implements Serializable { 
-	@Id
+	@Id 
+	@Column(name="cedula_cliente")
 	private String cedula; 
 	private String nombre; 
 	private String apellido; 

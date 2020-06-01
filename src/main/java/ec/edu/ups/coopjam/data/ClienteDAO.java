@@ -12,7 +12,7 @@ import ec.edu.ups.coopjam.model.Cliente;
 @Stateless
 public class ClienteDAO {
 	
-	@PersistenceContext
+	@PersistenceContext(name = "coopjamPersistenceUnit") 
 	private EntityManager em;
 
 	public void insert(Cliente c) {
@@ -37,6 +37,6 @@ public class ClienteDAO {
 
 		Query q = em.createQuery(jpql, Cliente.class);
 		return q.getResultList();
-	}
+	} 
 
 }
