@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Empleado;
 
 @Stateless
 public class ClienteDAO {
@@ -38,5 +40,19 @@ public class ClienteDAO {
 		Query q = em.createQuery(jpql, Cliente.class);
 		return q.getResultList();
 	} 
-
+	
+	public Cliente obtenerClienteUsuarioContraseña(String usuario,String contra) throws Exception {
+		try {
+			String jpl = "select c from Cliente c Where c.usuario =:usu AND c.clave =:contr";
+			Query q = em.createQuery(jpl, Cliente.class);
+			q.setParameter("usu", usuario);
+			q.setParameter("contr", contra);
+			return (Cliente)q.getSingleResult();
+			
+		} catch (NoResultException e) {
+			//System.out.println(e.getMessage());
+			 throw new Exception("Credenciaales Inocorrectas"); 
+		}
+		//return null;
+	}
 }
