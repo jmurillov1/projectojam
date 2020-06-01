@@ -8,13 +8,18 @@ import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
+import ec.edu.ups.coopjam.data.TransaccionDAO;
 import ec.edu.ups.coopjam.model.Empleado;
+import ec.edu.ups.coopjam.model.Transaccion;
 
 @Stateless
 public class GestionEmpleadosON {
 
 	@Inject
 	EmpleadoDAO empleadoDAO;
+	
+	@Inject
+	TransaccionDAO transaccionDAO;
 
 	public boolean validadorDeCedula(String cedula) throws Exception {
 		System.out.println(cedula + "    En Metodo ");
@@ -93,6 +98,28 @@ public class GestionEmpleadosON {
 		return null;
 		
 	}
+	
+	public List<Transaccion> listadeTransacciones(String cedula){
+		try {
+			return transaccionDAO.getListaTransacciones(cedula);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public void guardarTransaccion(Transaccion t) throws Exception {
+		
+		try {
+			transaccionDAO.insert(t);
+		} catch (Exception e) {
+			throw new Exception(e.toString());
+		}
+	}
+	
+	
 	
 
 }
