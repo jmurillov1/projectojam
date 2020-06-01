@@ -17,21 +17,14 @@ import ec.edu.ups.coopjam.model.Empleado;
 public class LoginBean {
 	@Inject
 	private GestionEmpleadosON empleadoON;
-	
-	@Inject
-	private GestionUsuarios clienteON;
 
 	private String usuario;
 
 	private String contrasena;
 
-	private Double monto;
-	
-	private Cliente cliente;
 	
 	@PostConstruct
 	public void init() {
-		cliente = new Cliente();
 	}
 
 	public GestionEmpleadosON getEmpleadoON() {
@@ -58,31 +51,6 @@ public class LoginBean {
 		this.contrasena = contrasena;
 	}
 	
-	
-	
-	public GestionUsuarios getClienteON() {
-		return clienteON;
-	}
-
-	public void setClienteON(GestionUsuarios clienteON) {
-		this.clienteON = clienteON;
-	}
-
-	public Double getMonto() {
-		return monto;
-	}
-
-	public void setMonto(Double monto) {
-		this.monto = monto;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
 
 	public String validarUsuario() {
 		Empleado emp;
@@ -113,34 +81,5 @@ public class LoginBean {
 		return null;
 	}
 	
-	
-	public String valCedula() {
-		System.out.println("*-------*"+cliente.getCedula());
-		if (cliente.getCedula() != null) {
-			Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
-			//cliente = usuarioRegistrado;
-			if (usuarioRegistrado != null) {
-				System.out.println("Registrado");
-				String l =(String) (usuarioRegistrado.getNombre() + "    " + usuarioRegistrado.getApellido());
-				return l;
-			}
-		}
-		return " ";
-	}
-	
-	public String valMonto() {
-		System.out.println("*-------*"+cliente.getCedula());
-		if (cliente.getCedula() != null) {
-			Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
-			//cliente = usuarioRegistrado;
-			if (usuarioRegistrado != null) {
-				System.out.println("Registrado");
-				//CuentaDeAhorro = clienteON.buscarCuentaDeAhorro()
-				String l =(String) (usuarioRegistrado.getNombre() + "    " + usuarioRegistrado.getApellido());
-				return l;
-			}
-		}
-		return " ";
-	}
 
 }
