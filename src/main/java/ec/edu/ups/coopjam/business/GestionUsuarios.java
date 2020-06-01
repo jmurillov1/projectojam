@@ -22,15 +22,19 @@ import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
+import ec.edu.ups.coopjam.data.SesionClienteDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.SesionCliente;
 
 @Stateless
 public class GestionUsuarios {
 	@Inject
 	private ClienteDAO clienteDAO;
 	@Inject
-	private CuentaDeAhorroDAO cuentaDeAhorroDAO;
+	private CuentaDeAhorroDAO cuentaDeAhorroDAO; 
+	@Inject  
+	private SesionClienteDAO sesionClienteDAO;
 
 	public boolean verificarCedula(String ced) {
 		int longitud = 0;
@@ -303,6 +307,59 @@ public class GestionUsuarios {
 	public List<CuentaDeAhorro> listaCuentaDeAhorros() {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
+	} 
+	
+	public void guardarSesion(SesionCliente sesionCliente) { 
+			Cliente cli = sesionCliente.getCliente();  
+			String destinatario =cli.getCorreo();
+		if(sesionCliente.getEstado().equalsIgnoreCase("Incorrecto")) {
+			  //A quien le quieres escribir.
+			  
+			  String asunto = "INICIO DE SESION FALLIDA";  
+			  String cuerpo = "JAMVirtual SISTEMA TRANSACCIONAL\n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  + "              Estimado(a): "+cli.getNombre().toUpperCase()+" "+cli.
+			  getApellido().toUpperCase()+"\n" +
+			  "------------------------------------------------------------------------------\n"
+			  +
+			  "COOPERATIVA JAM le informa que el acceso a su cuenta ha sido fallida.    \n"
+			  + "                       Fecha: "+sesionCliente.getFechaSesion()
+			  +"                                     \n" +
+			  "                                                                              \n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  ;  
+			  enviarCorreo(destinatario, asunto, cuerpo); 
+		}else  { 
+			 //A quien le quieres escribir.
+			  
+			  String asunto = "INICIO DE SESION CORRECTA";  
+			  String cuerpo = "JAMVirtual SISTEMA TRANSACCIONAL\n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  + "              Estimado(a): "+cli.getNombre().toUpperCase()+" "+cli.
+			  getApellido().toUpperCase()+"\n" +
+			  "------------------------------------------------------------------------------\n"
+			  +
+			  "COOPERATIVA JAM le informa que el acceso a su cuenta ha sido correcta.    \n"
+			  + "                       Fecha: "+sesionCliente.getFechaSesion()
+			  +"                                     \n" +
+			  "                                                                              \n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  ;  
+			  enviarCorreo(destinatario, asunto, cuerpo); 
+			
+		}
+		
+		sesionClienteDAO.insert(sesionCliente);
+
 	}
+
+	public SesionCliente buscarSesionCliente(int codigoSesionCliente) {
+		return sesionClienteDAO.read(codigoSesionCliente);
+	}
+	
 
 }
