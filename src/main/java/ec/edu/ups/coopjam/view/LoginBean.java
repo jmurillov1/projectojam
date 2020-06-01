@@ -1,5 +1,6 @@
 package ec.edu.ups.coopjam.view;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -20,6 +21,12 @@ public class LoginBean {
 
 	private boolean pasar;
 	
+	private Empleado cliente;
+	
+	@PostConstruct
+	public void init() {
+		cliente = new Empleado();
+	}
 
 	public GestionEmpleadosON getEmpleadoON() {
 		return empleadoON;
@@ -52,6 +59,14 @@ public class LoginBean {
 	public void setPasar(boolean pasar) {
 		this.pasar = pasar;
 	}
+	
+	public Empleado getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Empleado cliente) {
+		this.cliente = cliente;
+	}
 
 	public String validarUsuario() {
 		Empleado emp;
@@ -80,6 +95,36 @@ public class LoginBean {
 			return "InicioUsuarios";
 		}
 		return null;
+	}
+	
+	
+	public String clienteBuscar() {
+		if (cliente.getCedula() != null) {
+			Empleado em = empleadoON.usuarioRegistrado(cliente.getCedula());
+			String l = em.getNombre() +"     "+ em.getApellido();
+			return l;
+		}
+		return " ";
+	}
+	
+	public String valCedula() {
+		System.out.println("*-------*"+cliente.getCedula());
+		if (cliente.getCedula() != null) {
+			Empleado usuarioRegistrado = empleadoON.usuarioRegistrado(cliente.getCedula());
+			//cliente = usuarioRegistrado;
+			if (usuarioRegistrado != null) {
+				System.out.println("Registrado");
+				String l =(String) (usuarioRegistrado.getNombre() + "    " + usuarioRegistrado.getApellido());
+				return l;
+			}
+			try {
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		return " ";	
 	}
 
 }
