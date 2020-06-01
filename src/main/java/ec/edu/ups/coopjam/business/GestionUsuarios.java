@@ -1,11 +1,24 @@
 package ec.edu.ups.coopjam.business;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.management.remote.NotificationResult;
+import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
@@ -13,12 +26,12 @@ import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 
 @Stateless
-public class GestionUsuarios { 
-	@Inject 
-	private ClienteDAO clienteDAO;  
-	@Inject  
+public class GestionUsuarios {
+	@Inject
+	private ClienteDAO clienteDAO;
+	@Inject
 	private CuentaDeAhorroDAO cuentaDeAhorroDAO;
-	
+
 	public boolean verificarCedula(String ced) {
 		int longitud = 0;
 		char digitoN;
@@ -119,94 +132,177 @@ public class GestionUsuarios {
 		} else {
 			return false;
 		}
-	} 
-	
-	public String generarNumeroDeCuenta() { 
-	    int numeroInicio= 4040;  
-		List<CuentaDeAhorro> listaCuentas = listaCuentaDeAhorros(); 
-		int numero = listaCuentas.size()+1;
-		String resultado = String.format("%08d",numero);  
+	}
+
+	public String generarNumeroDeCuenta() {
+		int numeroInicio = 4040;
+		List<CuentaDeAhorro> listaCuentas = listaCuentaDeAhorros();
+		int numero = listaCuentas.size() + 1;
+		String resultado = String.format("%08d", numero);
 		String resultadoFinal = String.valueOf(numeroInicio) + resultado;
 		return resultadoFinal;
-	} 
-	
+	}
+
 	public static String getUsuario(String cedula, String nombre, String apellido) {
-        String ud = cedula.substring(cedula.length() - 1);
-        String pln = nombre.substring(0, 1);
-        int it = 0;
-        for (int i = 0; i < apellido.length(); i++) {
-            if (apellido.charAt(i) == 32) {
-                it = i;
-            }
-        }
-        String a = apellido.substring(0, it);
-        return pln.toLowerCase() + a.toLowerCase() + ud;
-    }
+		System.out.println(cedula);
+		System.out.println(nombre);
+		System.out.println(apellido);
+		String ud = cedula.substring(cedula.length() - 1);
+		String pln = nombre.substring(0, 1);
+		int it = 0;
+		for (int i = 0; i < apellido.length(); i++) {
+			if (apellido.charAt(i) == 32) {
+				it = i;
+			}
+		}
+		String a = "";
+		if (it == 0) {
+			a = apellido.substring(0, apellido.length());
+		} else {
+			a = apellido.substring(0, it);
+		}
+		return pln.toLowerCase() + a.toLowerCase() + ud;
+	}
 
-    public static String getContraseña() {
-        String simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefjhijklmnopqrstuvwxyz0123456789!#$%&()*+,-./:;<=>?@_";
+	public static String getContraseña() {
+		String simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefjhijklmnopqrstuvwxyz0123456789!#$%&()*+,-./:;<=>?@_";
 
-        int tam = simbolos.length();
-        String clave = "";
-        for (int i = 0; i < 10; i++) {
-            int v = (int) Math.floor(Math.random() * tam + 1);
-            clave += simbolos.charAt(v);
-        }
-        return clave;
-    }
-	
-	public void guardarCliente(Cliente c)  { 
+		int tam = simbolos.length() - 1;
+		System.out.println(tam);
+		String clave = "";
+		for (int i = 0; i < 10; i++) {
+			int v = (int) Math.floor(Math.random() * tam + 1);
+			clave += simbolos.charAt(v);
+		}
+
+		return clave;
+	}
+
+	public static void enviarCorreo(String destinatario, String asunto, String cuerpo) {
+		Properties propiedad = new Properties();
+		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
+		propiedad.setProperty("mail.smtp.starttls.enable", "true");
+		propiedad.setProperty("mail.smtp.port", "587");
+
+		Session sesion = Session.getDefaultInstance(propiedad);
+		String correoEnvia = "cooperativajam@gmail.com";
+		String contrasena = "ZJRIcfjy1719";
+
+		MimeMessage mail = new MimeMessage(sesion);
+		try {
+			mail.setFrom("Cooperativa JAM <" + correoEnvia + ">");
+			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+			mail.setSubject(asunto);
+			mail.setText(cuerpo);
+
+			Transport transportar = sesion.getTransport("smtp");
+			transportar.connect(correoEnvia, contrasena);
+			transportar.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
+		} catch (AddressException ex) {
+			System.out.println(ex.getMessage());
+		} catch (MessagingException ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+
+	public static String fecha() {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return hourdateFormat.format(date);
+	}
+
+	public void guardarCliente(Cliente c) {
 		clienteDAO.insert(c);
 
-	} 
-	
+	}
+
 	public Cliente buscarCliente(String cedulaCliente) {
 		Cliente cliente = clienteDAO.read(cedulaCliente);
 		return cliente;
-	}  
-	 
-	public void eliminarCliente(String cedulaCliente) { 
+	}
+
+	public Cliente buscarClienteUsuarioContraseña(String usuario, String contraseña) {
+		try {
+			return clienteDAO.obtenerClienteUsuarioContraseña(usuario, contraseña);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void eliminarCliente(String cedulaCliente) {
 		clienteDAO.delete(cedulaCliente);
 	}
-	public void actualizarCliente(Cliente cliente) {  
+
+	public void actualizarCliente(Cliente cliente) {
 		clienteDAO.update(cliente);
-	} 
-	
-	public List<Cliente> listaClientes(){ 
-		List<Cliente> clientes = clienteDAO.getClientes(); 
+	}
+
+	public List<Cliente> listaClientes() {
+		List<Cliente> clientes = clienteDAO.getClientes();
 		return clientes;
-	}  
-	
-	public void guardarCuentaDeAhorros(CuentaDeAhorro c) throws Exception { 
-		Cliente cli = c.getCliente();  
-		cli.setUsuario(getUsuario(cli.getCedula(), cli.getNombre(), cli.getApellido())); 
-		cli.setClave(getContraseña()); 
-		c.setCliente(cli);
-		cuentaDeAhorroDAO.insert(c);
-	} 
-	
-	public CuentaDeAhorro buscarCuentaDeAhorro (String numeroCuentaDeAhorro) {
+	}
+
+	public void guardarCuentaDeAhorros(CuentaDeAhorro c) { 
+		Cliente cliente = clienteDAO.read(c.getCliente().getCedula());  
+		if(cliente == null) {  
+			  Cliente cli = c.getCliente();  
+			  String usuario =getUsuario(cli.getCedula(), cli.getNombre(), cli.getApellido()); String
+			  contraseña = getContraseña(); cli.setUsuario(usuario);
+			  cli.setClave(contraseña); c.setCliente(cli); String destinatario =
+			  cli.getCorreo(); //A quien le quieres escribir.
+			  
+			  String asunto = "CREACION DE USUARIO"; String cuerpo =
+			  "JAMVirtual                                               SISTEMA TRANSACCIONAL\n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  + "              Estimado(a): "+cli.getNombre().toUpperCase()+" "+cli.
+			  getApellido().toUpperCase()+"\n" +
+			  "------------------------------------------------------------------------------\n"
+			  +
+			  "COOPERATIVA JAM le informa que el usuario ha sido habilitado exitosamente.    \n"
+			  +
+			  "                                                                              \n"
+			  + "                       Su usuario es : "+ usuario
+			  +"                          \n" +
+			  "                   	Su clave de acceso es:   "+
+			  contraseña+"               \n" + "                       Fecha: "+fecha()
+			  +"                                     \n" +
+			  "                                                                              \n"
+			  +
+			  "------------------------------------------------------------------------------\n"
+			  ;  
+			  enviarCorreo(destinatario, asunto, cuerpo);  
+			  cuentaDeAhorroDAO.insert(c); 
+		}
+		
+	}
+		 
+
+
+	public CuentaDeAhorro buscarCuentaDeAhorro(String numeroCuentaDeAhorro) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuentaDeAhorro);
 		return cuentaDeAhorro;
-	}   
-	
-	public CuentaDeAhorro buscarCuentaDeAhorroCliente (String cedulaCliente) {
+	}
+
+	public CuentaDeAhorro buscarCuentaDeAhorroCliente(String cedulaCliente) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedulaCliente);
 		return cuentaDeAhorro;
-	} 
-	 
-	public void eliminarCuentaDeAhorro(String numeroCuentaDeAhorro) { 
+
+	}
+
+	public void eliminarCuentaDeAhorro(String numeroCuentaDeAhorro) {
 		cuentaDeAhorroDAO.delete(numeroCuentaDeAhorro);
 	}
-	public void actualizarCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {  
+
+	public void actualizarCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
 		cuentaDeAhorroDAO.update(cuentaDeAhorro);
-	} 
-	
-	public List<CuentaDeAhorro> listaCuentaDeAhorros(){ 
-		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros(); 
+	}
+
+	public List<CuentaDeAhorro> listaCuentaDeAhorros() {
+		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
-	} 
-	
-	
+	}
 
 }

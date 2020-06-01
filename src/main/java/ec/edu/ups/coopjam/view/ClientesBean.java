@@ -1,6 +1,7 @@
 package ec.edu.ups.coopjam.view;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -19,11 +20,13 @@ public class ClientesBean {
 	private GestionUsuarios gestionUsuarios;
 	private Cliente cliente;  
 	private String numeroCuenta;
-	private CuentaDeAhorro cuentaDeAhorro; 
+	private CuentaDeAhorro cuentaDeAhorro;  
+	private List<Cliente> lstClientes;
 	
 
 	@PostConstruct
-	private void iniciar() { 
+	private void iniciar() {  
+		listarClientes();
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente();
 	}
@@ -59,6 +62,16 @@ public class ClientesBean {
 
 	public void setCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
 		this.cuentaDeAhorro = cuentaDeAhorro;
+	} 
+	
+	
+
+	public List<Cliente> getLstClientes() {
+		return lstClientes;
+	}
+
+	public void setLstClientes(List<Cliente> lstClientes) {
+		this.lstClientes = lstClientes;
 	}
 
 	public String crearCliente() {
@@ -103,7 +116,7 @@ public class ClientesBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return "CrearCliente";
 	} 
 	
 	public String obtenerCuenta() {  
@@ -113,4 +126,8 @@ public class ClientesBean {
 		return null;
 	}
 
+	
+	public void listarClientes() {
+		lstClientes = gestionUsuarios.listaClientes();
+	}
 }
