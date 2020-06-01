@@ -22,22 +22,32 @@
 								<div class="col-lg-6">
 									<h:form role="form">
 										<div class="form-group">
-											<label>Seleccione Tipo de Transaccion</label><br/>
-											<label class="checkbox-inline"> 
-												<h:selectBooleanCheckbox value="" />Deposito
-											</label><br/>  
-											<label class="checkbox-inline">
-												<h:selectBooleanCheckbox value="" />Retiro
-											</label><br/>
+											<label>Seleccione Tipo de Transaccion</label><br /> <label
+												class="checkbox-inline"> <h:selectBooleanCheckbox
+													value="" />Deposito
+											</label><br /> <label class="checkbox-inline"> <h:selectBooleanCheckbox
+													value="" />Retiro
+											</label><br />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
-											<h:inputText value="#{loginBean.cliente.cedula}" maxlength="10" class="form-control">
-											<f:ajax event="blur" render="Datos"/>
-											</h:inputText><br/>
-											<label>Cliente:</label><br/>
-											<h:outputText id="Datos" value="#{loginBean.valCedula()}"/>
+											<h:inputText value="#{loginBean.cliente.cedula}"
+												maxlength="10" class="form-control">
+												<f:ajax event="blur" render="Datos" />
+											</h:inputText>
+											<br /> <label>Cliente:</label><br />
+											<h:outputText id="Datos" value="#{loginBean.valCedula()}" />
 										</div>
+										<div class="form-group">
+											<label>Ingrese Monto</label>
+											<h:inputText value="#{loginBean.monto}"
+												type="Number" class="form-control">
+												<f:ajax event="blur" render="Monto" />
+											</h:inputText>
+											<br /> <label>Cliente:</label><br />
+											<h:outputText id="Monto" value="#{loginBean.valCedula()}" />
+										</div>
+
 									</h:form>
 								</div>
 							</div>
