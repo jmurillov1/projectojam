@@ -104,6 +104,13 @@ public class ClientesBean {
 			e.printStackTrace();
 		}
 		return null;
+	} 
+	
+	public String obtenerCuenta() {  
+		CuentaDeAhorro cuenta = gestionUsuarios.buscarCuentaDeAhorroCliente("0105011399"); 
+		System.out.println(cuenta.getNumeroCuentaDeAhorro());  
+		System.out.println(cuenta.getSaldoCuentaDeAhorro()); 
+		return null;
 	}
 
 }
