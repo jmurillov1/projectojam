@@ -188,7 +188,12 @@ public class GestionUsuarios {
 	public CuentaDeAhorro buscarCuentaDeAhorro (String numeroCuentaDeAhorro) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuentaDeAhorro);
 		return cuentaDeAhorro;
-	}  
+	}   
+	
+	public CuentaDeAhorro buscarCuentaDeAhorroCliente (String cedulaCliente) {
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedulaCliente);
+		return cuentaDeAhorro;
+	} 
 	 
 	public void eliminarCuentaDeAhorro(String numeroCuentaDeAhorro) { 
 		cuentaDeAhorroDAO.delete(numeroCuentaDeAhorro);
