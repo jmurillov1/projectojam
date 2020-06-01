@@ -95,7 +95,6 @@ public class EmpleadosBean {
 				empleado.setRol("JefeCredito");
 				empleadoON.guardarEmpleado(empleado);
 			}
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
