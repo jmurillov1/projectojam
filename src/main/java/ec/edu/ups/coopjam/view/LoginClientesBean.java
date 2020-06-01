@@ -74,7 +74,7 @@ public class LoginClientesBean {
 				gestionUsuarios.guardarSesion(sesionCliente);
 				try {
 					FacesContext contex = FacesContext.getCurrentInstance();
-					contex.getExternalContext().redirect("PaginaPrincipalCliente.xhtml");
+					contex.getExternalContext().redirect("PaginaPrincipalCliente.xhtml?faces-redirect=true&cedula="+c.getCedula());
 				} catch (Exception e) {
 				}
 			}else if(c.getUsuario().equalsIgnoreCase(usuario)) {  

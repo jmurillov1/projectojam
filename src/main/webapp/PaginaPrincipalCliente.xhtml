@@ -4,12 +4,40 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
-<h:head></h:head>
+<h:head>
+	<f:metadata>
+		<f:viewParam name="cedula" value="#{clientesBean.cedulaParametro}"></f:viewParam>
+	</f:metadata>
+</h:head>
 <h:body>
 	<ui:composition template="template/templateCliente.xhtml">
-		<ui:define name="title"> Listados </ui:define>
+		<ui:define name="title"> Resumen Cuenta </ui:define>
 		<ui:define name="content">
+			<h:form>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<h:dataTable value="#{clientesBean.buscarCuentaDeAhorro}" var="cuenta" class="table">
+							<h:column>
+								<f:facet name="header">Numero De Cuenta</f:facet>
+								#{cuenta.numeroCuentaDeAhorro}
+							</h:column>
+							<h:column>
+								<f:facet name="header">Propietario</f:facet>
+								#{cuenta.cliente.nombre}
+							</h:column>
+							<h:column>
+								<f:facet name="header">Fecha Ultima Transaccion</f:facet>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Saldo</f:facet>
+								#{cuenta.saldoCuentaDeAhorro}
+							</h:column>
+						</h:dataTable>
+					</div>
+				</div>
+			</h:form>
 
+			
 		</ui:define>
 	</ui:composition>
 </h:body>

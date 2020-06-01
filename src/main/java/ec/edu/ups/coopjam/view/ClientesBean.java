@@ -20,7 +20,9 @@ public class ClientesBean {
 	private GestionUsuarios gestionUsuarios;
 	private Cliente cliente;  
 	private String numeroCuenta;
-	private CuentaDeAhorro cuentaDeAhorro;  
+	private CuentaDeAhorro cuentaDeAhorro;    
+	private CuentaDeAhorro buscarCuentaDeAhorro;
+	private String cedulaParametro;
 	private List<Cliente> lstClientes;
 	
 
@@ -65,6 +67,30 @@ public class ClientesBean {
 	} 
 	
 	
+	
+	public CuentaDeAhorro getBuscarCuentaDeAhorro() {
+		return buscarCuentaDeAhorro;
+	}
+
+	public void setBuscarCuentaDeAhorro(CuentaDeAhorro buscarCuentaDeAhorro) {
+		this.buscarCuentaDeAhorro = buscarCuentaDeAhorro;
+	}
+
+	public String getCedulaParametro() {
+		return cedulaParametro;
+	}
+
+	public void setCedulaParametro(String cedulaParametro) {
+		this.cedulaParametro = cedulaParametro; 
+		if(cedulaParametro!=null) { 
+			try { 
+				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro); 
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+	}
 
 	public List<Cliente> getLstClientes() {
 		return lstClientes;
@@ -117,15 +143,7 @@ public class ClientesBean {
 			e.printStackTrace();
 		}
 		return "CrearCliente";
-	} 
-	
-	public String obtenerCuenta() {  
-		CuentaDeAhorro cuenta = gestionUsuarios.buscarCuentaDeAhorroCliente("0105011399"); 
-		System.out.println(cuenta.getNumeroCuentaDeAhorro());  
-		System.out.println(cuenta.getSaldoCuentaDeAhorro()); 
-		return null;
-	}
-
+	} 	
 	
 	public void listarClientes() {
 		lstClientes = gestionUsuarios.listaClientes();
