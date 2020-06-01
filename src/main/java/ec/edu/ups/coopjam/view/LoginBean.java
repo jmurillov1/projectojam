@@ -7,6 +7,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import ec.edu.ups.coopjam.business.GestionEmpleadosON;
+import ec.edu.ups.coopjam.business.GestionUsuarios;
+import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 
 @ManagedBean
@@ -14,18 +17,21 @@ import ec.edu.ups.coopjam.model.Empleado;
 public class LoginBean {
 	@Inject
 	private GestionEmpleadosON empleadoON;
+	
+	@Inject
+	private GestionUsuarios clienteON;
 
 	private String usuario;
 
 	private String contrasena;
 
-	private boolean pasar;
+	private Double monto;
 	
-	private Empleado cliente;
+	private Cliente cliente;
 	
 	@PostConstruct
 	public void init() {
-		cliente = new Empleado();
+		cliente = new Cliente();
 	}
 
 	public GestionEmpleadosON getEmpleadoON() {
@@ -51,20 +57,30 @@ public class LoginBean {
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
-
-	public boolean isPasar() {
-		return pasar;
-	}
-
-	public void setPasar(boolean pasar) {
-		this.pasar = pasar;
-	}
 	
-	public Empleado getCliente() {
+	
+	
+	public GestionUsuarios getClienteON() {
+		return clienteON;
+	}
+
+	public void setClienteON(GestionUsuarios clienteON) {
+		this.clienteON = clienteON;
+	}
+
+	public Double getMonto() {
+		return monto;
+	}
+
+	public void setMonto(Double monto) {
+		this.monto = monto;
+	}
+
+	public Cliente getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Empleado cliente) {
+	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
@@ -98,33 +114,33 @@ public class LoginBean {
 	}
 	
 	
-	public String clienteBuscar() {
-		if (cliente.getCedula() != null) {
-			Empleado em = empleadoON.usuarioRegistrado(cliente.getCedula());
-			String l = em.getNombre() +"     "+ em.getApellido();
-			return l;
-		}
-		return " ";
-	}
-	
 	public String valCedula() {
 		System.out.println("*-------*"+cliente.getCedula());
 		if (cliente.getCedula() != null) {
-			Empleado usuarioRegistrado = empleadoON.usuarioRegistrado(cliente.getCedula());
+			Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
 			//cliente = usuarioRegistrado;
 			if (usuarioRegistrado != null) {
 				System.out.println("Registrado");
 				String l =(String) (usuarioRegistrado.getNombre() + "    " + usuarioRegistrado.getApellido());
 				return l;
 			}
-			try {
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+		}
+		return " ";
+	}
+	
+	public String valMonto() {
+		System.out.println("*-------*"+cliente.getCedula());
+		if (cliente.getCedula() != null) {
+			Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
+			//cliente = usuarioRegistrado;
+			if (usuarioRegistrado != null) {
+				System.out.println("Registrado");
+				//CuentaDeAhorro = clienteON.buscarCuentaDeAhorro()
+				String l =(String) (usuarioRegistrado.getNombre() + "    " + usuarioRegistrado.getApellido());
+				return l;
 			}
 		}
-		return " ";	
+		return " ";
 	}
 
 }
