@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.SesionCliente;
 
 @Stateless
@@ -36,5 +37,12 @@ public class SesionClienteDAO {
 
 		Query q = em.createQuery(jpql, SesionCliente.class);
 		return q.getResultList();
-	} 
+	}  
+	
+	public List<SesionCliente> obtenerSesionCliente(String cedulaCliente) { 
+		String jpql = "SELECT s FROM SesionCliente s WHERE s.cliente.cedula = :cedulaCliente";
+		Query q = em.createQuery(jpql, SesionCliente.class);  
+		q.setParameter("cedulaCliente",cedulaCliente);
+		return q.getResultList();
+	}
 }

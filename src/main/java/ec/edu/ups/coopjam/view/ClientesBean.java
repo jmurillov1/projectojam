@@ -14,6 +14,7 @@ import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 @ManagedBean
@@ -30,12 +31,14 @@ public class ClientesBean {
 	private CuentaDeAhorro buscarCuentaDeAhorro;
 	private String cedulaParametro;    
 	private Transaccion transaccion; 
-	private List<Cliente> lstClientes;
+	private List<Cliente> lstClientes; 
+	private List<SesionCliente> lstSesionesCliente;
 	
 
 	@PostConstruct
 	private void iniciar() {  
-		listarClientes(); 
+		listarClientes();  
+		obtenerSesiones();
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente(); 
 	}
@@ -91,7 +94,9 @@ public class ClientesBean {
 			try { 
 				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);  
 				List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
-				transaccion = lista.get(lista.size()-1);
+				transaccion = lista.get(lista.size()-1);  
+				/*lstSesionesCliente = gestionUsuarios.obtenerSesionesCliente(cedulaParametro);*/
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -109,6 +114,15 @@ public class ClientesBean {
 
 	public List<Cliente> getLstClientes() {
 		return lstClientes;
+	} 
+	
+
+	public List<SesionCliente> getLstSesionesCliente() {
+		return lstSesionesCliente;
+	}
+
+	public void setLstSesionesCliente(List<SesionCliente> lstSesionesCliente) {
+		this.lstSesionesCliente = lstSesionesCliente;
 	}
 
 	public void setLstClientes(List<Cliente> lstClientes) {
@@ -162,7 +176,11 @@ public class ClientesBean {
 	
 	public void listarClientes() {
 		lstClientes = gestionUsuarios.listaClientes();
-	}  
+	}   
+	
+	public void obtenerSesiones() { 
+		lstSesionesCliente = gestionUsuarios.obtenerSesionesCliente("1101400982");
+	}
 	
 	
 	public String obtenerFecha(Date fecha) {
