@@ -20,13 +20,11 @@ public class EmpleadosBean {
 
 	private Empleado empleado;
 
-	private boolean cajero;
-
-	private boolean jefeCredito;
-
 	private boolean ced;
 	
-	private List<Empleado> listaEmpleados;	
+	private List<Empleado> listaEmpleados;
+	
+	private String tipoEmpleado;
 
 	@PostConstruct
 	public void init() {
@@ -50,22 +48,6 @@ public class EmpleadosBean {
 		this.empleado = empleado;
 	}
 
-	public boolean isCajero() {
-		return cajero;
-	}
-
-	public void setCajero(boolean cajero) {
-		this.cajero = cajero;
-	}
-
-	public boolean isJefeCredito() {
-		return jefeCredito;
-	}
-
-	public void setJefeCredito(boolean jefeCredito) {
-		this.jefeCredito = jefeCredito;
-	}
-
 	public boolean isCed() {
 		return ced;
 	}
@@ -83,15 +65,25 @@ public class EmpleadosBean {
 		this.listaEmpleados = listaEmpleados;
 	}
 	
+	
+	
+	public String getTipoEmpleado() {
+		return tipoEmpleado;
+	}
+
+	public void setTipoEmpleado(String tipoEmpleado) {
+		this.tipoEmpleado = tipoEmpleado;
+	}
+
 	public String guardarDatos() {
 
-		System.out.println(this.empleado.getCedula() + "   " + this.empleado.getNombre() + cajero + jefeCredito);
+		System.out.println(this.empleado.getCedula() + "   " + this.empleado.getNombre() + tipoEmpleado);
 
 		try {
-			if (cajero == true) {
+			if (tipoEmpleado.equalsIgnoreCase("cajero")) {
 				empleado.setRol("Cajero");
 				empleadoON.guardarEmpleado(empleado);
-			} else if (jefeCredito == true) {
+			} else if (tipoEmpleado.equalsIgnoreCase("jefeCredito")) {
 				empleado.setRol("JefeCredito");
 				empleadoON.guardarEmpleado(empleado);
 			}

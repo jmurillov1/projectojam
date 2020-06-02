@@ -28,10 +28,6 @@ public class CajeroBean {
 
 	private Cliente cliente;
 
-	private boolean retiro;
-
-	private boolean deposito;
-
 	private List<Transaccion> listaTra;
 
 	private boolean editable;
@@ -67,21 +63,6 @@ public class CajeroBean {
 		this.cliente = cliente;
 	}
 
-	public boolean isRetiro() {
-		return retiro;
-	}
-
-	public void setRetiro(boolean retiro) {
-		this.retiro = retiro;
-	}
-
-	public boolean isDeposito() {
-		return deposito;
-	}
-
-	public void setDeposito(boolean deposito) {
-		this.deposito = deposito;
-	}
 
 	public GestionEmpleadosON getEmpleadoON() {
 		return empleadoON;
@@ -159,7 +140,7 @@ public class CajeroBean {
 				System.out.println("Registrado");
 				CuentaDeAhorro cl = clienteON.buscarCuentaDeAhorroCliente(cliente.getCedula());
 				String l = String.valueOf(cl.getSaldoCuentaDeAhorro());
-				System.out.println("------MONTO--+++++++++"+ tipoTransaccion + retiro + cl.getSaldoCuentaDeAhorro() + monto);
+				System.out.println("------MONTO--+++++++++"+ tipoTransaccion + cl.getSaldoCuentaDeAhorro() + monto);
 				if (tipoTransaccion.equalsIgnoreCase("retiro") && cl.getSaldoCuentaDeAhorro() < monto) {
 					String ms = "La cuenta no cuenta con el saldo suficiente, Su saldo es: "
 							+ cl.getSaldoCuentaDeAhorro();

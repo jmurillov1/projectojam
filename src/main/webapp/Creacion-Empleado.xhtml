@@ -53,14 +53,13 @@
 											<h:inputText value="#{empleadosBean.empleado.correo}" class="form-control"
 												placeholder="Ingrese Correo" />
 										</div>
+										
 										<div class="form-group">
-											<label>Seleccione Rol de Usuario</label><br/>
-											<label class="checkbox-inline"> 
-												<h:selectBooleanCheckbox value="#{empleadosBean.cajero}" />Cajero
-											</label><br/>  
-											<label class="checkbox-inline">
-												<h:selectBooleanCheckbox value="#{empleadosBean.jefeCredito}" />Jefe de Credito
-											</label><br/>
+											<label>Seleccione Rol de Usuario</label><br /> 
+											<h:selectOneRadio  id="caj" value="#{empleadosBean.tipoEmpleado}">
+                								<f:selectItem itemValue="cajero" itemLabel="Cajero" />
+                								<f:selectItem itemValue="jefeCredito" itemLabel="Jede de Credito" />
+            								</h:selectOneRadio>
 										</div>
 										
 										<div class="form-group">
