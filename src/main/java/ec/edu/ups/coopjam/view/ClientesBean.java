@@ -1,5 +1,7 @@
 package ec.edu.ups.coopjam.view;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ClientesBean {
 	private String numeroCuenta;
 	private CuentaDeAhorro cuentaDeAhorro;    
 	private CuentaDeAhorro buscarCuentaDeAhorro;
-	private String cedulaParametro; 
+	private String cedulaParametro;    
 	private Transaccion transaccion; 
 	private List<Cliente> lstClientes;
 	
@@ -36,7 +38,6 @@ public class ClientesBean {
 		listarClientes(); 
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente(); 
-		obtenerUltimafecha();
 	}
 
 	public Cliente getCliente() {
@@ -71,9 +72,7 @@ public class ClientesBean {
 	public void setCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
 		this.cuentaDeAhorro = cuentaDeAhorro;
 	} 
-	
-	
-	
+
 	public CuentaDeAhorro getBuscarCuentaDeAhorro() {
 		return buscarCuentaDeAhorro;
 	}
@@ -90,7 +89,9 @@ public class ClientesBean {
 		this.cedulaParametro = cedulaParametro; 
 		if(cedulaParametro!=null) { 
 			try { 
-				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro); 
+				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);  
+				List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
+				transaccion = lista.get(lista.size()-1);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -161,13 +162,11 @@ public class ClientesBean {
 	
 	public void listarClientes() {
 		lstClientes = gestionUsuarios.listaClientes();
-	} 
+	}  
 	
 	
-	public String obtenerUltimafecha() {  
-		List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
-		transaccion = lista.get(lista.size()-1);  
-		System.out.println("LA FECHA DE LA TRANSACCION ES : "+ transaccion.getFecha());
-		return null;
+	public String obtenerFecha(Date fecha) {
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return hourdateFormat.format(fecha);
 	}
 }

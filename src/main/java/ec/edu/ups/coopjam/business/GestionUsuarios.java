@@ -217,6 +217,11 @@ public class GestionUsuarios {
 		Date date = new Date();
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(date);
+	} 
+	
+	public static String obtenerFecha(Date fecha) {
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return hourdateFormat.format(fecha);
 	}
 
 	public void guardarCliente(Cliente c) {
@@ -328,7 +333,7 @@ public class GestionUsuarios {
 			  "------------------------------------------------------------------------------\n"
 			  +
 			  "COOPERATIVA JAM le informa que el acceso a su cuenta ha sido fallida.    \n"
-			  + "                       Fecha: "+sesionCliente.getFechaSesion()
+			  + "                       Fecha: "+obtenerFecha(sesionCliente.getFechaSesion())
 			  +"                                     \n" +
 			  "                                                                              \n"
 			  +
@@ -347,7 +352,7 @@ public class GestionUsuarios {
 			  "------------------------------------------------------------------------------\n"
 			  +
 			  "COOPERATIVA JAM le informa que el acceso a su cuenta ha sido correcta.    \n"
-			  + "                       Fecha: "+sesionCliente.getFechaSesion()
+			  + "                       Fecha: "+obtenerFecha(sesionCliente.getFechaSesion())
 			  +"                                     \n" +
 			  "                                                                              \n"
 			  +
