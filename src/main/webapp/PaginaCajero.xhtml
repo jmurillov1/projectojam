@@ -23,12 +23,11 @@
 									<h:form role="form"
 										onkeypress="if (event.keyCode == 13) { return false; }">
 										<div class="form-group">
-											<label>Seleccione Tipo de Transaccion</label><br /> <label
-												class="checkbox-inline"> <h:selectBooleanCheckbox
-													id="dep" value="#{cajeroBean.deposito}" />Deposito
-											</label><br /> <label class="checkbox-inline"> <h:selectBooleanCheckbox
-													id="ret" value="#{cajeroBean.retiro}" />Retiro
-											</label><br />
+											<label>Seleccione Tipo de Transaccion</label><br /> 
+											<h:selectOneRadio value="#{cajeroBean.tipoTransaccion}">
+                								<f:selectItem id="ret" itemValue="retiro" itemLabel="Retiro" />
+                								<f:selectItem id="dep" itemValue="#{cajeroBean.deposito}" itemLabel="Deposito" />
+            								</h:selectOneRadio>
 										</div>
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
@@ -38,6 +37,7 @@
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
 											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
+											
 										</div>
 										<div class="form-group">
 											<label>Ingrese Monto</label>
@@ -50,7 +50,6 @@
 										</div>
 										<h:commandButton action="#{cajeroBean.registrar()}"
 											value="REGISTRAR" class="btn btn-default" />
-										<button type="reset" class="btn btn-default">Limpiar</button>
 									</h:form>
 									
 									
@@ -58,7 +57,7 @@
 									<h:form id="transa" rendered="#{cajeroBean.editable}">
 										<h1>Transacciones</h1>
 
-										<h:dataTable value="#{cajeroBean.listaTra}" var="tras"
+										<h:dataTable value="#{cajeroBean.listaTra}" var="tra"
 											class="table">
 											<h:column>
 												<f:facet name="header">Codigo</f:facet>
@@ -70,9 +69,12 @@
 											</h:column>
 											<h:column>
 												<f:facet name="header">Fecha</f:facet>
-												#{tra.feha}
+												#{tra.fecha}
 											</h:column>
-		
+											<h:column>
+												<f:facet name="header">Tipo</f:facet>
+												#{tra.tipo}
+											</h:column>
 										</h:dataTable>
 									</h:form>
 									</h:panelGroup>

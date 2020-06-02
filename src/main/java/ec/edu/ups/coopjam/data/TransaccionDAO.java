@@ -36,7 +36,7 @@ public class TransaccionDAO {
 
 	public List<Transaccion> getListaTransacciones(String cedula) throws Exception {
 		try {
-			String jpql = "SELECT s FROM SesionCliente s Where s.cliente.cedula =:ced";
+			String jpql = "SELECT s FROM Transaccion s Where s.cliente.cedula =:ced";
 			Query q = em.createQuery(jpql, Transaccion.class);
 			q.setParameter("ced", cedula);
 			return q.getResultList();
