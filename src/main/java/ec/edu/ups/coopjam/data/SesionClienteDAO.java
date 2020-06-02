@@ -39,10 +39,15 @@ public class SesionClienteDAO {
 		return q.getResultList();
 	}  
 	
-	public List<SesionCliente> obtenerSesionCliente(String cedulaCliente) { 
-		String jpql = "SELECT s FROM SesionCliente s WHERE s.cliente.cedula = :cedulaCliente";
-		Query q = em.createQuery(jpql, SesionCliente.class);  
-		q.setParameter("cedulaCliente",cedulaCliente);
-		return q.getResultList();
+	public List<SesionCliente> obtenerSesionCliente(String cedulaCliente) throws Exception { 
+		try {
+			String jpql = "SELECT s FROM SesionCliente s WHERE s.cliente.cedula = :cedulaCliente";
+			Query q = em.createQuery(jpql, SesionCliente.class);  
+			q.setParameter("cedulaCliente",cedulaCliente);
+			return q.getResultList();
+		} catch (Exception e) {
+			throw new Exception("No ha ingresado ni una sola vez");
+		}
+		
 	}
 }

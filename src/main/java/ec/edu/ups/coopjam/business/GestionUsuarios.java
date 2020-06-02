@@ -371,7 +371,12 @@ public class GestionUsuarios {
 	} 
 	
 	public List<SesionCliente> obtenerSesionesCliente(String cedulaCliente){ 
-		return sesionClienteDAO.obtenerSesionCliente(cedulaCliente);
+		try {
+			return sesionClienteDAO.obtenerSesionCliente(cedulaCliente);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
 	}
 	
 	

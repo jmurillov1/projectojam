@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
@@ -93,11 +94,8 @@ public class ClientesBean {
 			try { 
 				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);  
 				List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
-				transaccion = lista.get(lista.size()-1);  
-				/*lstSesionesCliente = gestionUsuarios.obtenerSesionesCliente(cedulaParametro);*/
-				
+				transaccion = lista.get(lista.size()-1);    
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		}
@@ -161,11 +159,17 @@ public class ClientesBean {
 	} 
 	
 	public String crearCuenta() {  
-		cuentaDeAhorro.setNumeroCuentaDeAhorro(numeroCuenta); 
-		cuentaDeAhorro.setFechaDeRegistro(new Date());
-		cuentaDeAhorro.setCliente(cliente); 
-		try {
-			gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro);
+		try {  
+			cuentaDeAhorro.setNumeroCuentaDeAhorro(numeroCuenta); 
+			cuentaDeAhorro.setFechaDeRegistro(new Date());
+			cuentaDeAhorro.setCliente(cliente); 
+			gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro); 
+			Transaccion transaccion = new Transaccion();  
+			transaccion.setFecha(new Date()); 
+			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro()); 
+			transaccion.setTipo("deposito");
+			transaccion.setCliente(cliente); 
+			gestionEmpleadosON.guardarTransaccion(transaccion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -180,6 +184,16 @@ public class ClientesBean {
 	public String obtenerFecha(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(fecha);
-	} 
+	}  
 	
+
+	public List<SesionCliente> cargarSesiones(String cedula) {  
+		System.out.println(cedula);
+		List<SesionCliente> lis = gestionUsuarios.obtenerSesionesCliente(cedulaParametro);
+		if (lis != null) {
+			lstSesionesCliente = lis; 
+			return lstSesionesCliente;
+		}
+		return null;
+	}
 }
