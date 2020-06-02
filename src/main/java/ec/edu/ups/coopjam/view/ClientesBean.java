@@ -8,27 +8,35 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
+import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.Transaccion;
 
 @ManagedBean
 @ViewScoped
 public class ClientesBean {
 
 	@Inject
-	private GestionUsuarios gestionUsuarios;
+	private GestionUsuarios gestionUsuarios;  
+	@Inject 
+	private GestionEmpleadosON gestionEmpleadosON;
 	private Cliente cliente;  
 	private String numeroCuenta;
-	private CuentaDeAhorro cuentaDeAhorro;  
+	private CuentaDeAhorro cuentaDeAhorro;    
+	private CuentaDeAhorro buscarCuentaDeAhorro;
+	private String cedulaParametro; 
+	private Transaccion transaccion; 
 	private List<Cliente> lstClientes;
 	
 
 	@PostConstruct
 	private void iniciar() {  
-		listarClientes();
+		listarClientes(); 
 		cuentaDeAhorro = new CuentaDeAhorro();  
-		cliente = new Cliente();
+		cliente = new Cliente(); 
+		obtenerUltimafecha();
 	}
 
 	public Cliente getCliente() {
@@ -65,6 +73,38 @@ public class ClientesBean {
 	} 
 	
 	
+	
+	public CuentaDeAhorro getBuscarCuentaDeAhorro() {
+		return buscarCuentaDeAhorro;
+	}
+
+	public void setBuscarCuentaDeAhorro(CuentaDeAhorro buscarCuentaDeAhorro) {
+		this.buscarCuentaDeAhorro = buscarCuentaDeAhorro;
+	}
+
+	public String getCedulaParametro() {
+		return cedulaParametro;
+	}
+
+	public void setCedulaParametro(String cedulaParametro) {
+		this.cedulaParametro = cedulaParametro; 
+		if(cedulaParametro!=null) { 
+			try { 
+				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro); 
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+	} 
+	
+	public Transaccion getTransaccion() {
+		return transaccion;
+	}
+
+	public void setTransaccion(Transaccion transaccion) {
+		this.transaccion = transaccion;
+	}
 
 	public List<Cliente> getLstClientes() {
 		return lstClientes;
@@ -117,17 +157,17 @@ public class ClientesBean {
 			e.printStackTrace();
 		}
 		return "CrearCliente";
-	} 
-	
-	public String obtenerCuenta() {  
-		CuentaDeAhorro cuenta = gestionUsuarios.buscarCuentaDeAhorroCliente("0105011399"); 
-		System.out.println(cuenta.getNumeroCuentaDeAhorro());  
-		System.out.println(cuenta.getSaldoCuentaDeAhorro()); 
-		return null;
-	}
-
+	} 	
 	
 	public void listarClientes() {
 		lstClientes = gestionUsuarios.listaClientes();
+	} 
+	
+	
+	public String obtenerUltimafecha() {  
+		List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
+		transaccion = lista.get(lista.size()-1);  
+		System.out.println("LA FECHA DE LA TRANSACCION ES : "+ transaccion.getFecha());
+		return null;
 	}
 }
