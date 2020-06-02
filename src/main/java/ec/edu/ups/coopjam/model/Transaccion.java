@@ -18,7 +18,7 @@ public class Transaccion implements Serializable {
 
 	private Date fecha;
 	private Double monto;
-
+	private String tipo;
 	@OneToOne
 	@JoinColumn(name = "cedula_cliente")
 	private Cliente cliente;
@@ -54,6 +54,16 @@ public class Transaccion implements Serializable {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+	
 	
 	
 
