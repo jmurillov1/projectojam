@@ -23,9 +23,11 @@ import javax.persistence.NoResultException;
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
+import ec.edu.ups.coopjam.data.TransaccionDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.SesionCliente;
+import ec.edu.ups.coopjam.model.Transaccion;
 
 @Stateless
 public class GestionUsuarios {
@@ -34,7 +36,9 @@ public class GestionUsuarios {
 	@Inject
 	private CuentaDeAhorroDAO cuentaDeAhorroDAO; 
 	@Inject  
-	private SesionClienteDAO sesionClienteDAO;
+	private SesionClienteDAO sesionClienteDAO; 
+	@Inject 
+	private TransaccionDAO transaccionDAO;
 
 	public boolean verificarCedula(String ced) {
 		int longitud = 0;
@@ -359,7 +363,10 @@ public class GestionUsuarios {
 
 	public SesionCliente buscarSesionCliente(int codigoSesionCliente) {
 		return sesionClienteDAO.read(codigoSesionCliente);
-	}
+	} 
+	
+	
+	
 	
 
 }
