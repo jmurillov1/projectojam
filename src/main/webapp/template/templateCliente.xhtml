@@ -45,13 +45,11 @@
 						secondtruth <b class="caret"></b>
 				</a>
 					<ul class="dropdown-menu dropdown-user">
-						<li><a href="#"><i class="fa fa-user fa-fw"></i> User
-								Profile</a></li>
-						<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-						</li>
+						<li><a href="AccessosInicioCliente.xhtml"><i class="fa fa-user fa-fw"></i> Perfil de
+								Cliente</a></li>
 						<li class="divider"></li>
 						<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>
-								Logout</a></li>
+								Salir</a></li>
 					</ul></li>
 			</ul>
 			<!-- /.navbar-top-links -->
@@ -75,7 +73,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<h1 class="page-header"><ui:insert name="title" /></h1>
-						<h:outputText value="<ui:insert name='cedula'/>" />
+						#{cedula}
 						<ui:insert name="content" />
 					</div>
 					<!-- /.col-lg-12 -->
