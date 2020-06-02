@@ -175,7 +175,7 @@ public class CajeroBean {
 
 	public String registrar() {
 		CuentaDeAhorro clp = clienteON.buscarCuentaDeAhorroCliente(cliente.getCedula());
-		if (deposito) {
+		if (tipoTransaccion.equalsIgnoreCase("deposito")) {
 			Double nvmonto = clp.getSaldoCuentaDeAhorro() + monto;
 			clp.setSaldoCuentaDeAhorro(nvmonto);
 			clienteON.actualizarCuentaDeAhorro(clp);
@@ -196,7 +196,7 @@ public class CajeroBean {
 				contex.getExternalContext().redirect("PaginaCajero.xhtml");
 			} catch (Exception e) {
 			}
-		} else if (retiro == true && monto <= clp.getSaldoCuentaDeAhorro()) {
+		} else if (tipoTransaccion.equalsIgnoreCase("retiro") && monto <= clp.getSaldoCuentaDeAhorro()) {
 			Double nvmonto2 = clp.getSaldoCuentaDeAhorro() - monto;
 			clp.setSaldoCuentaDeAhorro(nvmonto2);
 			clienteON.actualizarCuentaDeAhorro(clp);

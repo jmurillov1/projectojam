@@ -24,16 +24,16 @@
 										onkeypress="if (event.keyCode == 13) { return false; }">
 										<div class="form-group">
 											<label>Seleccione Tipo de Transaccion</label><br /> 
-											<h:selectOneRadio value="#{cajeroBean.tipoTransaccion}">
-                								<f:selectItem id="ret" itemValue="retiro" itemLabel="Retiro" />
-                								<f:selectItem id="dep" itemValue="#{cajeroBean.deposito}" itemLabel="Deposito" />
+											<h:selectOneRadio  id="caj" value="#{cajeroBean.tipoTransaccion}">
+                								<f:selectItem itemValue="retiro" itemLabel="Retiro" />
+                								<f:selectItem itemValue="deposito" itemLabel="Deposito" />
             								</h:selectOneRadio>
 										</div>
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
 											<h:inputText value="#{cajeroBean.cliente.cedula}"
 												maxlength="10" class="form-control">
-												<f:ajax event="blur" render="Datos panel" execute="dep ret #{cajeroBean.cargarTransacciones()}" />
+												<f:ajax event="blur" render="Datos panel" execute="dep ret caj #{cajeroBean.cargarTransacciones()}" />
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
 											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
