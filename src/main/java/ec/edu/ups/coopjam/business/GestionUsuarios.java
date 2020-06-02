@@ -370,6 +370,9 @@ public class GestionUsuarios {
 		return sesionClienteDAO.read(codigoSesionCliente);
 	} 
 	
+	public List<SesionCliente> obtenerSesionesCliente(String cedulaCliente){ 
+		return sesionClienteDAO.obtenerSesionCliente(cedulaCliente);
+	}
 	
 	
 	
