@@ -6,7 +6,8 @@
 
 <h:head></h:head>
 <h:body>
-	<ui:composition template="template/templateCliente.xhtml">
+	<ui:composition template="template/templateCliente.xhtml"> 
+		<ui:param name="cedula" value="#{clientesBean.cedulaParametro}" />
 		<ui:define name="title"> Datos Usuario </ui:define>
 		<ui:define name="content">
 			<h:form>
