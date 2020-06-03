@@ -28,8 +28,6 @@ public class ClientesBean {
     //Atributos de la clase
 	@Inject
 	private GestionUsuarios gestionUsuarios;  
-	@Inject 
-	private GestionEmpleadosON gestionEmpleadosON;
 	private Cliente cliente;  
 	private String numeroCuenta;
 	private CuentaDeAhorro cuentaDeAhorro;    
@@ -147,7 +145,7 @@ public class ClientesBean {
 		if(cedulaParametro!=null) { 
 			try { 
 				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);  
-				List<Transaccion> lista = gestionEmpleadosON.listadeTransacciones(cedulaParametro); 
+				List<Transaccion> lista = gestionUsuarios.listadeTransacciones(cedulaParametro); 
 				transaccion = lista.get(lista.size()-1);    
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -269,7 +267,7 @@ public class ClientesBean {
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro()); 
 			transaccion.setTipo("deposito");
 			transaccion.setCliente(cliente); 
-			gestionEmpleadosON.guardarTransaccion(transaccion);
+			gestionUsuarios.guardarTransaccion(transaccion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
