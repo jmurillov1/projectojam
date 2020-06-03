@@ -20,7 +20,13 @@ public class GestionEmpleadosON {
 	
 	@Inject
 	TransaccionDAO transaccionDAO;
-
+	
+	/**
+	 * Metodo para validacion
+	 * @param cedula El parmetro cedula sirve para la validacion de la una cedula Ecuatoriana
+	 * @return Si la cedula esta correcta o incorrecta en una variable booleana TRUE o FALSE
+	 * @throws Exception
+	 */
 	public boolean validadorDeCedula(String cedula) throws Exception {
 		System.out.println(cedula + "    En Metodo ");
 		boolean cedulaCorrecta = false;
@@ -63,7 +69,13 @@ public class GestionEmpleadosON {
 		}
 		return cedulaCorrecta;
 	}
-
+	
+	/**
+	 * Metodo para guardar Empleado
+	 * @param empleado El parametro empleado me permite registrarlo en la Base de Datos un Empleado
+	 * @throws SQLException Excepcion para un fallo de ingreso en la base de datos
+	 * @throws Exception Excepcion de registro en la base de datos
+	 */
 	public void guardarEmpleado(Empleado empleado) throws SQLException, Exception {
 
 		if (!validadorDeCedula(empleado.getCedula())) {
@@ -78,14 +90,31 @@ public class GestionEmpleadosON {
 		}
 	}
 	
+	
+	/**
+	 * Metodo para obtener un Empleado
+	 * @param cedula El parametro cedula me permite obtener un Empleado que contenga la cedual igual al parametro
+	 * @return Un Empleado registrado en la Base de Datos
+	 */
 	public Empleado usuarioRegistrado(String cedula) {
 		return empleadoDAO.obtenerEmpleado(cedula);
 	}
 	
+	/**
+	 * Metodo para obtener una Lista de Empleados
+	 * @return La lita con todos los empleado registrados en la Institucion
+	 */
 	public List<Empleado> listadoEmpleados(){
 		return empleadoDAO.obtener();
 	}
 	
+	/**
+	 * Metodo para obtener un Empleado
+	 * @param usuario El parametro usuario me permite obtener un Empleado que contenga el usuario pasado como parametro
+	 * @param contra El parametro contra permite obtener un Empleado que contenga el usuario pasado como parametro
+	 * @return Un Empleado con los usuario y contraseña de acuerdo a los parametros
+	 * @throws Exception Excepcion cuando no se obtiene ningun usuario
+	 */
 	public Empleado usuario(String usuario,String contra) throws Exception {
 		try {
 			Empleado em = empleadoDAO.obtenerUsuario(usuario, contra);
@@ -99,6 +128,12 @@ public class GestionEmpleadosON {
 		
 	}
 	
+	
+	/**
+	 * Metodo para obtener una Lista de Transacciones
+	 * @param cedula El parametro cedula me permite obtener la lista de transacciones de acuedo al parametro
+	 * @return Lista de Transacciones que realizo un Cliente de acuerdo al parametro
+	 */
 	public List<Transaccion> listadeTransacciones(String cedula){
 		try {
 			return transaccionDAO.getListaTransacciones(cedula);
@@ -110,6 +145,11 @@ public class GestionEmpleadosON {
 		
 	}
 	
+	/**
+	 * Metodo para guardad una Transaccion
+	 * @param t El parametro t me permite registrar una Transaccion de acuerdo al parametro
+	 * @throws Exception Excepcion para un fallo en el registro de la Transaccion
+	 */
 	public void guardarTransaccion(Transaccion t) throws Exception {
 		
 		try {
@@ -118,8 +158,6 @@ public class GestionEmpleadosON {
 			throw new Exception(e.toString());
 		}
 	}
-	
-	
 	
 
 }
