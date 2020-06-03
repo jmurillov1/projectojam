@@ -26,9 +26,6 @@ public class CajeroBean {
 	@Inject
 	private GestionUsuarios clienteON;
 
-	@Inject
-	private GestionEmpleadosON empleadoON;
-
 	private Double monto;
 
 	private Cliente cliente;
@@ -82,15 +79,6 @@ public class CajeroBean {
 	 */
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-
-	public GestionEmpleadosON getEmpleadoON() {
-		return empleadoON;
-	}
-
-	public void setEmpleadoON(GestionEmpleadosON empleadoON) {
-		this.empleadoON = empleadoON;
 	}
 	
 	/**
@@ -149,7 +137,7 @@ public class CajeroBean {
 		System.out.println("*-------*" + cliente.getCedula());
 		if (cliente.getCedula() != null) {
 			try {
-				boolean c = empleadoON.validadorDeCedula(cliente.getCedula());
+				boolean c = clienteON.validadorDeCedula(cliente.getCedula());
 				if (c) {
 					Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
 					// cliente = usuarioRegistrado;
@@ -224,7 +212,7 @@ public class CajeroBean {
 			t.setTipo("deposito");
 			try {
 				// editable = false;
-				empleadoON.guardarTransaccion(t);
+				clienteON.guardarTransaccion(t);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
@@ -244,7 +232,7 @@ public class CajeroBean {
 			t2.setFecha(new Date());
 			t2.setTipo("retiro");
 			try {
-				empleadoON.guardarTransaccion(t2);
+				clienteON.guardarTransaccion(t2);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
@@ -264,7 +252,7 @@ public class CajeroBean {
 	 * @return Una lista de transacciones del cliente que va a realizar un Deposito o Retiro
 	 */
 	public String cargarTransacciones() {
-		List<Transaccion> lis = empleadoON.listadeTransacciones(cliente.getCedula());
+		List<Transaccion> lis = clienteON.listadeTransacciones(cliente.getCedula());
 		if (lis != null) {
 			listaTra = lis;
 			editable = true;

@@ -23,7 +23,7 @@ public class GestionEmpleadosON {
 	
 	/**
 	 * Metodo para validacion
-	 * @param cedula El parmetro cedula sirve para la validacion de la una cedula Ecuatoriana
+	 * @param cedula El parmetro cedula sirve para la validacion de la 
 	 * @return Si la cedula esta correcta o incorrecta en una variable booleana TRUE o FALSE
 	 * @throws Exception
 	 */
