@@ -11,7 +11,9 @@
 </h:head>
 <h:body>
 	<ui:composition template="template/templateCliente.xhtml">
-		<ui:define name="title"> Resumen Cuenta </ui:define>
+		<ui:define name="title"> Resumen Cuenta </ui:define> 
+		<ui:param name="ced" value="#{clientesBean.cedulaParametro}" />  
+		<ui:param name="nombre" value="#{clientesBean.cuentaDeAhorro.cliente.nombre}" /> 
 		<ui:define name="content">
 			<h:form>  
 				<div class="panel-body">
@@ -38,8 +40,6 @@
 					</div>
 				</div>
 			</h:form>
-			
-			
 		</ui:define>
 	</ui:composition>
 </h:body>

@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 
 import ec.edu.ups.coopjam.business.GestionEmpleadosON;
@@ -18,7 +18,7 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class ClientesBean {
 
 	@Inject
@@ -38,7 +38,6 @@ public class ClientesBean {
 	@PostConstruct
 	private void iniciar() {  
 		listarClientes();  
-		obtenerSesiones();
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente(); 
 	}
@@ -176,15 +175,11 @@ public class ClientesBean {
 	
 	public void listarClientes() {
 		lstClientes = gestionUsuarios.listaClientes();
-	}   
-	
-	public void obtenerSesiones() { 
-		lstSesionesCliente = gestionUsuarios.obtenerSesionesCliente("1101400982");
-	}
-	
+	}   	
 	
 	public String obtenerFecha(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(fecha);
-	}
+	} 
+	
 }
