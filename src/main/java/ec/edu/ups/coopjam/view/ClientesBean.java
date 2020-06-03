@@ -7,7 +7,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
@@ -22,7 +23,7 @@ import ec.edu.ups.coopjam.model.Transaccion;
  * @version 1.0
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ClientesBean {
     //Atributos de la clase
 	@Inject
@@ -34,7 +35,8 @@ public class ClientesBean {
 	private String cedulaParametro;    
 	private Transaccion transaccion; 
 	private List<Cliente> lstClientes; 
-	private List<SesionCliente> lstSesionesCliente;
+	private List<SesionCliente> lstSesionesCliente; 
+	private String saldoCuenta;
 	
 	/** 
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
@@ -251,6 +253,12 @@ public class ClientesBean {
 		return numeroCuenta;
 	} 
 	
+	public String getSaldoCuenta() {
+		return saldoCuenta;
+	}
+	public void setSaldoCuenta(String saldoCuenta) {
+		this.saldoCuenta = saldoCuenta;
+	}
 	/** 
 	 * Metodo que permite crear la cuenta, cliente y a su vez una transaccion
 	 * @return Pagina que se redirige
@@ -259,14 +267,15 @@ public class ClientesBean {
 		try {  
 			cuentaDeAhorro.setNumeroCuentaDeAhorro(numeroCuenta); 
 			cuentaDeAhorro.setFechaDeRegistro(new Date());
-			cuentaDeAhorro.setCliente(cliente); 
+			cuentaDeAhorro.setCliente(cliente);  
+			cuentaDeAhorro.setSaldoCuentaDeAhorro(Double.parseDouble(saldoCuenta));
 			gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro); 
 			Transaccion transaccion = new Transaccion();  
 			transaccion.setFecha(new Date()); 
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro()); 
 			transaccion.setTipo("deposito");
 			transaccion.setCliente(cliente); 
-			gestionUsuarios.guardarTransaccion(transaccion);
+			gestionUsuarios.guardarTransaccion(transaccion);  
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

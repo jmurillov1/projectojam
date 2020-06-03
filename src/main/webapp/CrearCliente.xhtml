@@ -23,52 +23,111 @@
 
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
-											<h:inputText value="#{clientesBean.cliente.cedula}" maxlenght="10" class="form-control"> 
-												<f:ajax event="blur" render="valueError numeroCuenta"/>
-											</h:inputText> 
-											<h:outputText id="valueError" value="#{clientesBean.validarCedula()}" style="color: red"/>
+											<h:inputText value="#{clientesBean.cliente.cedula}"
+												maxlenght="10" class="form-control">
+												<f:ajax event="blur" render="valueError numeroCuenta" />
+											</h:inputText>
+											<h:outputText id="valueError"
+												value="#{clientesBean.validarCedula()}" style="color: red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Nombre</label>
-											<h:inputText value="#{clientesBean.cliente.nombre}" class="form-control" />
+											<h:inputText id="nombre"
+												value="#{clientesBean.cliente.nombre}" type="text"
+												placeholder="Joe Down"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar minimo dos nombres" label=" ">
+												<f:validateLength maximun="100" />
+												<f:validateRegex pattern="[a-zA-Z0-9]+ [a-zA-Z ]+" />
+											</h:inputText>
+											<h:message for="nombre" style="color:red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Apellido</label>
-											<h:inputText value="#{clientesBean.cliente.apellido}" class="form-control" />
+											<h:inputText id="apellido"
+												value="#{clientesBean.cliente.apellido}" type="text"
+												placeholder="Joe Down"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar minimo dos Apellidos" label=" ">
+												<f:validateLength maximun="100" />
+												<f:validateRegex pattern="[a-zA-Z]+ [a-zA-Z ]+" />
+											</h:inputText>
+											<h:message for="apellido" style="color:red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Direccion</label>
-											<h:inputText value="#{clientesBean.cliente.direccion}" class="form-control" />
+											<h:inputText id="direccion"
+												value="#{clientesBean.cliente.direccion}" type="text"
+												placeholder="Joe Down"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar una Direccion" label=" ">
+												<f:validateLength maximun="100" />
+												<f:validateRegex pattern="[a-zA-Z0-9]+ [a-zA-Z ]+" />
+											</h:inputText>
+											<h:message for="direccion" style="color:red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Telefono</label>
-											<h:inputText value="#{clientesBean.cliente.telefono1}" class="form-control" placeholder="Ingrese Telefono" />
+											<h:inputText id="tel"
+												value="#{clientesBean.cliente.telefono1}" type="text"
+												placeholder="Joe Down"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar Numero" label=" ">
+												<f:validateLength maximun="10" />
+												<f:validateRegex pattern="[0-9]+" />
+											</h:inputText>
+											<h:message for="tel" style="color:red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Telefono</label>
-											<h:inputText value="#{clientesBean.cliente.telefono2}" class="form-control" placeholder="Ingrese Telefono" />
+											<h:inputText id="tel2"
+												value="#{clientesBean.cliente.telefono2}" type="text"
+												placeholder="Joe Down"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar Numero" label=" ">
+												<f:validateLength maximun="10" />
+												<f:validateRegex pattern="[0-9]+" />
+											</h:inputText>
+											<h:message for="tel2" style="color:red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Correo</label>
-											<h:inputText value="#{clientesBean.cliente.correo}" class="form-control" placeholder="Ingrese Correo" />
+											<h:inputText id="corr" value="#{clientesBean.cliente.correo}"
+												type="text" placeholder="email@gmail.com"
+												class="form-control form-control-line" required="true"
+												validatorMessage="Ingresar correo valido" label=" ">
+												<f:validateRegex
+													pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
+											</h:inputText>
+											<h:message for="corr" style="color:red" />
+
 										</div>
 										<div class="row">
 											<div class="col-lg-12">
 												<h1 class="page-header">Cuenta de Ahorros</h1>
 												<div class="form-group">
-													<label>Numero de Cuenta</label> 
-													<br/>
-													<h:outputText id ="numeroCuenta" value="#{clientesBean.generarNumeroCuenta()}" />
-												</div>  
+													<label>Numero de Cuenta</label> <br />
+													<h:outputText id="numeroCuenta"
+														value="#{clientesBean.generarNumeroCuenta()}" />
+												</div>
 												<div class="form-group">
-													<label>Saldo</label>
-													<h:inputText type="number" value ="#{clientesBean.cuentaDeAhorro.saldoCuentaDeAhorro}" class="form-control"/>
+													<label>Saldo</label>  
+													<br/>
+													<h:inputText id="saldo"
+														value="#{clientesBean.saldoCuenta}"
+														placeholder="Joe Down"
+														class="form-control form-control-line" required="true"
+														validatorMessage="Ingresar solo numeros y minimo $10" label=" ">
+														<f:validateLength minimum = "2"/>
+														<f:validateRegex pattern="^[1-9][0-9]+" />
+													</h:inputText>
+													<h:message for="saldo" style="color:red" />	
 												</div>
 											</div>
 											<!-- /.col-lg-12 -->
 										</div>
-										<h:commandButton action="#{clientesBean.crearCuenta()}" value="Guardar" class="btn btn-success"/>
-										<h:commandButton action="#{clientesBean.obtenerCuenta()}" value="Ver" class="btn btn-success"/>
+										<h:commandButton action="#{clientesBean.crearCuenta()}"
+											value="Guardar" class="btn btn-success" />
 									</h:form>
 
 								</div>
