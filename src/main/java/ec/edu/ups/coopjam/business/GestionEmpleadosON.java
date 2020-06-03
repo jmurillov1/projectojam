@@ -23,8 +23,8 @@ public class GestionEmpleadosON {
 	
 	/**
 	 * Metodo para validacion
-	 * @param cedula
-	 * @return
+	 * @param cedula El parmetro cedula sirve para la validacion de la una cedula Ecuatoriana
+	 * @return Si la cedula esta correcta o incorrecta en una variable booleana TRUE o FALSE
 	 * @throws Exception
 	 */
 	public boolean validadorDeCedula(String cedula) throws Exception {
@@ -158,8 +158,6 @@ public class GestionEmpleadosON {
 			throw new Exception(e.toString());
 		}
 	}
-	
-	
 	
 
 }
