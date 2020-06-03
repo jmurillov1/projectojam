@@ -229,11 +229,16 @@ public class ClientesBean {
 			if(cli!=null) {  
 				return "Este cliente ya se encuentra registrado";
 			} 
-			boolean verificar = gestionUsuarios.verificarCedula(cliente.getCedula());
-			if(verificar) { 
-				return "Cedula Valida";
-			}else if(verificar==false) { 
-				return "Cedula Incorrecta";
+			try {
+				boolean verificar = gestionUsuarios.validadorDeCedula(cliente.getCedula()); 
+				if(verificar) { 
+					return "Cedula Valida";
+				}else if(verificar==false) { 
+					return "Cedula Incorrecta";
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}  
 		return " ";
