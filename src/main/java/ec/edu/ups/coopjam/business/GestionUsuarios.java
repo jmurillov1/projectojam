@@ -29,6 +29,11 @@ import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.Transaccion;
 
+/** 
+ * Esta clase me permite hacer diferentes validaciones o metodos necesarios antes de poder realizar las diferentes funciones basicas en la base de datos  
+ * @author ALEX
+ * @version 1.0
+ */
 @Stateless
 public class GestionUsuarios {
 	@Inject
@@ -40,6 +45,11 @@ public class GestionUsuarios {
 	@Inject 
 	private TransaccionDAO transaccionDAO;
 
+	/** 
+	 * Metodo que permite la validacion de una cedula correcta
+	 * @param ced Cedula que se valida
+	 * @return Es correcta o no la cedula
+	 */
 	public boolean verificarCedula(String ced) {
 		int longitud = 0;
 		char digitoN;
@@ -142,6 +152,10 @@ public class GestionUsuarios {
 		}
 	}
 
+	/** 
+	 * Metodo que permite generar una numero de cuenta automatico
+	 * @return Numero de cuenta generado
+	 */
 	public String generarNumeroDeCuenta() {
 		int numeroInicio = 4040;
 		List<CuentaDeAhorro> listaCuentas = listaCuentaDeAhorros();
@@ -150,7 +164,14 @@ public class GestionUsuarios {
 		String resultadoFinal = String.valueOf(numeroInicio) + resultado;
 		return resultadoFinal;
 	}
-
+	
+	/** 
+	 * Metodo que permite generar un usuario aletorio
+	 * @param cedula Cedula del usuario
+	 * @param nombre Nombre del usario
+	 * @param apellido Apellido del usuario
+	 * @return Usuario que se ha creado
+	 */
 	public static String getUsuario(String cedula, String nombre, String apellido) {
 		System.out.println(cedula);
 		System.out.println(nombre);
@@ -171,7 +192,12 @@ public class GestionUsuarios {
 		}
 		return pln.toLowerCase() + a.toLowerCase() + ud;
 	}
-
+	
+	
+	/** 
+	 * Metodo que permite la creacion de una contraseña aleatoria
+	 * @return Contraseña aleatoria
+	 */
 	public static String getContraseña() {
 		String simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefjhijklmnopqrstuvwxyz0123456789!#$%&()*+,-./:;<=>?@_";
 
@@ -184,8 +210,14 @@ public class GestionUsuarios {
 		}
 
 		return clave;
-	}
-
+	} 
+	
+	/** 
+	 * Metodo que permite el envio de un correo
+	 * @param destinatario Destinario que se envia el correo
+	 * @param asunto Asunto del correo
+	 * @param cuerpo Cuerpo del correo
+	 */
 	public static void enviarCorreo(String destinatario, String asunto, String cuerpo) {
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
@@ -212,28 +244,52 @@ public class GestionUsuarios {
 			System.out.println(ex.getMessage());
 		}
 	}
-
+	
+	/** 
+	 * Metodo que permite cambiar el formato de la fecha
+	 * @return Fecha con nuevo formato
+	 */
 	public static String fecha() {
 		Date date = new Date();
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(date);
 	} 
 	
+	/** 
+	 * Metodo que permite cambiar el formato de la fecha
+	 * @param fecha Fecha que se cambiara el formato
+	 * @return
+	 */
 	public static String obtenerFecha(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(fecha);
 	}
-
+	
+	/** 
+	 * Metodo que me permite guardar el cliente en la base de datos
+	 * @param c Cliente que se guarda en la base de datos
+	 */
 	public void guardarCliente(Cliente c) {
 		clienteDAO.insert(c);
 
 	}
-
+	
+	/** 
+	 * Metodo que permite la busqueda de un cliente
+	 * @param cedulaCliente Cedula del cliente que se busca
+	 * @return Cliente obtenido de la busqueda
+	 */
 	public Cliente buscarCliente(String cedulaCliente) {
 		Cliente cliente = clienteDAO.read(cedulaCliente);
 		return cliente;
 	}
-
+	
+	/** 
+	 * Metodo que permite la busqueda del cliente en base a su usuario y contraseña
+	 * @param usuario Usuario del cliente
+	 * @param contraseña Contraseña del cliente
+	 * @return Cliente obtenido de la busqueda
+	 */
 	public Cliente buscarClienteUsuarioContraseña(String usuario, String contraseña) {
 		try {
 			return clienteDAO.obtenerClienteUsuarioContraseña(usuario, contraseña);
@@ -243,20 +299,36 @@ public class GestionUsuarios {
 		}
 		return null;
 	}
-
+	
+	/** 
+	 * Metodo que permite eliminar un cliente
+	 * @param cedulaCliente Cedula del cliente que se elimina
+	 */
 	public void eliminarCliente(String cedulaCliente) {
 		clienteDAO.delete(cedulaCliente);
 	}
-
+	
+	/** 
+	 * Metodo que permite actualizar un cliente 
+	 * @param cliente Cliente que se actualiza
+	 */
 	public void actualizarCliente(Cliente cliente) {
 		clienteDAO.update(cliente);
 	}
-
+	
+	/** 
+	 * Metodo que permite listar los clientes
+	 * @return Lista de todos los clientes 
+	 */
 	public List<Cliente> listaClientes() {
 		List<Cliente> clientes = clienteDAO.getClientes();
 		return clientes;
 	}
-
+	
+	/** 
+	 * Metodo que permite guardar una cuenta de ahorro
+	 * @param c Cuenta de ahorro que se guarda
+	 */
 	public void guardarCuentaDeAhorros(CuentaDeAhorro c) { 
 		Cliente cliente = clienteDAO.read(c.getCliente().getCedula());  
 		if(cliente == null) {  
@@ -292,32 +364,57 @@ public class GestionUsuarios {
 		
 	}
 		 
-
-
+	
+	/** 
+	 * Metodo que permite buscar una cuenta de ahorros
+	 * @param numeroCuentaDeAhorro Numero de la cuenta de ahorros que se desea buscar
+	 * @return Cuenta de ahorros que se obtiende de la busqueda
+	 */
 	public CuentaDeAhorro buscarCuentaDeAhorro(String numeroCuentaDeAhorro) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuentaDeAhorro);
 		return cuentaDeAhorro;
 	}
-
+	
+	/** 
+	 * Metodo que me permite buscar una cuenta de ahorros
+	 * @param cedulaCliente Cedula del cliente de la cuenta de ahorros
+	 * @return Cuenta de ahorro obtenida de la busqueda
+	 */
 	public CuentaDeAhorro buscarCuentaDeAhorroCliente(String cedulaCliente) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedulaCliente);
 		return cuentaDeAhorro;
 
-	}
-
+	} 
+	
+	/** 
+	 * Metodo que me permite eliminar una cuenta de ahorros
+	 * @param numeroCuentaDeAhorro Numero de la cuenta de ahorros que se desea eliminar
+	 */
 	public void eliminarCuentaDeAhorro(String numeroCuentaDeAhorro) {
 		cuentaDeAhorroDAO.delete(numeroCuentaDeAhorro);
 	}
 
+	/** 
+	 * Metodo que permite actualizar una cuenta de ahorros
+	 * @param cuentaDeAhorro Cuenta de Ahorros que se desea actualizar
+	 */
 	public void actualizarCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
 		cuentaDeAhorroDAO.update(cuentaDeAhorro);
 	}
-
+	
+	/** 
+	 * Metodo que me permite listar las cuentas de ahorros
+	 * @return Lista de todas las cuentas de ahorros
+	 */
 	public List<CuentaDeAhorro> listaCuentaDeAhorros() {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
 	} 
 	
+	/** 
+	 * Metodo que permite guardar la sesion y enviar un correo al usuario que se le ha asignado esa sesion
+	 * @param sesionCliente Sesion que se guarda
+	 */
 	public void guardarSesion(SesionCliente sesionCliente) { 
 			Cliente cli = sesionCliente.getCliente();  
 			String destinatario =cli.getCorreo();
@@ -364,14 +461,30 @@ public class GestionUsuarios {
 		
 		sesionClienteDAO.insert(sesionCliente);
 
-	}
+	} 
+	
+	/** 
+	 * Metodo que permite buscar una Sesion
+	 * @param codigoSesionCliente Codigo de la sesion que se desea buscar
+	 * @return Sesion obtenida de la busqueda
+	 */
 
 	public SesionCliente buscarSesionCliente(int codigoSesionCliente) {
 		return sesionClienteDAO.read(codigoSesionCliente);
 	} 
 	
+	/** 
+	 * Metodo que permite obtener las sesiones de un cliente
+	 * @param cedulaCliente Cedula del cliente que tiene la sesion que se desea buscar
+	 * @return Lista de sesiones de un cliente 
+	 */
 	public List<SesionCliente> obtenerSesionesCliente(String cedulaCliente){ 
-		return sesionClienteDAO.obtenerSesionCliente(cedulaCliente);
+		try {
+			return sesionClienteDAO.obtenerSesionCliente(cedulaCliente);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
 	}
 	
 	
