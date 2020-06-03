@@ -11,7 +11,6 @@ import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
-import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;

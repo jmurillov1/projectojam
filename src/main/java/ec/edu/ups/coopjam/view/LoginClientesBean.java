@@ -8,8 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-
-import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.SesionCliente;
