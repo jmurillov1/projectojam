@@ -13,53 +13,97 @@ import ec.edu.ups.coopjam.business.GestionEmpleadosON;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.SesionCliente;
-
+/** 
+ * Esta clase implementa la logica que se utilizara en las diferentes interfaces para poder utilizar las entidades o clases
+ * @author ALEX
+ * @version 1.0
+ */
 @ManagedBean 
 @SessionScoped
 public class LoginClientesBean {
+	//Atributos de la clase
 	@Inject 
 	private GestionUsuarios gestionUsuarios;  
 	private Cliente cliente;  
 	private String usuario; 
-	private String contraseña;
+	private String contraseña; 
+	
+	/** 
+	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
+	 */
 	@PostConstruct 
 	public void init() { 
 		cliente = new Cliente();
 	}
-
+	
+	/** 
+	 * Metodo que permite obtener el atributo gestionUsuarios
+	 * @return Atributo gestionUsuarios de la clase
+	 */
 	public GestionUsuarios getGestionUsuarios() {
 		return gestionUsuarios;
 	}
-
+	
+	/** 
+	 * Metodo que permite asignar un valor al atributo gestionUsuarios
+	 * @param gestionUsuarios Variable asignada al atributo gestionUsuarios de la clase
+	 */
 	public void setGestionUsuarios(GestionUsuarios gestionUsuarios) {
 		this.gestionUsuarios = gestionUsuarios;
 	}
-
+	
+	/**
+	 * Metodo que permite obtener el atributo cliente
+	 * @return Atributo cliente de la clase
+	 */
 	public Cliente getCliente() {
 		return cliente;
 	}
-
+	
+	/** 
+	 * Metodo que permite asignar un valor al atributo cliente
+	 * @param cliente Variable asignada al atributo cliente de la clase
+	 */
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	} 
 	
-	
+	/** 
+	 * Metodo que permite obtener el atributo usuario
+	 * @return Atributo usuario de la clase
+	 */
 	public String getUsuario() {
 		return usuario;
 	}
-
+	
+	/** 
+	 * Metodo que permite asignar un valor al atributo usuario
+	 * @param usuario Variable asignada al atributo usuario de la clase
+	 */
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-
+	
+	/**
+	 * Metodo que permite obtener el atributo contraseña
+	 * @return  Atributo contraseña de la clase
+	 */
 	public String getContraseña() {
 		return contraseña;
 	}
-
+	
+	/** 
+	 * Metodo que permite asignar un valor al atributo contraseña
+	 * @param contraseña Variable asignada al atributo contraseña de la clase
+	 */
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
 	} 
-
+	
+	/** 
+	 * Metodo que permite guardar una sesion 
+	 * @return Nombre de Pagina a donde se va a redirigir la pagina
+	 */
 	public 	String validarCliente() {  
 		List<Cliente> lstClis = gestionUsuarios.listaClientes();  
 		System.out.println("PASO LA LISTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
