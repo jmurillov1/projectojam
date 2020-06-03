@@ -6,7 +6,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import ec.edu.ups.coopjam.business.GestionEmpleadosON;
+
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
@@ -20,7 +20,7 @@ import ec.edu.ups.coopjam.model.Empleado;
 @SessionScoped
 public class LoginBean {
 	@Inject
-	private GestionEmpleadosON empleadoON;
+	private GestionUsuarios empleadoON;
 
 	private String usuario;
 
@@ -31,11 +31,11 @@ public class LoginBean {
 	public void init() {
 	}
 
-	public GestionEmpleadosON getEmpleadoON() {
+	public GestionUsuarios getEmpleadoON() {
 		return empleadoON;
 	}
 
-	public void setEmpleadoON(GestionEmpleadosON empleadoON) {
+	public void setEmpleadoON(GestionUsuarios empleadoON) {
 		this.empleadoON = empleadoON;
 	}
 	

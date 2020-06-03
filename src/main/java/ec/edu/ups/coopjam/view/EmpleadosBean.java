@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import ec.edu.ups.coopjam.business.GestionEmpleadosON;
+import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Empleado;
 /**
  * Clase de tipo Bean para el manejo de JSF y archivos xhtml
@@ -20,7 +21,7 @@ import ec.edu.ups.coopjam.model.Empleado;
 public class EmpleadosBean {
 
 	@Inject
-	private GestionEmpleadosON empleadoON;
+	private GestionUsuarios empleadoON;
 
 	private Empleado empleado;
 
@@ -36,11 +37,11 @@ public class EmpleadosBean {
 		loadData();
 	}
 
-	public GestionEmpleadosON getEmpleadoON() {
+	public GestionUsuarios getEmpleadoON() {
 		return empleadoON;
 	}
 
-	public void setEmpleadoON(GestionEmpleadosON empleadoON) {
+	public void setEmpleadoON(GestionUsuarios empleadoON) {
 		this.empleadoON = empleadoON;
 	}
 	
