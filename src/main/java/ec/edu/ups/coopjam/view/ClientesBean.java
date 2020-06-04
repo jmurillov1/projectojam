@@ -37,7 +37,9 @@ public class ClientesBean {
 	private Transaccion transaccion; 
 	private List<Cliente> lstClientes; 
 	private List<SesionCliente> lstSesionesCliente; 
-	private String saldoCuenta;
+	private String saldoCuenta; 
+	private Date fechaInicio;
+    private Date fechaFinal;
 	
 	/** 
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
@@ -205,6 +207,18 @@ public class ClientesBean {
 	}
 	
 	
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	public Date getFechaFinal() {
+		return fechaFinal;
+	}
+	public void setFechaFinal(Date fechaFinal) {
+		this.fechaFinal = fechaFinal;
+	}
 	/** 
 	 * Metodo que permite crear un cliente 
 	 * @return Nulo 
@@ -314,5 +328,21 @@ public class ClientesBean {
 			return lstSesionesCliente;
 		}
 		return null;
+	} 
+	
+	
+	public String consultarTransacciones() { 
+		return "ConsultaTransacciones";
 	}
+	
+	public void validarFechas() throws Exception {
+        if (this.fechaInicio != null && this.fechaFinal != null) {
+        	System.out.println(fechaInicio.getClass());
+        	DateFormat hourdateFormat = new SimpleDateFormat("dd/mm/yyyy");
+    		String d = hourdateFormat.format(fechaInicio);
+    		System.out.println(buscarCuentaDeAhorro.getNumeroCuentaDeAhorro());
+            System.out.println(d +"***"+fechaFinal);
+            
+        }
+    }
 }

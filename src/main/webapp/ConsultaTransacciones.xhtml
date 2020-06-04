@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head></h:head>
@@ -11,7 +12,23 @@
 		<ui:define name="content">
 			<h:panelGroup id="panelPersona">
 				<h:form>
+					<div>
+						<h:panelGrid id="grid" columns="1" cellpadding="1">
+							<p:messages id="messages" showDetail="true" autoUpdate="true"
+								closable="true" />
 
+							<p:outputLabel for="fechaInicio" value="Fecha Inicio" />
+							<p:calendar id="fechaInicio" value="#{clientesBean.fechaInicio}"
+								showOn="button" pattern="yyyy-MMM-dd" locale="es" />
+
+							<p:outputLabel for="fechaFin" value="Fecha Inicio" />
+							<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
+								showOn="button" pattern="yyyy-MMM-dd" />
+
+							<p:commandButton value="Validar"
+								actionListener="#{clientesBean.validarFechas}" /> 
+						</h:panelGrid>
+					</div>
 				</h:form>
 			</h:panelGroup>
 			<h:panelGroup id="panelTelefono">
