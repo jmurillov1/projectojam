@@ -80,7 +80,7 @@ public class TransaccionDAO {
 	public List<Transaccion> getListaTransaccionesFechas(String cedula,String fechI , String fechaF ) throws Exception {
 		//select * from transaccion where cedula_cliente = 0105011399 AND fecha BETWEEN '2020-06-03 20:21:40.090000' AND '2020-06-03 23:22:39.160000';
 		try {
-			String jpql = "select s from Transaccion s where s.cliente.cedula =:ced AND fecha BETWEEN ':fcI' AND ':fcF'";
+			String jpql = "select s from Transaccion s where s.cliente.cedula =:ced AND s.fecha BETWEEN ':fcI' AND ':fcF'";
 			Query q = em.createQuery(jpql, Transaccion.class);
 			q.setParameter("ced", cedula);
 			q.setParameter("fcI", fechI);
