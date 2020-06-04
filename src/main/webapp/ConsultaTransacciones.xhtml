@@ -1,41 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
 
-<h:head></h:head> 
-<h:body> 
+<h:head></h:head>
+<h:body>
 	<ui:composition template="template/templateCliente.xhtml">
-		<ui:define name="title"> Estado de Cuenta</ui:define>
+		<ui:define name="title"> Listado </ui:define>
 		<ui:define name="content">
-			
-			
-			<h:form>
-				<div class="panel-body">
-					<div class="table-responsive">
-						<h:dataTable value="#{empleadosBean.listaEmpleados}" var="empleado" class="table">
-							<h:column>
-								<f:facet name="header">Fecha</f:facet>
-								#{empleado.cedula}
-							</h:column>
-							<h:column>
-								<f:facet name="header">Monto</f:facet>
-								#{empleado.nombre}
-							</h:column>
-							<h:column>
-								<f:facet name="header">Tipo</f:facet>
-								#{empleado.rol}
-							</h:column>
-							<h:column>
-								<f:facet name="header">Saldo</f:facet>
-								#{empleado.usuario}
-							</h:column>
-						</h:dataTable>
-					</div>
-				</div>
-			</h:form>
+			<h:panelGroup id="panelPersona">
+				<h:form>
+
+				</h:form>
+			</h:panelGroup>
+			<h:panelGroup id="panelTelefono">
+				<h:form id="tels" rendered="#{contactosBean.editable}">
+					<h1>Telefonos</h1>
+
+					<h:dataTable value="#{contactosBean.listaTels}" var="tel"
+						class="table">
+						<h:column>
+							<f:facet name="header">Número</f:facet>
+						#{tel.numero}
+					</h:column>
+						<h:column>
+							<f:facet name="header">Tipo</f:facet>
+						#{tel.tipo}
+					</h:column>
+					</h:dataTable>
+				</h:form>
+			</h:panelGroup>
+
 		</ui:define>
 	</ui:composition>
-</h:body> 
+</h:body>
 </html>
