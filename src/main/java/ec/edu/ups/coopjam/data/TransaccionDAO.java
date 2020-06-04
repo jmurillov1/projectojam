@@ -76,5 +76,21 @@ public class TransaccionDAO {
 		}
 
 	}
+	
+	public List<Transaccion> getListaTransaccionesFechas(String cedula,String fechI , String fechaF ) throws Exception {
+		//select * from transaccion where cedula_cliente = 0105011399 AND fecha BETWEEN '2020-06-03 20:21:40.090000' AND '2020-06-03 23:22:39.160000';
+		try {
+			String jpql = "select * from transaccion where cedula_cliente =:ced AND fecha BETWEEN ':fcI' AND ':fcF'";
+			Query q = em.createQuery(jpql, Transaccion.class);
+			q.setParameter("ced", cedula);
+			q.setParameter("fcI", fechI);
+			q.setParameter("fcF", fechaF);
+			return q.getResultList();
+		} catch (NoResultException e) {
+			throw new Exception("Erro Consultas Entre Fechas");
+		}
+
+	}
+	
 
 }
