@@ -2,6 +2,7 @@ package ec.edu.ups.coopjam.view;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,17 +37,22 @@ public class ClientesBean {
 	private String cedulaParametro;    
 	private Transaccion transaccion; 
 	private List<Cliente> lstClientes; 
-	private List<SesionCliente> lstSesionesCliente; 
-	private String saldoCuenta;
+	private List<SesionCliente> lstSesionesCliente;  
+	private List<Transaccion> lstTransacciones;
+	private String saldoCuenta; 
+	private Date fechaInicio;
+    private Date fechaFinal; 
+    private String tipoTransaccion;
 	
 	/** 
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
 	 */
 	@PostConstruct
 	private void iniciar() {  
-		listarClientes();  
+		listarClientes();   	
 		cuentaDeAhorro = new CuentaDeAhorro();  
-		cliente = new Cliente(); 
+		cliente = new Cliente();  
+		ultimosDias();
 	}
 	/** 
 	 *Metodo que permite obtener el atributo cliente
@@ -204,7 +210,30 @@ public class ClientesBean {
 		this.lstSesionesCliente = lstSesionesCliente;
 	}
 	
-	
+	public List<Transaccion> getLstTransacciones() {
+		return lstTransacciones;
+	}
+	public void setLstTransacciones(List<Transaccion> lstTransacciones) {
+		this.lstTransacciones = lstTransacciones;
+	}
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	public Date getFechaFinal() {
+		return fechaFinal;
+	}
+	public void setFechaFinal(Date fechaFinal) {
+		this.fechaFinal = fechaFinal;
+	} 
+	public String getTipoTransaccion() {
+		return tipoTransaccion;
+	}
+	public void setTipoTransaccion(String tipoTransaccion) {
+		this.tipoTransaccion = tipoTransaccion;
+	}
 	/** 
 	 * Metodo que permite crear un cliente 
 	 * @return Nulo 
@@ -314,5 +343,45 @@ public class ClientesBean {
 			return lstSesionesCliente;
 		}
 		return null;
+	} 
+	
+	
+	public String consultarTransacciones() { 
+		return "ConsultaTransacciones";
+	}
+	
+	public void validarFechas() throws Exception {
+        if (this.fechaInicio != null && this.fechaFinal != null) {
+        	/*System.out.println(fechaInicio.getClass());
+        	DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    		String d = hourdateFormat.format(fechaInicio);
+    		System.out.println(buscarCuentaDeAhorro.getNumeroCuentaDeAhorro());
+            System.out.println(d +"***"+fechaFinal);*/  
+        	DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+        	String i = hourdateFormat.format(fechaInicio);  
+        	String f = hourdateFormat.format(fechaFinal); 
+        	System.out.println(i); 
+        	System.out.println(f);
+        }
+    } 
+	
+	public void obtenerTransaccionesInicioFinal() { 
+		/*lstTransacciones = gestionUsuarios.obtenerTransaccionesFechaHora(buscarCuentaDeAhorro.getCliente().getCedula(), fechaInicio, fechaFinal);
+		*/ 
+		System.out.println("Este es el tipo de transaccion : " + tipoTransaccion);
+	
+	} 
+	
+	
+	public void ultimosDias() { 
+		Calendar c = Calendar.getInstance();
+		fechaFinal = c.getTime();
+		c.add(Calendar.DATE, -30);
+		fechaInicio= c.getTime(); 
+		DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+    	String inicioF = hourdateFormat.format(fechaInicio);  
+    	String finalF = hourdateFormat.format(fechaFinal);  
+    	lstTransacciones = gestionUsuarios.obtenerTransaccionesFechaHora("0105011399",inicioF, finalF); 
+    	System.out.println(lstTransacciones);
 	}
 }
