@@ -630,5 +630,19 @@ public class GestionUsuarios {
 		} catch (Exception e) {
 			throw new Exception(e.toString());
 		}
+	} 
+	
+	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF){  
+		String fechaInicio = fechaI + " 00:00:00.000000";  
+		System.out.println(fechaInicio);
+		String fechaFinal = fechaF + " 23:59:59.000000"; 
+		System.out.println(fechaFinal);
+		try {
+			return transaccionDAO.getListaTransaccionesFechas(cedula, fechaInicio, fechaFinal);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

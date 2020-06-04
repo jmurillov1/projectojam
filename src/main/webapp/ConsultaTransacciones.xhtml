@@ -19,14 +19,15 @@
 
 							<p:outputLabel for="fechaInicio" value="Fecha Inicio" />
 							<p:calendar id="fechaInicio" value="#{clientesBean.fechaInicio}"
-								showOn="button" pattern="yyyy-MMM-dd" locale="es" />
+								showOn="button" pattern="yyyy-MM-dd" locale="es" />
 
-							<p:outputLabel for="fechaFin" value="Fecha Inicio" />
+							<p:outputLabel for="fechaFin" value="Fecha Fin" />
 							<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
-								showOn="button" pattern="yyyy-MMM-dd" />
+								showOn="button" pattern="yyyy-MM-dd" />
 
 							<p:commandButton value="Validar"
-								actionListener="#{clientesBean.validarFechas}" /> 
+								actionListener="#{clientesBean.validarFechas}" />
+
 						</h:panelGrid>
 					</div>
 				</h:form>
