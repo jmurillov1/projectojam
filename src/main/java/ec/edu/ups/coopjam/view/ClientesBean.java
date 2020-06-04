@@ -48,11 +48,11 @@ public class ClientesBean {
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
 	 */
 	@PostConstruct
-	private void iniciar() {  
+	private void iniciar() { 
+		ultimosDias();
 		listarClientes();   	
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente();  
-		ultimosDias();
 	}
 	/** 
 	 *Metodo que permite obtener el atributo cliente
@@ -382,6 +382,6 @@ public class ClientesBean {
     	String inicioF = hourdateFormat.format(fechaInicio);  
     	String finalF = hourdateFormat.format(fechaFinal);  
     	lstTransacciones = gestionUsuarios.obtenerTransaccionesFechaHora("0105011399",inicioF, finalF); 
-    	System.out.println(lstTransacciones);
+    	System.out.println(lstTransacciones.size());
 	}
 }
