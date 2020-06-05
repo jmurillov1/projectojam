@@ -48,9 +48,9 @@ public class ClientesBean {
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a esta clase
 	 */
 	@PostConstruct
-	private void iniciar() { 
-		ultimosDias();
-		listarClientes();   	
+	private void iniciar() {  
+		listarClientes(); 
+		System.out.println(lstClientes.size());
 		cuentaDeAhorro = new CuentaDeAhorro();  
 		cliente = new Cliente();  
 	}
@@ -154,7 +154,8 @@ public class ClientesBean {
 			try { 
 				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);  
 				List<Transaccion> lista = gestionUsuarios.listadeTransacciones(cedulaParametro); 
-				transaccion = lista.get(lista.size()-1);    
+				transaccion = lista.get(lista.size()-1);   
+				ultimosDias();
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -358,10 +359,13 @@ public class ClientesBean {
     		System.out.println(buscarCuentaDeAhorro.getNumeroCuentaDeAhorro());
             System.out.println(d +"***"+fechaFinal);*/  
         	DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-        	String i = hourdateFormat.format(fechaInicio);  
-        	String f = hourdateFormat.format(fechaFinal); 
-        	System.out.println(i); 
-        	System.out.println(f);
+        	String inicioF = hourdateFormat.format(fechaInicio);  
+        	String finalF = hourdateFormat.format(fechaFinal);      
+        	List<Transaccion> listaTrans= gestionUsuarios.obtenerTransaccionesFechaHora(cedulaParametro,inicioF, finalF);  
+        	lstTransacciones = listaTrans;
+        	System.out.println("ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOO CON LE HACEN AL MALKI   "+lstTransacciones.size()); 
+        	System.out.println(cedulaParametro); 
+        	System.out.println(new Date());
         }
     } 
 	
@@ -381,7 +385,9 @@ public class ClientesBean {
 		DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
     	String inicioF = hourdateFormat.format(fechaInicio);  
     	String finalF = hourdateFormat.format(fechaFinal);  
-    	lstTransacciones = gestionUsuarios.obtenerTransaccionesFechaHora("0105011399",inicioF, finalF); 
-    	System.out.println(lstTransacciones.size());
+    	List<Transaccion> listaTrans = gestionUsuarios.obtenerTransaccionesFechaHora(cedulaParametro,inicioF, finalF); 
+    	lstTransacciones = listaTrans;
+    	System.out.println(lstTransacciones.size()); 
+    	System.out.println(cedulaParametro);
 	}
 }

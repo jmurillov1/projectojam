@@ -9,43 +9,85 @@
 <h:body>
 	<ui:composition template="template/templateCliente.xhtml">
 		<ui:define name="title"> Listado </ui:define>
-		<ui:define name="content">
-			<h:panelGroup id="panelPersona">
+		<ui:define name="content"> 
+		<script type="text/javascript">
+				PrimeFaces.locales['es'] = {
+					closeText : 'Cerrar',
+					prevText : 'Anterior',
+					nextText : 'Siguiente',
+					monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril',
+							'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+							'Octubre', 'Noviembre', 'Diciembre' ],
+					monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May',
+							'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+					dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miércoles',
+							'Jueves', 'Viernes', 'Sábado' ],
+					dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
+							'Sab' ],
+					dayNamesMin : [ 'D', 'L', 'M', 'X', 'J', 'V', 'S' ],
+					weekHeader : 'Semana',
+					firstDay : 1,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : '',
+					timeOnlyTitle : 'Sólo hora',
+					timeText : 'Tiempo',
+					hourText : 'Hora',
+					minuteText : 'Minuto',
+					secondText : 'Segundo',
+					currentText : 'Fecha actual',
+					ampm : false,
+					month : 'Mes',
+					week : 'Semana',
+					day : 'Día',
+					allDayText : 'Todo el día'
+				};
+			</script>
 				<h:form>
 					<div>
 						<h:panelGrid id="grid" columns="1" cellpadding="1">
+							<h:selectOneMenu value="#{clientesBean.tipoTransaccion}">
+								<f:selectItem itemValue="Todos" itemLabel="Todos" />
+								<f:selectItem itemValue="Depositos" itemLabel="Depositos" />
+								<f:selectItem itemValue="Retiro" itemLabel="Retiros" />
+							</h:selectOneMenu>
+							<br></br>
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
 
 							<p:outputLabel for="fechaInicio" value="Fecha Inicio" />
 							<p:calendar id="fechaInicio" value="#{clientesBean.fechaInicio}"
-								showOn="button" pattern="yyyy-MM-dd" locale="es" />
+								showOn="button" pattern="yyyy-MM-dd" locale="es" navigator="true"/>
 
 							<p:outputLabel for="fechaFin" value="Fecha Fin" />
 							<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
 								showOn="button" pattern="yyyy-MM-dd" />
-
-							<p:commandButton value="Validar"
-								actionListener="#{clientesBean.validarFechas}" />
+							<br></br>
+							<h:commandButton value="Validar"
+								action="#{clientesBean.validarFechas}">
+								<f:ajax render="Trans" execute="fechaInicio fechaFin" />
+							</h:commandButton>
 
 						</h:panelGrid>
 					</div>
 				</h:form>
-			</h:panelGroup>
-			<h:panelGroup id="panelTelefono">
-				<h:form id="tels" rendered="#{contactosBean.editable}">
+			<h:panelGroup id="Trans">
+				<h:form id="tels">
 					<h1>Telefonos</h1>
-
-					<h:dataTable value="#{contactosBean.listaTels}" var="tel"
-						class="table">
+					<h:dataTable id ="tblTransacciones" value="#{clientesBean.lstTransacciones}"
+						var="transaccion" class="table">
 						<h:column>
-							<f:facet name="header">Número</f:facet>
-						#{tel.numero}
+							<f:facet name="header">FECHA</f:facet>
+						#{transaccion.fecha}
 					</h:column>
 						<h:column>
-							<f:facet name="header">Tipo</f:facet>
-						#{tel.tipo}
-					</h:column>
+							<f:facet name="header">MONTO</f:facet>
+						#{transaccion.monto}
+						</h:column>
+						<h:column>
+							<f:facet name="header">TIPO</f:facet>
+						#{transaccion.tipo}
+						</h:column>
 					</h:dataTable>
 				</h:form>
 			</h:panelGroup>
