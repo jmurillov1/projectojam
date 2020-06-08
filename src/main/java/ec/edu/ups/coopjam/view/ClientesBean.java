@@ -388,5 +388,6 @@ public class ClientesBean {
     	lstTransacciones = listaTrans;
     	System.out.println(lstTransacciones.size()); 
     	System.out.println(cedulaParametro);
-	}
+	} 
+	
 }
