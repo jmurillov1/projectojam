@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -25,7 +24,7 @@ import ec.edu.ups.coopjam.model.Transaccion;
  * @version 1.0
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ClientesBean {
     //Atributos de la clase
 	@Inject
