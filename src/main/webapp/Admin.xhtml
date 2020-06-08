@@ -8,6 +8,7 @@
 <h:body>
 	<ui:composition template="template/templateAdmin.xhtml">
 		<ui:define name="title"> Listados </ui:define>
+		<ui:param name="nombre" value="#{loginBean.usuario}" /> 
 		<ui:define name="content">
 
 			<h:form>
@@ -39,7 +40,7 @@
 			<h2> Listado Clientes</h2>
 				<div class="panel-body">
 					<div class="table-responsive">
-						<h:dataTable value="#{clientesBean.lstClientes}" var="cliente" class="table">
+						<h:dataTable value="#{clientesBean.listarClientes}" var="cliente" class="table">
 							<h:column>
 								<f:facet name="header">Cedula</f:facet>
 								#{cliente.cedula}
