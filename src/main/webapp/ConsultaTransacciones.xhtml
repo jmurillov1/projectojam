@@ -63,7 +63,7 @@
 							<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
 								showOn="button" pattern="yyyy-MM-dd" />
 							<br></br>
-							<h:commandButton value="Validar"
+							<h:commandButton value="Buscar"
 								action="#{clientesBean.validarFechas}">
 								<f:ajax render="Trans" execute="fechaInicio fechaFin" />
 							</h:commandButton>

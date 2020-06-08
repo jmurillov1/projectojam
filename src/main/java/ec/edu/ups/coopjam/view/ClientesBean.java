@@ -362,7 +362,7 @@ public class ClientesBean {
         	String finalF = hourdateFormat.format(fechaFinal);      
         	List<Transaccion> listaTrans= gestionUsuarios.obtenerTransaccionesFechaHora(cedulaParametro,inicioF, finalF);  
         	lstTransacciones = listaTrans;
-        	System.out.println("ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOO CON LE HACEN AL MALKI   "+lstTransacciones.size()); 
+        	System.out.println("H"+lstTransacciones.size()); 
         	System.out.println(cedulaParametro); 
         	System.out.println(new Date());
         }
