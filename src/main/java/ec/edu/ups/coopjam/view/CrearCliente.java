@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import ec.edu.ups.coopjam.business.GestionUsuarios;
@@ -13,7 +13,7 @@ import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class CrearCliente {
 	@Inject
 	private GestionUsuarios gestionUsuarios;  
@@ -25,6 +25,7 @@ public class CrearCliente {
 	@PostConstruct
 	private void iniciar() {  
 		cliente = new Cliente();  
+		cuentaDeAhorro = new CuentaDeAhorro();  
 	}
 	public GestionUsuarios getGestionUsuarios() {
 		return gestionUsuarios;
