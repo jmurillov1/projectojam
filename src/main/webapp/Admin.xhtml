@@ -15,7 +15,7 @@
 			<h2> Listado Empleados</h2>
 				<div class="panel-body">
 					<div class="table-responsive">
-						<h:dataTable value="#{crearCliente.obtenerClientes}" var="empleado" class="table">
+						<h:dataTable value="#{empleadosBean.listaEmpleados}" var="empleado" class="table">
 							<h:column>
 								<f:facet name="header">Cedula</f:facet>
 								#{empleado.cedula}
@@ -40,7 +40,7 @@
 			<h2> Listado Clientes</h2>
 				<div class="panel-body">
 					<div class="table-responsive">
-						<h:dataTable value="#{clientesBean.listarClientes}" var="cliente" class="table">
+						<h:dataTable value="#{crearCliente.obtenerClientes()}" var="cliente" class="table">
 							<h:column>
 								<f:facet name="header">Cedula</f:facet>
 								#{cliente.cedula}
