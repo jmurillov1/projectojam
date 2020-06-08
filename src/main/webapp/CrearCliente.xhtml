@@ -23,17 +23,17 @@
 
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
-											<h:inputText value="#{clientesBean.cliente.cedula}"
+											<h:inputText value="#{crearCliente.cliente.cedula}"
 												maxlenght="10" class="form-control">
 												<f:ajax event="blur" render="valueError numeroCuenta" />
 											</h:inputText>
 											<h:outputText id="valueError"
-												value="#{clientesBean.validarCedula()}" style="color: red" />
+												value="#{crearCliente.validarCedula()}" style="color: red" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Nombre</label>
 											<h:inputText id="nombre"
-												value="#{clientesBean.cliente.nombre}" type="text"
+												value="#{crearCliente.cliente.nombre}" type="text"
 												placeholder="Joe Down"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar minimo dos nombres" label=" ">
@@ -45,7 +45,7 @@
 										<div class="form-group">
 											<label>Ingrese Apellido</label>
 											<h:inputText id="apellido"
-												value="#{clientesBean.cliente.apellido}" type="text"
+												value="#{crearCliente.cliente.apellido}" type="text"
 												placeholder="Joe Down"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar minimo dos Apellidos" label=" ">
@@ -57,7 +57,7 @@
 										<div class="form-group">
 											<label>Ingrese Direccion</label>
 											<h:inputText id="direccion"
-												value="#{clientesBean.cliente.direccion}" type="text"
+												value="#{crearCliente.cliente.direccion}" type="text"
 												placeholder="Joe Down"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar una Direccion" label=" ">
@@ -69,7 +69,7 @@
 										<div class="form-group">
 											<label>Ingrese Telefono</label>
 											<h:inputText id="tel"
-												value="#{clientesBean.cliente.telefono1}" type="text"
+												value="#{crearCliente.cliente.telefono1}" type="text"
 												placeholder="Joe Down"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar Numero" label=" ">
@@ -81,7 +81,7 @@
 										<div class="form-group">
 											<label>Ingrese Telefono</label>
 											<h:inputText id="tel2"
-												value="#{clientesBean.cliente.telefono2}" type="text"
+												value="#{crearCliente.cliente.telefono2}" type="text"
 												placeholder="Joe Down"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar Numero" label=" ">
@@ -92,7 +92,7 @@
 										</div>
 										<div class="form-group">
 											<label>Ingrese Correo</label>
-											<h:inputText id="corr" value="#{clientesBean.cliente.correo}"
+											<h:inputText id="corr" value="#{crearCliente.cliente.correo}"
 												type="text" placeholder="email@gmail.com"
 												class="form-control form-control-line" required="true"
 												validatorMessage="Ingresar correo valido" label=" ">
@@ -108,13 +108,13 @@
 												<div class="form-group">
 													<label>Numero de Cuenta</label> <br />
 													<h:outputText id="numeroCuenta"
-														value="#{clientesBean.generarNumeroCuenta()}" />
+														value="#{crearCliente.generarNumeroCuenta()}" />
 												</div>
 												<div class="form-group">
 													<label>Saldo</label>  
 													<br/>
 													<h:inputText id="saldo"
-														value="#{clientesBean.saldoCuenta}"
+														value="#{crearCliente.saldoCuenta}"
 														placeholder="Joe Down"
 														class="form-control form-control-line" required="true"
 														validatorMessage="Ingresar solo numeros y minimo $10" label=" ">
@@ -126,7 +126,7 @@
 											</div>
 											<!-- /.col-lg-12 -->
 										</div>
-										<h:commandButton action="#{clientesBean.crearCuenta()}"
+										<h:commandButton action="#{crearCliente.crearCuenta()}"
 											value="Guardar" class="btn btn-success" />
 									</h:form>
 
