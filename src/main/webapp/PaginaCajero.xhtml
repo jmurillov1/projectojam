@@ -11,7 +11,7 @@
 
 	<ui:composition template="template/templateCajero.xhtml">
 		<ui:define name="title">Cajero</ui:define>
-
+		<ui:param name="nombre" value="#{loginBean.usuario}" />
 		<ui:define name="content">
 
 			<div class="row">
@@ -33,7 +33,7 @@
 											<label>Ingrese Cedula</label>
 											<h:inputText value="#{cajeroBean.cliente.cedula}"
 												maxlength="10" class="form-control">
-												<f:ajax event="blur" render="Datos panel" execute="dep ret caj #{cajeroBean.cargarTransacciones()}" />
+												<f:ajax event="blur" render="Datos panel Monto" execute="dep ret caj #{cajeroBean.cargarTransacciones()}" />
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
 											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
