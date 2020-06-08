@@ -33,11 +33,12 @@
 											<label>Ingrese Cedula</label>
 											<h:inputText value="#{cajeroBean.cliente.cedula}"
 												maxlength="10" class="form-control">
-												<f:ajax event="blur" render="Datos panel Monto" execute="dep ret caj #{cajeroBean.cargarTransacciones()}" />
+												<f:ajax event="blur" render="Datos Cuenta panel Monto" execute="dep ret caj #{cajeroBean.cargarTransacciones()}" />
 											</h:inputText>
 											<br /> <label>Cliente:</label><br />
 											<h:outputText id="Datos" value="#{cajeroBean.valCedula()}" />
-											
+											<br /> <label>Numero de Cuenta:</label><br />
+											<h:outputText id="Cuenta" value="#{cajeroBean.numCuenta()}" />
 										</div>
 										<div class="form-group">
 											<label>Ingrese Monto</label>
