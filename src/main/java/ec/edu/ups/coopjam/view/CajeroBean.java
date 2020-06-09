@@ -259,6 +259,7 @@ public class CajeroBean {
 			t.setMonto(monto);
 			t.setFecha(new Date());
 			t.setTipo("deposito");
+			t.setSaldoCuenta(nvmonto);
 			try {
 				// editable = false;
 				clienteON.guardarTransaccion(t);
@@ -280,6 +281,7 @@ public class CajeroBean {
 			t2.setMonto(monto);
 			t2.setFecha(new Date());
 			t2.setTipo("retiro");
+			t2.setSaldoCuenta(nvmonto2);
 			try {
 				clienteON.guardarTransaccion(t2);
 			} catch (Exception e1) {
