@@ -73,7 +73,7 @@ public class SesionClienteDAO {
 	 */
 	public List<SesionCliente> obtenerSesionCliente(String cedulaCliente) throws Exception { 
 		try {
-			String jpql = "SELECT s FROM SesionCliente s WHERE s.cliente.cedula = :cedulaCliente";
+			String jpql = "SELECT s FROM SesionCliente s WHERE s.cliente.cedula = :cedulaCliente order by s.fechaSesion desc";
 			Query q = em.createQuery(jpql, SesionCliente.class);  
 			q.setParameter("cedulaCliente",cedulaCliente);
 			return q.getResultList();
