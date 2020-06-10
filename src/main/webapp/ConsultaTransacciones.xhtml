@@ -8,9 +8,10 @@
 <h:head></h:head>
 <h:body>
 	<ui:composition template="template/templateCliente.xhtml">
-		<ui:define name="title"> Listado </ui:define>
-		<ui:define name="content"> 
-		<script type="text/javascript">
+		<ui:define name="title">Transacciones Entre Fechas</ui:define> 
+		<ui:param name="nombre" value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}"/> 
+		<ui:define name="content">
+			<script type="text/javascript">
 				PrimeFaces.locales['es'] = {
 					closeText : 'Cerrar',
 					prevText : 'Anterior',
@@ -43,39 +44,44 @@
 					allDayText : 'Todo el día'
 				};
 			</script>
-				<h:form>
-					<div>
-						<h:panelGrid id="grid" columns="1" cellpadding="1">
-							<h:selectOneMenu value="#{clientesBean.tipoTransaccion}">
-								<f:selectItem itemValue="Todos" itemLabel="Todos" />
-								<f:selectItem itemValue="Depositos" itemLabel="Depositos" />
-								<f:selectItem itemValue="Retiro" itemLabel="Retiros" />
-							</h:selectOneMenu>
-							<br></br>
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
-								closable="true" />
+			<h:form>
+				<div>
+					<h:panelGrid id="grid" columns="1" cellpadding="1">
+						<h:selectOneMenu id="combobox"
+							value="#{clientesBean.tipoTransaccion}">
+							<f:selectItem itemValue="Todos" itemLabel="Todos" />
+							<f:selectItem itemValue="Depositos" itemLabel="Depositos" />
+							<f:selectItem itemValue="Retiros" itemLabel="Retiros" />
+						</h:selectOneMenu>
+						<br></br>
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" />
 
-							<p:outputLabel for="fechaInicio" value="Fecha Inicio" />
-							<p:calendar id="fechaInicio" value="#{clientesBean.fechaInicio}"
-								showOn="button" pattern="yyyy-MM-dd" locale="es" navigator="true"/>
+						<p:outputLabel for="fechaInicio" value="Fecha Inicio" />
+						<p:calendar id="fechaInicio" value="#{clientesBean.fechaInicio}"
+							showOn="button" pattern="yyyy-MM-dd" locale="es" navigator="true" />
 
-							<p:outputLabel for="fechaFin" value="Fecha Fin" />
-							<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
-								showOn="button" pattern="yyyy-MM-dd" />
-							<br></br>
-							<h:commandButton value="Buscar"
-								action="#{clientesBean.validarFechas}">
-								<f:ajax render="Trans" execute="fechaInicio fechaFin" />
-							</h:commandButton>
+						<p:outputLabel for="fechaFin" value="Fecha Fin" />
+						<p:calendar id="fechaFin" value="#{clientesBean.fechaFinal}"
+							showOn="button" pattern="yyyy-MM-dd">
+						</p:calendar>
+						<h:outputText id="valueError"
+							value="#{clientesBean.fechasInvalidas}" style="color: red" />
+						<br></br>
+						<h:commandButton value="Buscar"
+							action="#{clientesBean.validarFechas2()}">
+							<f:ajax render="Trans valueError" execute="fechaInicio fechaFin combobox" />
+						</h:commandButton> 
 
-						</h:panelGrid>
-					</div>
-				</h:form>
+					</h:panelGrid>
+				</div>
+			</h:form>
 			<h:panelGroup id="Trans">
 				<h:form id="tels">
-					<h1>Telefonos</h1>
-					<h:dataTable id ="tblTransacciones" value="#{clientesBean.lstTransacciones}"
-						var="transaccion" class="table">
+					<h1>LISTADO DE TRANSACCIONES</h1>
+					<h:dataTable id="tblTransacciones"
+						value="#{clientesBean.lstTransacciones}" var="transaccion"
+						class="table">
 						<h:column>
 							<f:facet name="header">FECHA</f:facet>
 						#{transaccion.fecha}

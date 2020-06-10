@@ -123,8 +123,15 @@ public class CrearCliente {
 		return "CrearCliente";
 	} 	 
 	
-	public List<Cliente> obtenerClientes(){ 
-		return gestionUsuarios.listaClientes();
+	public List<Cliente> obtenerClientes(){  
+		try {
+			List<Cliente> clis = gestionUsuarios.listaClientes();  
+			System.out.println(clis.size());
+			return gestionUsuarios.listaClientes(); 
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 	
 }
