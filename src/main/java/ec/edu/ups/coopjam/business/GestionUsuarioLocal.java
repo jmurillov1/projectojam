@@ -1,5 +1,6 @@
 package ec.edu.ups.coopjam.business;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,13 +34,13 @@ public interface GestionUsuarioLocal {
 	public void guardarSesion(SesionCliente sesionCliente);
 	public SesionCliente buscarSesionCliente(int codigoSesionCliente);
 	public List<SesionCliente> obtenerSesionesCliente(String cedulaCliente);
-	public boolean validadorDeCedula(String cedula);
-	public void guardarEmpleado(Empleado empleado);
+	public boolean validadorDeCedula(String cedula)throws Exception;
+	public void guardarEmpleado(Empleado empleado)throws SQLException, Exception;
 	public Empleado usuarioRegistrado(String cedula);
 	public List<Empleado> listadoEmpleados();
 	public Empleado usuario(String usuario,String contra);
 	public List<Transaccion> listadeTransacciones(String cedula);
-	public void guardarTransaccion(Transaccion t);
+	public void guardarTransaccion(Transaccion t)throws Exception;
 	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF);
 
 }
