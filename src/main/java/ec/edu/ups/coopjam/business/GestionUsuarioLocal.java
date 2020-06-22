@@ -38,7 +38,7 @@ public interface GestionUsuarioLocal {
 	public void guardarEmpleado(Empleado empleado)throws SQLException, Exception;
 	public Empleado usuarioRegistrado(String cedula);
 	public List<Empleado> listadoEmpleados();
-	public Empleado usuario(String usuario,String contra);
+	public Empleado usuario(String usuario,String contra)throws Exception ;
 	public List<Transaccion> listadeTransacciones(String cedula);
 	public void guardarTransaccion(Transaccion t)throws Exception;
 	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF);
