@@ -3,12 +3,14 @@ package ec.edu.ups.coopjam.business;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Local;
+
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.Transaccion;
-
+@Local
 public interface GestionUsuarioLocal {
 	public String generarNumeroDeCuenta();
 	public String getUsuario(String cedula, String nombre, String apellido);
