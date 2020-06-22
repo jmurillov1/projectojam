@@ -38,7 +38,7 @@ import ec.edu.ups.coopjam.model.Transaccion;
  * @version 1.0
  */
 @Stateless
-public class GestionUsuarios {
+public class GestionUsuarios implements GestionUsuarioLocal {
 	@Inject
 	private ClienteDAO clienteDAO;
 	@Inject
@@ -179,7 +179,7 @@ public class GestionUsuarios {
 	 * @param apellido Apellido del usuario
 	 * @return Usuario que se ha creado
 	 */
-	public static String getUsuario(String cedula, String nombre, String apellido) {
+	public String getUsuario(String cedula, String nombre, String apellido) {
 		System.out.println(cedula);
 		System.out.println(nombre);
 		System.out.println(apellido);
@@ -205,7 +205,7 @@ public class GestionUsuarios {
 	 * Metodo que permite la creacion de una contraseña aleatoria
 	 * @return Contraseña aleatoria
 	 */
-	public static String getContraseña() {
+	public String getContraseña() {
 		String simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefjhijklmnopqrstuvwxyz0123456789!#$%&()*+,-./:;<=>?@_";
 
 		int tam = simbolos.length() - 1;
@@ -225,7 +225,7 @@ public class GestionUsuarios {
 	 * @param asunto Asunto del correo
 	 * @param cuerpo Cuerpo del correo
 	 */
-	public static void enviarCorreo(String destinatario, String asunto, String cuerpo) {
+	public void enviarCorreo(String destinatario, String asunto, String cuerpo) {
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
 		propiedad.setProperty("mail.smtp.starttls.enable", "true");
@@ -256,7 +256,7 @@ public class GestionUsuarios {
 	 * Metodo que permite cambiar el formato de la fecha
 	 * @return Fecha con nuevo formato
 	 */
-	public static String fecha() {
+	public String fecha() {
 		Date date = new Date();
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(date);
@@ -267,7 +267,7 @@ public class GestionUsuarios {
 	 * @param fecha Fecha que se cambiara el formato
 	 * @return
 	 */
-	public static String obtenerFecha(Date fecha) {
+	public String obtenerFecha(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return hourdateFormat.format(fecha);
 	}
