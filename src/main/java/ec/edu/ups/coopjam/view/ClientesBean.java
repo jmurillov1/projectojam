@@ -362,7 +362,8 @@ public class ClientesBean {
 			transaccion.setFecha(new Date());
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro());
 			transaccion.setTipo("deposito");
-			transaccion.setCliente(cliente);
+			transaccion.setCliente(cliente); 
+			transaccion.setSaldoCuenta(Double.parseDouble(saldoCuenta));
 			gestionUsuarios.guardarTransaccion(transaccion);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
