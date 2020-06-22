@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
@@ -24,7 +25,7 @@ import ec.edu.ups.coopjam.model.Transaccion;
 @ViewScoped
 public class CajeroBean {
 	@Inject
-	private GestionUsuarios clienteON;
+	private GestionUsuarioLocal clienteON;
 
 	private Double monto;
 
@@ -41,11 +42,11 @@ public class CajeroBean {
 		cliente = new Cliente();
 	}
 
-	public GestionUsuarios getClienteON() {
+	public GestionUsuarioLocal getClienteON() {
 		return clienteON;
 	}
 
-	public void setClienteON(GestionUsuarios clienteON) {
+	public void setClienteON(GestionUsuarioLocal clienteON) {
 		this.clienteON = clienteON;
 	}
 

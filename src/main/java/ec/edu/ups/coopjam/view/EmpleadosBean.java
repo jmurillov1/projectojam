@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
-
+import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Empleado;
 /**
@@ -21,7 +21,7 @@ import ec.edu.ups.coopjam.model.Empleado;
 public class EmpleadosBean {
 
 	@Inject
-	private GestionUsuarios empleadoON;
+	private GestionUsuarioLocal empleadoON;
 
 	private Empleado empleado;
 
@@ -37,11 +37,11 @@ public class EmpleadosBean {
 		loadData();
 	}
 
-	public GestionUsuarios getEmpleadoON() {
+	public GestionUsuarioLocal getEmpleadoON() {
 		return empleadoON;
 	}
 
-	public void setEmpleadoON(GestionUsuarios empleadoON) {
+	public void setEmpleadoON(GestionUsuarioLocal empleadoON) {
 		this.empleadoON = empleadoON;
 	}
 	
