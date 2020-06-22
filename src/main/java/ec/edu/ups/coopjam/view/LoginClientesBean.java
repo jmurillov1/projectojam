@@ -8,7 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import ec.edu.ups.coopjam.business.GestionUsuarios;
+
+import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.SesionCliente;
 /** 
@@ -21,7 +22,7 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 public class LoginClientesBean {
 	//Atributos de la clase
 	@Inject 
-	private GestionUsuarios gestionUsuarios;  
+	private GestionUsuarioLocal gestionUsuarios;  
 	private Cliente cliente;  
 	private String usuario; 
 	private String contraseña; 
@@ -38,7 +39,7 @@ public class LoginClientesBean {
 	 * Metodo que permite obtener el atributo gestionUsuarios
 	 * @return Atributo gestionUsuarios de la clase
 	 */
-	public GestionUsuarios getGestionUsuarios() {
+	public GestionUsuarioLocal getGestionUsuarios() {
 		return gestionUsuarios;
 	}
 	
@@ -46,7 +47,7 @@ public class LoginClientesBean {
 	 * Metodo que permite asignar un valor al atributo gestionUsuarios
 	 * @param gestionUsuarios Variable asignada al atributo gestionUsuarios de la clase
 	 */
-	public void setGestionUsuarios(GestionUsuarios gestionUsuarios) {
+	public void setGestionUsuarios(GestionUsuarioLocal gestionUsuarios) {
 		this.gestionUsuarios = gestionUsuarios;
 	}
 	
