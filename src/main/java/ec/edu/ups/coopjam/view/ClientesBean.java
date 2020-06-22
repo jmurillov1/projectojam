@@ -14,7 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
-import ec.edu.ups.coopjam.business.GestionUsuarios;
+import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.SesionCliente;
@@ -32,7 +32,7 @@ import ec.edu.ups.coopjam.model.Transaccion;
 public class ClientesBean {
 	// Atributos de la clase
 	@Inject
-	private GestionUsuarios gestionUsuarios;
+	private GestionUsuarioLocal gestionUsuarios;
 	private Cliente cliente;
 	private String numeroCuenta;
 	private CuentaDeAhorro cuentaDeAhorro;
@@ -84,7 +84,7 @@ public class ClientesBean {
 	 * 
 	 * @return Atributo gestionUsuarios de la clase
 	 */
-	public GestionUsuarios getGestionUsuarios() {
+	public GestionUsuarioLocal getGestionUsuarios() {
 		return gestionUsuarios;
 	}
 
@@ -94,7 +94,7 @@ public class ClientesBean {
 	 * @param gestionUsuarios Variable asiganda al atributo gestionUsuarios de la
 	 *                        clase
 	 */
-	public void setGestionUsuarios(GestionUsuarios gestionUsuarios) {
+	public void setGestionUsuarios(GestionUsuarioLocal gestionUsuarios) {
 		this.gestionUsuarios = gestionUsuarios;
 	}
 
