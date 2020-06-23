@@ -7,15 +7,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class TransfereciaLocal implements Serializable{
 	@Id  
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int codigoTransferenciaLocal; 
-	private double monto; 
-	@JoinColumn(name="numero_cuenta")
-	private CuentaDeAhorro cuentaDeAhorroOrigen;   
+	private double monto;  
+	@OneToOne
+	@JoinColumn(name="cedula_cliente")
+	private Cliente cliente;   
+	@OneToOne
 	@JoinColumn(name="numero_cuenta")
 	private CuentaDeAhorro cuentaDeAhorroDestino; 
 	
@@ -31,11 +34,12 @@ public class TransfereciaLocal implements Serializable{
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
-	public CuentaDeAhorro getCuentaDeAhorroOrigen() {
-		return cuentaDeAhorroOrigen;
+	
+	public Cliente getCliente() {
+		return cliente;
 	}
-	public void setCuentaDeAhorroOrigen(CuentaDeAhorro cuentaDeAhorroOrigen) {
-		this.cuentaDeAhorroOrigen = cuentaDeAhorroOrigen;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	public CuentaDeAhorro getCuentaDeAhorroDestino() {
 		return cuentaDeAhorroDestino;
