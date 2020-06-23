@@ -13,8 +13,13 @@ public class ServiciosBancoSOAP {
 	private GestionUsuarioLocal gestionUsuario; 
 	
 	@WebMethod 
-	public String realizarTransaccion(String cuenta, double monto, String tipo) { 
-		return null;
+	public String realizarTransaccionBancaria(String cuenta, double monto, String tipo) { 
+		return gestionUsuario.realizarTransaccion(cuenta, monto, tipo);
+	} 
+	
+	@WebMethod 
+	public String realizarTransferencia(String cedula, String cuentaDeAhorro, double monto) { 
+		return gestionUsuario.realizarTransferencia(cedula, cuentaDeAhorro, monto);
 	}
 	
 	

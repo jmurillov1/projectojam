@@ -27,11 +27,13 @@ import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
 import ec.edu.ups.coopjam.data.TransaccionDAO;
+import ec.edu.ups.coopjam.data.TransferenciaLocalDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.Transaccion;
+import ec.edu.ups.coopjam.model.TransfereciaLocal;
 
 /** 
  * Esta clase me permite hacer diferentes validaciones o metodos necesarios antes de poder realizar las diferentes funciones basicas en la base de datos  
@@ -49,7 +51,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	@Inject 
 	private TransaccionDAO transaccionDAO; 
 	@Inject
-	private EmpleadoDAO empleadoDAO;
+	private EmpleadoDAO empleadoDAO; 
+	@Inject
+	private TransferenciaLocalDAO transferenciaLocalDAO;
 
 	
 	/** 
@@ -648,7 +652,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	} 
 	
 	
-	public String realizarTransferencia(String cuenta, double monto, String tipoTransaccion) { 
+	public String realizarTransaccion(String cuenta, double monto, String tipoTransaccion) { 
 		CuentaDeAhorro clp = buscarCuentaDeAhorro(cuenta);
 		if (tipoTransaccion.equalsIgnoreCase("deposito")) {
 			Double nvmonto = clp.getSaldoCuentaDeAhorro() + monto;
@@ -692,5 +696,30 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			}
 		} 
 		return "Fallido";
+	} 
+	
+	public String realizarTransferencia(String cedula, String cuentaDeAhorro, double monto) {  
+		CuentaDeAhorro cuentaAhorro = buscarCuentaDeAhorroCliente(cedula);  
+		CuentaDeAhorro cuentaAhorroTransferir = buscarCuentaDeAhorro(cuentaDeAhorro);
+		if(cuentaAhorro.getSaldoCuentaDeAhorro() >= monto) { 
+			cuentaAhorro.setSaldoCuentaDeAhorro(cuentaAhorro.getSaldoCuentaDeAhorro()-monto); 
+			actualizarCuentaDeAhorro(cuentaAhorro); 
+			cuentaAhorroTransferir.setSaldoCuentaDeAhorro(cuentaAhorroTransferir.getSaldoCuentaDeAhorro()+monto);  
+			actualizarCuentaDeAhorro(cuentaAhorroTransferir);  
+			TransfereciaLocal transfereciaLocal = new TransfereciaLocal(); 
+			transfereciaLocal.setCuentaDeAhorroOrigen(cuentaAhorro); 
+			transfereciaLocal.setCuentaDeAhorroDestino(cuentaAhorroTransferir);  
+			transfereciaLocal.setMonto(monto); 
+			guardarTransferenciaLocal(transfereciaLocal);
+			return "Transferencia Satisfactoria";
+		}else { 
+			return "Monto exedido";
+		}
+	} 
+	
+	
+	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
+		transferenciaLocalDAO.insert(transfereciaLocal);
+
 	}
 }

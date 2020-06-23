@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -17,7 +18,8 @@ import javax.persistence.OneToOne;
 @Entity
 public class CuentaDeAhorro implements Serializable {
 	//Atributos de la clase
-	@Id 
+	@Id  
+	@Column(name="numero_cuenta")
 	private String numeroCuentaDeAhorro;  
 	private Date fechaDeRegistro;  
 	private Double saldoCuentaDeAhorro; 
