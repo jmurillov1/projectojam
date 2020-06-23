@@ -24,13 +24,16 @@ public class SolicitudDeCredito {
 	private String tipoVivienda; 
 	private String tipoEmpleo; 
 	private String trabajadorExtranjero; 
-	private String estadoCredito; 
+	private String estadoCredito;  
+	private String cedulaCliente; 
+	private String plantillaServicios;
+	private String rolDePagos; 
 	
-	public int getCodigoSolicitudCredito() {
+	public int getCodigoCredito() {
 		return codigoCredito;
 	}
-	public void setCodigoSolicitudCredito(int codigoSolicitudCredito) {
-		this.codigoCredito = codigoSolicitudCredito;
+	public void setCodigoCredito(int codigoCredito) {
+		this.codigoCredito = codigoCredito;
 	}
 	public Cliente getClienteCredito() {
 		return clienteCredito;
@@ -97,7 +100,27 @@ public class SolicitudDeCredito {
 	}
 	public void setEstadoCredito(String estadoCredito) {
 		this.estadoCredito = estadoCredito;
+	}
+	public String getCedulaCliente() {
+		return cedulaCliente;
+	}
+	public void setCedulaCliente(String cedulaCliente) {
+		this.cedulaCliente = cedulaCliente;
+	}
+	public String getPlantillaServicios() {
+		return plantillaServicios;
+	}
+	public void setPlantillaServicios(String plantillaServicios) {
+		this.plantillaServicios = plantillaServicios;
+	}
+	public String getRolDePagos() {
+		return rolDePagos;
+	}
+	public void setRolDePagos(String rolDePagos) {
+		this.rolDePagos = rolDePagos;
 	} 
+	
+	
 	
 	
 	
