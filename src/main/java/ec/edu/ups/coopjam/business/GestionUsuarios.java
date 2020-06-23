@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -644,5 +645,52 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			e.printStackTrace();
 		}
 		return null;
+	} 
+	
+	
+	public String realizarTransferencia(String cuenta, double monto, String tipoTransaccion) { 
+		CuentaDeAhorro clp = buscarCuentaDeAhorro(cuenta);
+		if (tipoTransaccion.equalsIgnoreCase("deposito")) {
+			Double nvmonto = clp.getSaldoCuentaDeAhorro() + monto;
+			clp.setSaldoCuentaDeAhorro(nvmonto);
+			actualizarCuentaDeAhorro(clp);
+			Transaccion t = new Transaccion();
+			t.setCliente(clp.getCliente());
+			t.setMonto(monto);
+			t.setFecha(new Date());
+			t.setTipo("deposito");
+			t.setSaldoCuenta(nvmonto);
+			try {
+				// editable = false;
+				guardarTransaccion(t); 
+				return "Hecho";
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.getMessage();
+			}
+			try {
+				FacesContext contex = FacesContext.getCurrentInstance();
+				contex.getExternalContext().redirect("PaginaCajero.xhtml");
+			} catch (Exception e) {
+			}
+		} else if (tipoTransaccion.equalsIgnoreCase("retiro") && monto <= clp.getSaldoCuentaDeAhorro()) {
+			Double nvmonto2 = clp.getSaldoCuentaDeAhorro() - monto;
+			clp.setSaldoCuentaDeAhorro(nvmonto2);
+			actualizarCuentaDeAhorro(clp);
+			Transaccion t2 = new Transaccion();
+			t2.setCliente(clp.getCliente());
+			t2.setMonto(monto);
+			t2.setFecha(new Date());
+			t2.setTipo("retiro");
+			t2.setSaldoCuenta(nvmonto2);
+			try {
+				guardarTransaccion(t2); 
+				return "Hecho";
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.getMessage();
+			}
+		} 
+		return "Fallido";
 	}
 }

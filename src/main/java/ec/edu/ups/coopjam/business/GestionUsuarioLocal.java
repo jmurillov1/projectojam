@@ -42,5 +42,5 @@ public interface GestionUsuarioLocal {
 	public List<Transaccion> listadeTransacciones(String cedula);
 	public void guardarTransaccion(Transaccion t)throws Exception;
 	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF);
-
+	public String realizarTransferencia(String cuenta, double monto, String tipoTransaccion);
 }
