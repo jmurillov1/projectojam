@@ -26,12 +26,14 @@ import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
+import ec.edu.ups.coopjam.data.SolicitudDeCreditoDAO;
 import ec.edu.ups.coopjam.data.TransaccionDAO;
 import ec.edu.ups.coopjam.data.TransferenciaLocalDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
 
@@ -56,7 +58,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	private EmpleadoDAO empleadoDAO;
 	@Inject
 	private TransferenciaLocalDAO transferenciaLocalDAO;
-
+	@Inject
+	private SolicitudDeCreditoDAO solicitudDeCreditoDAO;
+	
 	/**
 	 * Metodo que permite la validacion de una cedula correcta
 	 * 
@@ -673,6 +677,17 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
 		transferenciaLocalDAO.insert(transfereciaLocal);
-
+	} 
+	
+	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+		solicitudDeCreditoDAO.insert(solicitudDeCredito);
+	} 
+	
+	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+		solicitudDeCreditoDAO.update(solicitudDeCredito);
+	} 
+	
+	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
+		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
 	}
 }
