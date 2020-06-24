@@ -49,5 +49,6 @@ public interface GestionUsuarioLocal {
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal); 
 	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
-	public List<SolicitudDeCredito> listadoSolicitudDeCreditos();
+	public List<SolicitudDeCredito> listadoSolicitudDeCreditos(); 
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta);
 }

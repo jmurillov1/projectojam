@@ -7,7 +7,8 @@
 <h:head></h:head>
 <h:body>
 	<ui:composition template="template/templateCliente2.xhtml">
-		<ui:define name="title">Solicitud de Credito</ui:define>
+		<ui:define name="title">Solicitud de Credito</ui:define> 
+		<ui:param name="nombre" value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" /> 
 		<ui:define name="content">
 			<h:form>
 				<div class="row">
@@ -166,14 +167,13 @@
 															<label>Cargar rol de pagos&nbsp;&nbsp;</label>  
 															<input type="file" value="#{crearCliente.solicitudDeCredito.rolDePagos}"></input>
 														</div> 
-														<h:commandButton action="#{crearCliente.crearSolicitudCredito()}"
-														value="Guardar" class="btn btn-success" />
 													</div>
 												</div>
 												<!-- /.col-lg-12 -->
-											</div>
+											</div> 
+											<h:commandButton action="#{crearCliente.crearSolicitudCredito()}"
+											value="Guardar" class="btn btn-success" />
 										</h:form>
-
 									</div>
 								</div>
 							</div>

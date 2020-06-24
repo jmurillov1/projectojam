@@ -366,7 +366,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
 	}
-
+	
 	/**
 	 * Metodo que permite guardar la sesion y enviar un correo al usuario que se le
 	 * ha asignado esa sesion
@@ -689,5 +689,10 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
 		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
+	}  
+	
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) { 
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta);
+		return cuentaDeAhorro.getCliente();
 	}
 }
