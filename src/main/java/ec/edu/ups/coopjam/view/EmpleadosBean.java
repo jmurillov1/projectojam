@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Empleado;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 /**
  * Clase de tipo Bean para el manejo de JSF y archivos xhtml
  * @author Malki Yupanki
@@ -30,6 +31,8 @@ public class EmpleadosBean {
 	private List<Empleado> listaEmpleados;
 	
 	private String tipoEmpleado;
+	
+	private List<SolicitudDeCredito> solicitudes;
 
 	@PostConstruct
 	public void init() {
@@ -110,6 +113,16 @@ public class EmpleadosBean {
 		this.tipoEmpleado = tipoEmpleado;
 	}
 	
+	
+
+	public List<SolicitudDeCredito> getSolicitudes() {
+		return solicitudes;
+	}
+
+	public void setSolicitudes(List<SolicitudDeCredito> solicitudes) {
+		this.solicitudes = solicitudes;
+	}
+
 	/**
 	 * Metodo para guardar datos del Empleado
 	 * @return La paguina con la lista de los Empleados registrados
