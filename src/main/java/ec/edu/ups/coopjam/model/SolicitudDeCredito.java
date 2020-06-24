@@ -17,8 +17,9 @@ public class SolicitudDeCredito {
 	private Cliente clienteCredito; 
 	private String propositoCredito; 
 	private double montoCredito; 
+	private String mesesCredito;
 	private String tiempoEmpleo; 
-	private String estadoCivil; 
+	private String estadoCivilSexo; 
 	private double avaluoDeVivienda; 
 	private String activo; 
 	private String tipoVivienda; 
@@ -52,6 +53,13 @@ public class SolicitudDeCredito {
 	}
 	public void setMontoCredito(double montoCredito) {
 		this.montoCredito = montoCredito;
+	} 
+	
+	public String getMesesCredito() {
+		return mesesCredito;
+	}
+	public void setMesesCredito(String mesesCredito) {
+		this.mesesCredito = mesesCredito;
 	}
 	public String getTiempoEmpleo() {
 		return tiempoEmpleo;
@@ -59,11 +67,11 @@ public class SolicitudDeCredito {
 	public void setTiempoEmpleo(String tiempoEmpleo) {
 		this.tiempoEmpleo = tiempoEmpleo;
 	}
-	public String getEstadoCivil() {
-		return estadoCivil;
+	public String getEstadoCivilSexo() {
+		return estadoCivilSexo;
 	}
-	public void setEstadoCivil(String estadoCivil) {
-		this.estadoCivil = estadoCivil;
+	public void setEstadoCivilSexo(String estadoCivilSexo) {
+		this.estadoCivilSexo = estadoCivilSexo;
 	}
 	public double getAvaluoDeVivienda() {
 		return avaluoDeVivienda;

@@ -10,6 +10,7 @@ import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
 @Local
@@ -45,5 +46,8 @@ public interface GestionUsuarioLocal {
 	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF);
 	public String realizarTransaccion(String cuenta, double monto, String tipoTransaccion); 
 	public String realizarTransferencia(String cedula, String cuentaDeAhorro, double monto); 
-	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal);
+	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal); 
+	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
+	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
+	public List<SolicitudDeCredito> listadoSolicitudDeCreditos();
 }

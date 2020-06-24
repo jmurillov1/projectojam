@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 @ManagedBean
@@ -22,12 +23,14 @@ public class CrearCliente {
 	private String numeroCuenta;
 	private String saldoCuenta;  
 	private CuentaDeAhorro cuentaDeAhorro;   
-	private List<Cliente> lstClientes;
+	private List<Cliente> lstClientes;  
+	private SolicitudDeCredito solicitudDeCredito; 
 	
 	@PostConstruct
 	private void iniciar() {  
 		cliente = new Cliente();  
-		cuentaDeAhorro = new CuentaDeAhorro();  
+		cuentaDeAhorro = new CuentaDeAhorro();   
+		solicitudDeCredito = new SolicitudDeCredito();
 	}
 	public GestionUsuarioLocal getGestionUsuarios() {
 		return gestionUsuarios;
@@ -64,6 +67,12 @@ public class CrearCliente {
 	}
 	public void setLstClientes(List<Cliente> lstClientes) {
 		this.lstClientes = lstClientes;
+	}  
+	public SolicitudDeCredito getSolicitudDeCredito() {
+		return solicitudDeCredito;
+	}
+	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
+		this.solicitudDeCredito = solicitudDeCredito;
 	}
 	public String crearCliente() {
 		try {
@@ -132,6 +141,15 @@ public class CrearCliente {
 			// TODO: handle exception
 		}
 		return null;
+	} 
+	
+	public String crearSolicitudCredito() {  
+		Cliente cliente = new Cliente(); 
+		cliente = gestionUsuarios.buscarCliente("0150350668"); 
+		solicitudDeCredito.setClienteCredito(cliente); 
+		solicitudDeCredito.setEstadoCredito("Solicitando");
+		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);
+		return "SolicitudCredito"; 
 	}
 	
 }
