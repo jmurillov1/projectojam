@@ -19,14 +19,115 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
-									<h:form role="form">
+									
 
+										<h:panelGroup id="panelPersona">
+											<h:form>
+												<h:dataTable value="#{empleadosBean.solicitudes}" var="soli"
+													class="table">
+													<h:column>
+														<f:facet name="header">Numero Credito</f:facet>
+														#{soli.codigoCredito}
+													</h:column>
+													<h:column>
+														<f:facet name="header">Proposito Credito</f:facet>
+														#{soli.propositoCredito}
+													</h:column>
+
+													<h:column>
+														<f:facet name="header">Monto Credito</f:facet>
+														#{soli.montoCredito}
+													</h:column>
+													<h:column>
+														<f:facet name="header">Cedula Cliente</f:facet>
+														#{soli.clienteCredito.cedula}
+													</h:column>
+													<h:column>
+														<f:facet name="header">Estado Credito</f:facet>
+														#{soli.estadoCredito}
+													</h:column>
+
+													<h:column>
+														<f:facet name="header">Verificar</f:facet>
+														<h:commandButton
+															action="#{empleadosBean.cargarSol(soli.codigoCredito)}"
+															value="Ver Solicitud" class="btn btn-success">
+															<f:ajax render="panelTelefono" />
+														</h:commandButton>
+													</h:column>
+													<h:column>
+														<f:facet name="header">Aprobar</f:facet>
+														<h:commandButton
+															action="#{empleadosBean.aprobar(soli.codigoCredito)}"
+															value="Aprobar" class="btn btn-success">
+															<f:ajax render="@all" />
+														</h:commandButton>
+													</h:column>
+													<h:column>
+														<f:facet name="header">Rechazar</f:facet>
+														<h:commandButton
+															action="#{empleadosBean.cambio()}"
+															value="Rechazar" class="btn btn-success">
+															<f:ajax render="panelTelefono panelRechazo" />
+														</h:commandButton>
+													</h:column>
+													
+
+												</h:dataTable>
+											</h:form>
+										</h:panelGroup>
+
+
+										<h:panelGroup id="panelTelefono">
+											<h:form id="tels" rendered="#{empleadosBean.editable}">
+												<h1>Detalles del Credito</h1>
+												<div class="form-group">
+												<label>Proposito del credito</label>
+												<h:inputTextarea value="#{empleadosBean.solicitudDeCredito.propositoCredito}" class="form-control"/>
+												
+											</div>
+											<div class="form-group">
+												<label>Ingrese monto del credito a solicitar</label>
+												<h:inputText id="nombre"
+													value="#{empleadosBean.solicitudDeCredito.montoCredito}" type="text"
+													class="form-control form-control-line">
+												</h:inputText>
+												
+											</div>
+											<div class="form-group">
+												<label>Ingrese el plazo de credito en meses</label>
+												<h:inputText id="apellido"
+													value="#{empleadosBean.solicitudDeCredito.mesesCredito}" type="text"
+													class="form-control form-control-line">
+												</h:inputText>
+											</div>
+											<div class="form-group">
+												<label>Tiempo de Empleo&nbsp;&nbsp;</label> 
+												<h:inputText id="a"
+													value="#{empleadosBean.solicitudDeCredito.tiempoEmpleo}" type="text"
+													class="form-control form-control-line">
+												</h:inputText>
+											</div>
+											</h:form>
+										</h:panelGroup>
+										<h:panelGroup id="panelRechazo">
+										<h:form id="rech" rendered="#{empleadosBean.editabledos}">
+												<h1>Motivo de Rechazo</h1>
+												<div class="form-group">
+												<label>Detallar el Motivo del Rechazo de Credito</label>
+												<h:inputTextarea id="mo" value="#{empleadosBean.motivo}" class="form-control"/>
+												</div>
+												<div>
+														<h:commandButton
+															action="#{empleadosBean.rechazar()}"
+															value="Confirmar" class="btn btn-success">
+															<f:ajax execute="mo" render="@all" />
+														</h:commandButton>
+												</div>
+											</h:form>
 										
-
-
-
-
-									</h:form>
+										</h:panelGroup>
+									
 								</div>
 							</div>
 						</div>
