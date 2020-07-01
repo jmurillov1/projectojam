@@ -1,5 +1,7 @@
 package ec.edu.ups.coopjam.business;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -49,5 +51,7 @@ public interface GestionUsuarioLocal {
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal); 
 	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
-	public List<SolicitudDeCredito> listadoSolicitudDeCreditos();
+	public List<SolicitudDeCredito> listadoSolicitudDeCreditos(); 
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta); 
+	public byte[] toByteArray(InputStream in) throws IOException;
 }

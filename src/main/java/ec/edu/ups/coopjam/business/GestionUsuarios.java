@@ -1,5 +1,8 @@
 package ec.edu.ups.coopjam.business;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -366,7 +369,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
 	}
-
+	
 	/**
 	 * Metodo que permite guardar la sesion y enviar un correo al usuario que se le
 	 * ha asignado esa sesion
@@ -689,5 +692,26 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
 		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
+	}  
+	
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) { 
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta);
+		return cuentaDeAhorro.getCliente();
+	} 
+	
+	public byte[] toByteArray(InputStream in) throws IOException {
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+		byte[] buffer = new byte[1024];
+		int len;
+
+		// read bytes from the input stream and store them in buffer
+		while ((len = in.read(buffer)) != -1) {
+			// write bytes from the buffer into output stream
+			os.write(buffer, 0, len);
+		}
+
+		return os.toByteArray();
 	}
 }

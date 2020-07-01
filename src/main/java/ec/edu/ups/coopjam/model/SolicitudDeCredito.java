@@ -1,11 +1,17 @@
 package ec.edu.ups.coopjam.model;
 
+import java.io.File;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+
+import org.primefaces.model.file.UploadedFile;
 
 @Entity
 public class SolicitudDeCredito {
@@ -25,10 +31,13 @@ public class SolicitudDeCredito {
 	private String tipoVivienda; 
 	private String tipoEmpleo; 
 	private String trabajadorExtranjero; 
-	private String estadoCredito;  
-	private String cedulaCliente; 
-	private String plantillaServicios;
-	private String rolDePagos; 
+	private String estadoCredito;   
+	@Lob
+    private byte[] arCedula; 
+	@Lob
+    private byte[] arPlanillaServicios; 
+	@Lob
+    private byte[] arRolDePagos; 
 	
 	public int getCodigoCredito() {
 		return codigoCredito;
@@ -109,24 +118,26 @@ public class SolicitudDeCredito {
 	public void setEstadoCredito(String estadoCredito) {
 		this.estadoCredito = estadoCredito;
 	}
-	public String getCedulaCliente() {
-		return cedulaCliente;
+	public byte[] getArCedula() {
+		return arCedula;
 	}
-	public void setCedulaCliente(String cedulaCliente) {
-		this.cedulaCliente = cedulaCliente;
+	public void setArCedula(byte[] arCedula) {
+		this.arCedula = arCedula;
 	}
-	public String getPlantillaServicios() {
-		return plantillaServicios;
+	public byte[] getArPlanillaServicios() {
+		return arPlanillaServicios;
 	}
-	public void setPlantillaServicios(String plantillaServicios) {
-		this.plantillaServicios = plantillaServicios;
+	public void setArPlanillaServicios(byte[] arPlanillaServicios) {
+		this.arPlanillaServicios = arPlanillaServicios;
 	}
-	public String getRolDePagos() {
-		return rolDePagos;
+	public byte[] getArRolDePagos() {
+		return arRolDePagos;
 	}
-	public void setRolDePagos(String rolDePagos) {
-		this.rolDePagos = rolDePagos;
-	} 
+	public void setArRolDePagos(byte[] arRolDePagos) {
+		this.arRolDePagos = arRolDePagos;
+	}
+	
+	
 	
 	
 	
