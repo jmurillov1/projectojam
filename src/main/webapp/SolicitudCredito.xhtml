@@ -15,7 +15,6 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="panel panel-default">
-
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-lg-6">
@@ -44,14 +43,14 @@
 											<div class="form-group">
 												<label>Proposito del credito</label>
 												<h:inputTextarea
-													value="#{crearCliente.solicitudDeCredito.propositoCredito}"
+													value="#{clientesBean.solicitudDeCredito.propositoCredito}"
 													class="form-control" />
 
 											</div>
 											<div class="form-group">
 												<label>Ingrese monto del credito a solicitar</label>
 												<h:inputText id="nombre"
-													value="#{crearCliente.solicitudDeCredito.montoCredito}"
+													value="#{clientesBean.solicitudDeCredito.montoCredito}"
 													type="text" class="form-control form-control-line">
 												</h:inputText>
 
@@ -59,14 +58,14 @@
 											<div class="form-group">
 												<label>Ingrese el plazo de credito en meses</label>
 												<h:inputText id="apellido"
-													value="#{crearCliente.solicitudDeCredito.mesesCredito}"
+													value="#{clientesBean.solicitudDeCredito.mesesCredito}"
 													type="text" class="form-control form-control-line">
 												</h:inputText>
 											</div>
 											<div class="form-group">
 												<label>Tiempo de Empleo&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tiempoempleo"
-													value="#{crearCliente.solicitudDeCredito.tiempoEmpleo}">
+													value="#{clientesBean.solicitudDeCredito.tiempoEmpleo}">
 													<f:selectItem itemValue="desempleado"
 														itemLabel="desempleado" />
 													<f:selectItem itemValue="menos de 1 año"
@@ -83,7 +82,7 @@
 											<div class="form-group">
 												<label>Estado Civil&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="estadocivil"
-													value="#{crearCliente.solicitudDeCredito.estadoCivilSexo}">
+													value="#{clientesBean.solicitudDeCredito.estadoCivilSexo}">
 													<f:selectItem itemValue="masculino: divorciado/separado"
 														itemLabel="masculino: divorciado/separado" />
 													<f:selectItem
@@ -101,14 +100,14 @@
 											<div class="form-group">
 												<label>Ingrese el avaluo de su vivienda</label>
 												<h:inputText id="tel2"
-													value="#{crearCliente.solicitudDeCredito.avaluoDeVivienda}"
+													value="#{clientesBean.solicitudDeCredito.avaluoDeVivienda}"
 													type="text" class="form-control form-control-line">
 												</h:inputText>
 											</div>
 											<div class="form-group">
 												<label>Activo&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="activos"
-													value="#{crearCliente.solicitudDeCredito.activo}">
+													value="#{clientesBean.solicitudDeCredito.activo}">
 													<f:selectItem itemValue="Bienes inmuebles"
 														itemLabel="Bienes inmuebles" />
 													<f:selectItem
@@ -125,7 +124,7 @@
 												<label>Ingrese el tipo de vienda que
 													posee&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tpvivienda"
-													value="#{crearCliente.solicitudDeCredito.tipoVivienda}">
+													value="#{clientesBean.solicitudDeCredito.tipoVivienda}">
 													<f:selectItem itemValue="gratis" itemLabel="gratis" />
 													<f:selectItem itemValue="alquiler" itemLabel="alquiler" />
 													<f:selectItem itemValue="propio" itemLabel="propio" />
@@ -136,7 +135,7 @@
 												<label>Ingrese el tipo de empleo que tiene en este
 													momento&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tipempleo"
-													value="#{crearCliente.solicitudDeCredito.tipoEmpleo}">
+													value="#{clientesBean.solicitudDeCredito.tipoEmpleo}">
 													<f:selectItem itemValue="desempleado"
 														itemLabel="desempleado" />
 													<f:selectItem itemValue="jubilado" itemLabel="jubilado" />
@@ -148,7 +147,7 @@
 											<div class="form-group">
 												<label>Trabajador extranjero&nbsp;&nbsp;</label> <br />
 												<h:selectOneRadio id="caj"
-													value="#{crearCliente.solicitudDeCredito.trabajadorExtranjero}"
+													value="#{clientesBean.solicitudDeCredito.trabajadorExtranjero}"
 													required="true" label=" ">
 													<f:selectItem itemValue="si" itemLabel="si" />
 													<f:selectItem itemValue="no" itemLabel="no" />
@@ -162,21 +161,21 @@
 														<div class="form-group">
 															<label>Cargar cedula&nbsp;&nbsp;</label>
 															<p:inputFile id="file" label="Cargar"
-																value="#{crearCliente.arCedula}" required="true"
+																value="#{clientesBean.arCedula}" required="true"
 																requiredMessage="Archivo no seleccionado" />
 														</div>
 														<div class="form-group">
 															<label>Cargar respaldos de servicios
 																basicos&nbsp;&nbsp;</label>  
 															<p:inputFile id="file2" label="Cargar"
-																value="#{crearCliente.arPlanillaServicios}" required="true"
+																value="#{clientesBean.arPlanillaServicios}" required="true"
 																requiredMessage="Archivo no seleccionado" />
 														</div>
 
 														<div class="form-group">
 															<label>Cargar rol de pagos&nbsp;&nbsp;</label>  
 															<p:inputFile id="file3" label="Cargar"
-																value="#{crearCliente.arRolDePagos}" required="true"
+																value="#{clientesBean.arRolDePagos}" required="true"
 																requiredMessage="Archivo no seleccionado" />
 														</div>
 													</div>
@@ -184,7 +183,7 @@
 												<!-- /.col-lg-12 -->
 											</div>
 											<h:commandButton
-												action="#{crearCliente.crearSolicitudCredito()}"
+												action="#{clientesBean.crearSolicitudCredito()}"
 												value="Guardar" class="btn btn-success" />
 										</h:form>
 									</div>

@@ -174,10 +174,10 @@ public class CrearCliente {
 		return null;
 	} 
 	
-	public String crearSolicitudCredito() throws IOException{   
+	/*public String crearSolicitudCredito() throws IOException{   
 		System.out.println("ENTRO EN LA SOLICITUD"); 
 		Cliente cliente = new Cliente(); 
-		cliente = gestionUsuarios.buscarCliente("0150350668"); 
+		cliente = gestionUsuarios.buscarCliente(""); 
 		solicitudDeCredito.setClienteCredito(cliente); 
 		solicitudDeCredito.setEstadoCredito("Solicitando");
 		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
@@ -185,5 +185,5 @@ public class CrearCliente {
 		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream()));
 		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);
 		return "SolicitudCredito"; 
-	} 
+	} */
 }

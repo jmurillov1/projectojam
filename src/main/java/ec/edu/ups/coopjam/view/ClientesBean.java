@@ -1,5 +1,6 @@
 package ec.edu.ups.coopjam.view;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,11 +14,13 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import javax.servlet.http.Part;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.SesionCliente;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 /**
@@ -46,7 +49,11 @@ public class ClientesBean {
 	private Date fechaInicio;
 	private Date fechaFinal;
 	private String tipoTransaccion;  
-	private String fechasInvalidas;
+	private String fechasInvalidas; 
+	private SolicitudDeCredito solicitudDeCredito;  
+	private Part arCedula; 
+	private Part arPlanillaServicios; 
+	private Part arRolDePagos; 
 
 	/**
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a
@@ -58,7 +65,8 @@ public class ClientesBean {
 		tipoTransaccion = "Todos";
 		System.out.println(lstClientes.size());
 		cuentaDeAhorro = new CuentaDeAhorro();
-		cliente = new Cliente();
+		cliente = new Cliente(); 
+		solicitudDeCredito = new SolicitudDeCredito();
 	}
 
 	/**
@@ -345,6 +353,39 @@ public class ClientesBean {
 	public void setSaldoCuenta(String saldoCuenta) {
 		this.saldoCuenta = saldoCuenta;
 	}
+	
+	
+	public SolicitudDeCredito getSolicitudDeCredito() {
+		return solicitudDeCredito;
+	}
+
+	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
+		this.solicitudDeCredito = solicitudDeCredito;
+	}
+
+	public Part getArCedula() {
+		return arCedula;
+	}
+
+	public void setArCedula(Part arCedula) {
+		this.arCedula = arCedula;
+	}
+
+	public Part getArPlanillaServicios() {
+		return arPlanillaServicios;
+	}
+
+	public void setArPlanillaServicios(Part arPlanillaServicios) {
+		this.arPlanillaServicios = arPlanillaServicios;
+	}
+
+	public Part getArRolDePagos() {
+		return arRolDePagos;
+	}
+
+	public void setArRolDePagos(Part arRolDePagos) {
+		this.arRolDePagos = arRolDePagos;
+	}
 
 	/**
 	 * Metodo que permite crear la cuenta, cliente y a su vez una transaccion
@@ -525,7 +566,20 @@ public class ClientesBean {
            return "Fecha inicio mayor";
         }
         return null;
-	}
+	} 
+	
+	
+	public String crearSolicitudCredito() throws IOException{   
+		System.out.println("ENTRO EN LA SOLICITUD");    
+		solicitudDeCredito.setClienteCredito(gestionUsuarios.buscarCliente(cedulaParametro));   
+		solicitudDeCredito.setEstadoCredito("Solicitando");
+		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
+		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
+		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream()));
+		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);  
+		solicitudDeCredito = new SolicitudDeCredito();
+		return "SolicitudCredito"; 
+	} 
 	
 	
 }
