@@ -1,5 +1,10 @@
 package ec.edu.ups.coopjam.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +12,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.Part;
+
+import org.primefaces.model.file.UploadedFile;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
@@ -24,7 +32,11 @@ public class CrearCliente {
 	private String saldoCuenta;  
 	private CuentaDeAhorro cuentaDeAhorro;   
 	private List<Cliente> lstClientes;  
-	private SolicitudDeCredito solicitudDeCredito; 
+	private SolicitudDeCredito solicitudDeCredito;  
+	private Part arCedula; 
+	private Part arPlanillaServicios; 
+	private Part arRolDePagos; 
+
 	
 	@PostConstruct
 	private void iniciar() {  
@@ -73,6 +85,25 @@ public class CrearCliente {
 	}
 	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
 		this.solicitudDeCredito = solicitudDeCredito;
+	} 
+	
+	public Part getArCedula() {
+		return arCedula;
+	}
+	public void setArCedula(Part arCedula) {
+		this.arCedula = arCedula;
+	}
+	public Part getArPlanillaServicios() {
+		return arPlanillaServicios;
+	}
+	public void setArPlanillaServicios(Part arPlanillaServicios) {
+		this.arPlanillaServicios = arPlanillaServicios;
+	}
+	public Part getArRolDePagos() {
+		return arRolDePagos;
+	}
+	public void setArRolDePagos(Part arRolDePagos) {
+		this.arRolDePagos = arRolDePagos;
 	}
 	public String crearCliente() {
 		try {
@@ -143,13 +174,16 @@ public class CrearCliente {
 		return null;
 	} 
 	
-	public String crearSolicitudCredito() {  
+	public String crearSolicitudCredito() throws IOException{   
+		System.out.println("ENTRO EN LA SOLICITUD"); 
 		Cliente cliente = new Cliente(); 
 		cliente = gestionUsuarios.buscarCliente("0150350668"); 
 		solicitudDeCredito.setClienteCredito(cliente); 
 		solicitudDeCredito.setEstadoCredito("Solicitando");
+		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
+		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
+		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream()));
 		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);
 		return "SolicitudCredito"; 
-	}
-	
+	} 
 }

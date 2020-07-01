@@ -2,15 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://xmlns.jcp.org/jsf/html">
 
 <h:head></h:head>
 <h:body>
 	<ui:composition template="template/templateCliente2.xhtml">
-		<ui:define name="title">Solicitud de Credito</ui:define> 
-		<ui:param name="nombre" value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" /> 
+		<ui:define name="title">Solicitud de Credito</ui:define>
+		<ui:param name="nombre" value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" />
 		<ui:define name="content">
-			<h:form>
+			<h:form enctype="multipart/form-data">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="panel panel-default">
@@ -18,161 +19,173 @@
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-lg-6">
-										<h:form role="form">
+										<h:form role="form" enctype="multipart/form-data">
 											<div class="form-group">
 												<label>Nombre:&nbsp;&nbsp;</label>
-												<h:outputText
-													value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" />
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" />
 											</div>
 											<div class="form-group">
 												<label> Cedula:&nbsp;&nbsp;</label>
-												<h:outputText
-													value="#{clientesBean.buscarCuentaDeAhorro.cliente.cedula}" />
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.cedula}" />
 											</div>
 
 											<div class="form-group">
 												<label>Telefono:&nbsp;&nbsp;</label>
-												<h:outputText
-													value="#{clientesBean.buscarCuentaDeAhorro.cliente.telefono1}" />
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.telefono1}" />
 											</div>
 											<div class="form-group">
 												<label>Direccion:&nbsp;&nbsp;</label>
-												<h:outputText
-													value="#{clientesBean.buscarCuentaDeAhorro.cliente.direccion}" />
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.direccion}" />
 											</div>
 											<div class="form-group">
 												<label>Correo Electronico:&nbsp;&nbsp;</label>
-												<h:outputText
-													value="#{clientesBean.buscarCuentaDeAhorro.cliente.correo}" />
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.correo}" />
 											</div>
 											<div class="form-group">
 												<label>Proposito del credito</label>
-												<h:inputTextarea value="#{crearCliente.solicitudDeCredito.propositoCredito}" class="form-control"/>
-												
+												<h:inputTextarea
+													value="#{crearCliente.solicitudDeCredito.propositoCredito}"
+													class="form-control" />
+
 											</div>
 											<div class="form-group">
 												<label>Ingrese monto del credito a solicitar</label>
 												<h:inputText id="nombre"
-													value="#{crearCliente.solicitudDeCredito.montoCredito}" type="text"
-													class="form-control form-control-line">
+													value="#{crearCliente.solicitudDeCredito.montoCredito}"
+													type="text" class="form-control form-control-line">
 												</h:inputText>
-												
+
 											</div>
 											<div class="form-group">
 												<label>Ingrese el plazo de credito en meses</label>
 												<h:inputText id="apellido"
-													value="#{crearCliente.solicitudDeCredito.mesesCredito}" type="text"
-													class="form-control form-control-line">
+													value="#{crearCliente.solicitudDeCredito.mesesCredito}"
+													type="text" class="form-control form-control-line">
 												</h:inputText>
 											</div>
 											<div class="form-group">
-												<label>Tiempo de Empleo&nbsp;&nbsp;</label> 
-												<br/>
+												<label>Tiempo de Empleo&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tiempoempleo"
-													value="#{crearCliente.solicitudDeCredito.tiempoEmpleo}"> 
-													<f:selectItem itemValue="desempleado" itemLabel="desempleado" />
-													<f:selectItem itemValue="menos de 1 año" itemLabel="menos de 1 año" />
-													<f:selectItem itemValue="entre 1 y 4 años" itemLabel="entre 1 y 4 años" />
-													<f:selectItem itemValue="entre 4 y 7 años" itemLabel="entre 4 y 7 años"/> 
-													<f:selectItem itemValue="mas de  7 años" itemLabel="mas de  7 años" />
+													value="#{crearCliente.solicitudDeCredito.tiempoEmpleo}">
+													<f:selectItem itemValue="desempleado"
+														itemLabel="desempleado" />
+													<f:selectItem itemValue="menos de 1 año"
+														itemLabel="menos de 1 año" />
+													<f:selectItem itemValue="entre 1 y 4 años"
+														itemLabel="entre 1 y 4 años" />
+													<f:selectItem itemValue="entre 4 y 7 años"
+														itemLabel="entre 4 y 7 años" />
+													<f:selectItem itemValue="mas de  7 años"
+														itemLabel="mas de  7 años" />
 												</h:selectOneMenu>
-												<br/> 
-												<br/>
+												<br /> <br />
 											</div>
 											<div class="form-group">
-												<label>Estado Civil&nbsp;&nbsp;</label> 
-												<br/>
+												<label>Estado Civil&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="estadocivil"
-													value="#{crearCliente.solicitudDeCredito.estadoCivilSexo}"> 
-													<f:selectItem itemValue="masculino: divorciado/separado" itemLabel="masculino: divorciado/separado" />
-													<f:selectItem itemValue="femenino: dirvorciada/separada/casada" itemLabel="femenino: dirvorciada/separada/casada" />
-													<f:selectItem itemValue="masculino: soltero" itemLabel="masculino: soltero" />
-													<f:selectItem itemValue="masculino: casado/viudo" itemLabel="masculino: casado/viudo"/> 
-													<f:selectItem itemValue="femenino: soltera" itemLabel="femenino: soltera" />
+													value="#{crearCliente.solicitudDeCredito.estadoCivilSexo}">
+													<f:selectItem itemValue="masculino: divorciado/separado"
+														itemLabel="masculino: divorciado/separado" />
+													<f:selectItem
+														itemValue="femenino: dirvorciada/separada/casada"
+														itemLabel="femenino: dirvorciada/separada/casada" />
+													<f:selectItem itemValue="masculino: soltero"
+														itemLabel="masculino: soltero" />
+													<f:selectItem itemValue="masculino: casado/viudo"
+														itemLabel="masculino: casado/viudo" />
+													<f:selectItem itemValue="femenino: soltera"
+														itemLabel="femenino: soltera" />
 												</h:selectOneMenu>
-												<br/> 
-												<br/>
+												<br /> <br />
 											</div>
 											<div class="form-group">
 												<label>Ingrese el avaluo de su vivienda</label>
 												<h:inputText id="tel2"
-													value="#{crearCliente.solicitudDeCredito.avaluoDeVivienda}" type="text"
-													class="form-control form-control-line">
+													value="#{crearCliente.solicitudDeCredito.avaluoDeVivienda}"
+													type="text" class="form-control form-control-line">
 												</h:inputText>
 											</div>
 											<div class="form-group">
-												<label>Activo&nbsp;&nbsp;</label> 
-												<br/>
+												<label>Activo&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="activos"
-													value="#{crearCliente.solicitudDeCredito.activo}"> 
-													<f:selectItem itemValue="Bienes inmuebles" itemLabel="Bienes inmuebles"  />
-													<f:selectItem itemValue="Seguro de vida y plan de construcción" itemLabel="Seguro de vida y plan de construcción"/>
-													<f:selectItem itemValue="automovil u otro" itemLabel="automovil u otro"/>
-													<f:selectItem itemValue="desconocido / sin propiedad" itemLabel="desconocido / sin propiedad/"/> 
+													value="#{crearCliente.solicitudDeCredito.activo}">
+													<f:selectItem itemValue="Bienes inmuebles"
+														itemLabel="Bienes inmuebles" />
+													<f:selectItem
+														itemValue="Seguro de vida y plan de construcción"
+														itemLabel="Seguro de vida y plan de construcción" />
+													<f:selectItem itemValue="automovil u otro"
+														itemLabel="automovil u otro" />
+													<f:selectItem itemValue="desconocido / sin propiedad"
+														itemLabel="desconocido / sin propiedad/" />
 												</h:selectOneMenu>
-												<br/> 
-												<br/>
+												<br /> <br />
 											</div>
 											<div class="form-group">
-												<label>Ingrese el tipo de vienda que posee&nbsp;&nbsp;</label> 
-												<br/> 
+												<label>Ingrese el tipo de vienda que
+													posee&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tpvivienda"
-													value="#{crearCliente.solicitudDeCredito.tipoVivienda}"> 
-													<f:selectItem itemValue="gratis" itemLabel="gratis"  />
-													<f:selectItem itemValue="alquiler" itemLabel="alquiler"/>
-													<f:selectItem itemValue="propio" itemLabel="propio"/>
-												</h:selectOneMenu> 
-												<br/> 
-												<br/> 
+													value="#{crearCliente.solicitudDeCredito.tipoVivienda}">
+													<f:selectItem itemValue="gratis" itemLabel="gratis" />
+													<f:selectItem itemValue="alquiler" itemLabel="alquiler" />
+													<f:selectItem itemValue="propio" itemLabel="propio" />
+												</h:selectOneMenu>
+												<br /> <br />
 											</div>
 											<div class="form-group">
 												<label>Ingrese el tipo de empleo que tiene en este
-													momento&nbsp;&nbsp;</label> 
-												<br/> 
+													momento&nbsp;&nbsp;</label> <br />
 												<h:selectOneMenu id="tipempleo"
-													value="#{crearCliente.solicitudDeCredito.tipoEmpleo}"> 
-													<f:selectItem itemValue="desempleado" itemLabel="desempleado"  />
-													<f:selectItem itemValue="jubilado" itemLabel="jubilado"/>
-													<f:selectItem itemValue="empleado" itemLabel="empleado"/> 
-													<f:selectItem itemValue=" autonomo" itemLabel=" autonomo"/>
-												</h:selectOneMenu> 
-												<br/> 
-												<br/>
+													value="#{crearCliente.solicitudDeCredito.tipoEmpleo}">
+													<f:selectItem itemValue="desempleado"
+														itemLabel="desempleado" />
+													<f:selectItem itemValue="jubilado" itemLabel="jubilado" />
+													<f:selectItem itemValue="empleado" itemLabel="empleado" />
+													<f:selectItem itemValue=" autonomo" itemLabel=" autonomo" />
+												</h:selectOneMenu>
+												<br /> <br />
 											</div>
 											<div class="form-group">
-												<label>Trabajador extranjero&nbsp;&nbsp;</label> 
-												<br/> 
-												<h:selectOneRadio  id="caj" value="#{crearCliente.solicitudDeCredito.trabajadorExtranjero}" required="true" label=" ">
-                									<f:selectItem itemValue="si" itemLabel="si" />
-                									<f:selectItem itemValue="no" itemLabel="no" />
-            									</h:selectOneRadio> 
-            									<br/> 
-												<br/>
+												<label>Trabajador extranjero&nbsp;&nbsp;</label> <br />
+												<h:selectOneRadio id="caj"
+													value="#{crearCliente.solicitudDeCredito.trabajadorExtranjero}"
+													required="true" label=" ">
+													<f:selectItem itemValue="si" itemLabel="si" />
+													<f:selectItem itemValue="no" itemLabel="no" />
+												</h:selectOneRadio>
+												<br /> <br />
 											</div>
 											<div class="row">
 												<div class="col-lg-12">
 													<h1 class="page-header">Cargar Documentos</h1>
 													<div class="form-group">
 														<div class="form-group">
-															<label>Cargar cedula&nbsp;&nbsp;</label>  
-															<input type="file" value="#{crearCliente.solicitudDeCredito.cedulaCliente}"></input>
+															<label>Cargar cedula&nbsp;&nbsp;</label>
+															<p:inputFile id="file" label="Cargar"
+																value="#{crearCliente.arCedula}" required="true"
+																requiredMessage="Archivo no seleccionado" />
 														</div>
 														<div class="form-group">
 															<label>Cargar respaldos de servicios
 																basicos&nbsp;&nbsp;</label>  
-																<input type="file" value="#{crearCliente.solicitudDeCredito.plantillaServicios}"></input>
+															<p:inputFile id="file2" label="Cargar"
+																value="#{crearCliente.arPlanillaServicios}" required="true"
+																requiredMessage="Archivo no seleccionado" />
 														</div>
 
 														<div class="form-group">
 															<label>Cargar rol de pagos&nbsp;&nbsp;</label>  
-															<input type="file" value="#{crearCliente.solicitudDeCredito.rolDePagos}"></input>
-														</div> 
+															<p:inputFile id="file3" label="Cargar"
+																value="#{crearCliente.arRolDePagos}" required="true"
+																requiredMessage="Archivo no seleccionado" />
+														</div>
 													</div>
 												</div>
 												<!-- /.col-lg-12 -->
-											</div> 
-											<h:commandButton action="#{crearCliente.crearSolicitudCredito()}"
-											value="Guardar" class="btn btn-success" />
+											</div>
+											<h:commandButton
+												action="#{crearCliente.crearSolicitudCredito()}"
+												value="Guardar" class="btn btn-success" />
 										</h:form>
 									</div>
 								</div>
