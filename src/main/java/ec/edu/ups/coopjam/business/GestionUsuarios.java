@@ -1,5 +1,8 @@
 package ec.edu.ups.coopjam.business;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,12 +29,14 @@ import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
+import ec.edu.ups.coopjam.data.SolicitudDeCreditoDAO;
 import ec.edu.ups.coopjam.data.TransaccionDAO;
 import ec.edu.ups.coopjam.data.TransferenciaLocalDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
+import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
 
@@ -56,7 +61,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	private EmpleadoDAO empleadoDAO;
 	@Inject
 	private TransferenciaLocalDAO transferenciaLocalDAO;
-
+	@Inject
+	private SolicitudDeCreditoDAO solicitudDeCreditoDAO;
+	
 	/**
 	 * Metodo que permite la validacion de una cedula correcta
 	 * 
@@ -362,7 +369,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
 	}
-
+	
 	/**
 	 * Metodo que permite guardar la sesion y enviar un correo al usuario que se le
 	 * ha asignado esa sesion
@@ -673,6 +680,42 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
 		transferenciaLocalDAO.insert(transfereciaLocal);
+	} 
+	
+	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+		solicitudDeCreditoDAO.insert(solicitudDeCredito);
+	} 
+	
+	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+		solicitudDeCreditoDAO.update(solicitudDeCredito);
+	} 
+	
+	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
+		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
+	}  
+	
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) { 
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta);
+		return cuentaDeAhorro.getCliente();
+	} 
+	
+	public byte[] toByteArray(InputStream in) throws IOException {
 
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+		byte[] buffer = new byte[1024];
+		int len;
+
+		// read bytes from the input stream and store them in buffer
+		while ((len = in.read(buffer)) != -1) {
+			// write bytes from the buffer into output stream
+			os.write(buffer, 0, len);
+		}
+
+		return os.toByteArray();
+	} 
+	
+	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {  
+		
 	}
 }

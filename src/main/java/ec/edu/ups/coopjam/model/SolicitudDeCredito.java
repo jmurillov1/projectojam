@@ -1,11 +1,17 @@
 package ec.edu.ups.coopjam.model;
 
+import java.io.File;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+
+import org.primefaces.model.file.UploadedFile;
 
 @Entity
 public class SolicitudDeCredito {
@@ -14,20 +20,30 @@ public class SolicitudDeCredito {
 	private int codigoCredito; 
 	@OneToOne
 	@JoinColumn(name="cedula_cliente")
-	private Cliente clienteCredito; 
+	private Cliente clienteCredito;  
+	@OneToOne
+	@JoinColumn(name="cedula_garante")
+	private Cliente garanteCredito; 
 	private String propositoCredito; 
 	private double montoCredito; 
+	private String mesesCredito;
 	private String tiempoEmpleo; 
-	private String estadoCivil; 
+	private String estadoCivilSexo; 
 	private double avaluoDeVivienda; 
 	private String activo; 
 	private String tipoVivienda; 
 	private String tipoEmpleo; 
 	private String trabajadorExtranjero; 
-	private String estadoCredito;  
-	private String cedulaCliente; 
-	private String plantillaServicios;
-	private String rolDePagos; 
+	private String estadoCredito;   
+	@Lob 
+	@Column(length=16777216)
+    private byte[] arCedula; 
+	@Lob 
+	@Column(length=16777216)
+    private byte[] arPlanillaServicios; 
+	@Lob 
+	@Column(length=16777216)
+    private byte[] arRolDePagos; 
 	
 	public int getCodigoCredito() {
 		return codigoCredito;
@@ -52,6 +68,13 @@ public class SolicitudDeCredito {
 	}
 	public void setMontoCredito(double montoCredito) {
 		this.montoCredito = montoCredito;
+	} 
+	
+	public String getMesesCredito() {
+		return mesesCredito;
+	}
+	public void setMesesCredito(String mesesCredito) {
+		this.mesesCredito = mesesCredito;
 	}
 	public String getTiempoEmpleo() {
 		return tiempoEmpleo;
@@ -59,11 +82,11 @@ public class SolicitudDeCredito {
 	public void setTiempoEmpleo(String tiempoEmpleo) {
 		this.tiempoEmpleo = tiempoEmpleo;
 	}
-	public String getEstadoCivil() {
-		return estadoCivil;
+	public String getEstadoCivilSexo() {
+		return estadoCivilSexo;
 	}
-	public void setEstadoCivil(String estadoCivil) {
-		this.estadoCivil = estadoCivil;
+	public void setEstadoCivilSexo(String estadoCivilSexo) {
+		this.estadoCivilSexo = estadoCivilSexo;
 	}
 	public double getAvaluoDeVivienda() {
 		return avaluoDeVivienda;
@@ -101,24 +124,33 @@ public class SolicitudDeCredito {
 	public void setEstadoCredito(String estadoCredito) {
 		this.estadoCredito = estadoCredito;
 	}
-	public String getCedulaCliente() {
-		return cedulaCliente;
+	public byte[] getArCedula() {
+		return arCedula;
 	}
-	public void setCedulaCliente(String cedulaCliente) {
-		this.cedulaCliente = cedulaCliente;
+	public void setArCedula(byte[] arCedula) {
+		this.arCedula = arCedula;
 	}
-	public String getPlantillaServicios() {
-		return plantillaServicios;
+	public byte[] getArPlanillaServicios() {
+		return arPlanillaServicios;
 	}
-	public void setPlantillaServicios(String plantillaServicios) {
-		this.plantillaServicios = plantillaServicios;
+	public void setArPlanillaServicios(byte[] arPlanillaServicios) {
+		this.arPlanillaServicios = arPlanillaServicios;
 	}
-	public String getRolDePagos() {
-		return rolDePagos;
+	public byte[] getArRolDePagos() {
+		return arRolDePagos;
 	}
-	public void setRolDePagos(String rolDePagos) {
-		this.rolDePagos = rolDePagos;
+	public void setArRolDePagos(byte[] arRolDePagos) {
+		this.arRolDePagos = arRolDePagos;
+	}
+	public Cliente getGaranteCredito() {
+		return garanteCredito;
+	}
+	public void setGaranteCredito(Cliente garanteCredito) {
+		this.garanteCredito = garanteCredito;
 	} 
+	
+	
+	
 	
 	
 	
