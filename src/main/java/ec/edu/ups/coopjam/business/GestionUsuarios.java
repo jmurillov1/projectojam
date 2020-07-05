@@ -713,5 +713,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		}
 
 		return os.toByteArray();
+	} 
+	
+	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {  
+		
 	}
 }

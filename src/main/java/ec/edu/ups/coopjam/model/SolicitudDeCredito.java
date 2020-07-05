@@ -20,7 +20,10 @@ public class SolicitudDeCredito {
 	private int codigoCredito; 
 	@OneToOne
 	@JoinColumn(name="cedula_cliente")
-	private Cliente clienteCredito; 
+	private Cliente clienteCredito;  
+	@OneToOne
+	@JoinColumn(name="cedula_garante")
+	private Cliente garanteCredito; 
 	private String propositoCredito; 
 	private double montoCredito; 
 	private String mesesCredito;
@@ -32,11 +35,14 @@ public class SolicitudDeCredito {
 	private String tipoEmpleo; 
 	private String trabajadorExtranjero; 
 	private String estadoCredito;   
-	@Lob
+	@Lob 
+	@Column(length=16777216)
     private byte[] arCedula; 
-	@Lob
+	@Lob 
+	@Column(length=16777216)
     private byte[] arPlanillaServicios; 
-	@Lob
+	@Lob 
+	@Column(length=16777216)
     private byte[] arRolDePagos; 
 	
 	public int getCodigoCredito() {
@@ -136,6 +142,13 @@ public class SolicitudDeCredito {
 	public void setArRolDePagos(byte[] arRolDePagos) {
 		this.arRolDePagos = arRolDePagos;
 	}
+	public Cliente getGaranteCredito() {
+		return garanteCredito;
+	}
+	public void setGaranteCredito(Cliente garanteCredito) {
+		this.garanteCredito = garanteCredito;
+	} 
+	
 	
 	
 	
