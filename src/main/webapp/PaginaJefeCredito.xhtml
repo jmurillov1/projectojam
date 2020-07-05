@@ -108,6 +108,20 @@
 													class="form-control form-control-line">
 												</h:inputText>
 											</div>
+											<div class="form-group">
+												<label>Copia Cedula</label><br/>
+												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('cedula')}" target="_blank" />
+											</div>
+											<div class="form-group">
+												<label>Copia Planilla</label><br/> 
+												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('planilla')}" target="_blank" />
+											</div>
+											<div class="form-group">
+												<label>Copia Rol de Pagos</label><br/> 
+												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('rol')}" target="_blank" />
+											</div>
+											
+											
 											</h:form>
 										</h:panelGroup>
 										<h:panelGroup id="panelRechazo">
