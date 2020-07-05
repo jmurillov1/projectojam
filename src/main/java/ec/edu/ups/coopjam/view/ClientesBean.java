@@ -36,7 +36,8 @@ public class ClientesBean {
 	// Atributos de la clase
 	@Inject
 	private GestionUsuarioLocal gestionUsuarios;
-	private Cliente cliente;
+	private Cliente cliente; 
+	private Cliente garante;
 	private String numeroCuenta;
 	private CuentaDeAhorro cuentaDeAhorro;
 	private CuentaDeAhorro buscarCuentaDeAhorro;
@@ -50,10 +51,12 @@ public class ClientesBean {
 	private Date fechaFinal;
 	private String tipoTransaccion;  
 	private String fechasInvalidas; 
-	private SolicitudDeCredito solicitudDeCredito;  
+	private SolicitudDeCredito solicitudDeCredito;    
+	private String cedulaGarante;
 	private Part arCedula; 
 	private Part arPlanillaServicios; 
-	private Part arRolDePagos; 
+	private Part arRolDePagos;   
+	
 
 	/**
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a
@@ -65,7 +68,8 @@ public class ClientesBean {
 		tipoTransaccion = "Todos";
 		System.out.println(lstClientes.size());
 		cuentaDeAhorro = new CuentaDeAhorro();
-		cliente = new Cliente(); 
+		cliente = new Cliente();  
+		garante = new Cliente();
 		solicitudDeCredito = new SolicitudDeCredito();
 	}
 
@@ -292,6 +296,21 @@ public class ClientesBean {
 
 	public void setTipoTransaccion(String tipoTransaccion) {
 		this.tipoTransaccion = tipoTransaccion;
+	} 
+	public Cliente getGarante() {
+		return garante;
+	}
+
+	public void setGarante(Cliente garante) {
+		this.garante = garante;
+	}
+	
+	public String getCedulaGarante() {
+		return cedulaGarante;
+	}
+
+	public void setCedulaGarante(String cedulaGarante) {
+		this.cedulaGarante = cedulaGarante;
 	}
 
 	/**
@@ -575,11 +594,19 @@ public class ClientesBean {
 		solicitudDeCredito.setEstadoCredito("Solicitando");
 		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
 		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
-		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream()));
-		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);  
-		solicitudDeCredito = new SolicitudDeCredito();
+		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream())); 
+		solicitudDeCredito.setGaranteCredito(garante);
+		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);    
+		garante = new Cliente();
+		solicitudDeCredito = new SolicitudDeCredito(); 
 		return "SolicitudCredito"; 
-	} 
+	}  
+	
+	public String buscarCliente() {  
+		garante = gestionUsuarios.buscarCliente(cedulaGarante);  
+		System.out.println("LA CEDULA ESSSSS:  "+garante.getCedula());
+		return null;
+	}
 	
 	
 }
