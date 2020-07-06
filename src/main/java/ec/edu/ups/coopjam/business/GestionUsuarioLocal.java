@@ -9,7 +9,9 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Credito;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
@@ -54,4 +56,8 @@ public interface GestionUsuarioLocal {
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos(); 
 	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta); 
 	public byte[] toByteArray(InputStream in) throws IOException;
+	public void guardarCredito(Credito credito);
+	public void actualizarCredito(Credito credito);
+	public List<Credito> listarCreditos();
+	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes);
 }

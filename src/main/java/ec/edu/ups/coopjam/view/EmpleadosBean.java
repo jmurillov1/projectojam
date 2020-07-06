@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
+import ec.edu.ups.coopjam.model.Credito;
+import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 
@@ -271,11 +275,23 @@ public class EmpleadosBean {
 		}
 		return null;
 	}
-	public String aprobar(int cod) {
-		solicitudDeCredito.setEstadoCredito("Aprobado");
+	public String aprobar(int cod) {	
 		for (SolicitudDeCredito sol : solicitudes) {
-			if (sol.getCodigoCredito() == cod) {
+			if (sol.getCodigoCredito() == cod && sol.getEstadoCredito().equalsIgnoreCase("Solicitando") ) {
+				solicitudDeCredito.setEstadoCredito("Aprobado");
 				empleadoON.actualizarSolicitudCredito(solicitudDeCredito);
+				Credito credito = new Credito();
+				credito.setFechaRegistro(new Date());
+				credito.setInteres(12);
+				credito.setMonto(sol.getMontoCredito());
+				//credito.setJefeC();
+				credito.setEstado("Pendiente");
+				credito.setSolicitud(sol);
+				List<DetalleCredito> li = empleadoON.crearTablaAmortizacion(Integer.parseInt(sol.getMesesCredito()), sol.getMontoCredito(), 12.00);
+				System.out.println(li.toString());
+				credito.setDetalles(li);
+				empleadoON.guardarCredito(credito);
+	
 			}
 		}
 		

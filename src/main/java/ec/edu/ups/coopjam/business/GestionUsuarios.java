@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
@@ -26,14 +27,18 @@ import javax.management.remote.NotificationResult;
 import javax.persistence.NoResultException;
 
 import ec.edu.ups.coopjam.data.ClienteDAO;
+import ec.edu.ups.coopjam.data.CreditoDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
+import ec.edu.ups.coopjam.data.DetalleCreditoDAO;
 import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
 import ec.edu.ups.coopjam.data.SolicitudDeCreditoDAO;
 import ec.edu.ups.coopjam.data.TransaccionDAO;
 import ec.edu.ups.coopjam.data.TransferenciaLocalDAO;
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Credito;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.Empleado;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
@@ -63,6 +68,10 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	private TransferenciaLocalDAO transferenciaLocalDAO;
 	@Inject
 	private SolicitudDeCreditoDAO solicitudDeCreditoDAO;
+	@Inject
+	private CreditoDAO creditoDAO;
+	@Inject
+	private DetalleCreditoDAO detalleCreditoDAO;
 	
 	/**
 	 * Metodo que permite la validacion de una cedula correcta
@@ -718,4 +727,50 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {  
 		
 	}
+	
+	public void guardarCredito(Credito credito) {
+		creditoDAO.insert(credito);
+	}
+	 public void actualizarCredito(Credito credito) {
+		 creditoDAO.update(credito);
+	 }
+	 public List<Credito> listarCreditos(){
+		 List<Credito> cred = creditoDAO.getCreditos();
+		 return cred;
+	 }
+	 
+	 public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes) {
+		 	List<DetalleCredito> listaDet = new ArrayList<>();
+		 	//double monto =12000;
+	        //double interes = 5;
+
+	        Date fecha = new Date();
+	        List<Date> fechas = new ArrayList<>();
+	        double vcuota=monto/cuotas;
+	        double icuota=monto*(interes/100);
+	        System.out.println("Fecha "+"| Cuota "+"| Capital "+"| Interes "+"| Saldo");
+	        for (int i = 0; i < cuotas; i++) {
+	        	DetalleCredito detalle = new DetalleCredito();
+	        	detalle.setEstado("Pendiente");
+	            Calendar calendar1 = Calendar.getInstance();
+	            calendar1.setTime(fecha); // Configuramos la fecha que se recibe
+	            calendar1.add(Calendar.MONTH, 1);
+	            fecha = calendar1.getTime();// numero de horas a añadir, o restar en caso de horas<0
+	            fechas.add(fecha);
+	            DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	            monto-=vcuota;
+	            System.out.println(hourdateFormat.format(fecha)+" | "+(vcuota+icuota)+" | "+icuota+" | "+vcuota+" | "+(monto));
+	            detalle.setNumeroCuota(i);
+	            detalle.setFechaPago(fecha);
+	            detalle.setInteres(icuota);
+	            detalle.setSaldo(vcuota+icuota);
+	            detalle.setMonto(monto);
+	            detalle.setCuota(vcuota);
+	            listaDet.add(detalle);
+	        }
+	        return listaDet;
+	 }
+	 
+	 
+	
 }
