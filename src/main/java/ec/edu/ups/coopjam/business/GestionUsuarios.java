@@ -3,6 +3,8 @@ package ec.edu.ups.coopjam.business;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +28,7 @@ import javax.mail.internet.MimeMessage;
 import javax.management.remote.NotificationResult;
 import javax.persistence.NoResultException;
 
+import dnl.utils.text.table.TextTable;
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CreditoDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
@@ -72,7 +75,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	private CreditoDAO creditoDAO;
 	@Inject
 	private DetalleCreditoDAO detalleCreditoDAO;
-	
+
 	/**
 	 * Metodo que permite la validacion de una cedula correcta
 	 * 
@@ -378,7 +381,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		List<CuentaDeAhorro> clientes = cuentaDeAhorroDAO.getCuentaDeAhorros();
 		return clientes;
 	}
-	
+
 	/**
 	 * Metodo que permite guardar la sesion y enviar un correo al usuario que se le
 	 * ha asignado esa sesion
@@ -618,8 +621,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public String realizarTransaccion(String cuenta, double monto, String tipoTransaccion) {
-		CuentaDeAhorro clp = cuentaDeAhorroDAO.read(cuenta); 
-		if(clp != null) { 
+		CuentaDeAhorro clp = cuentaDeAhorroDAO.read(cuenta);
+		if (clp != null) {
 			System.out.println(clp.getNumeroCuentaDeAhorro());
 			if (tipoTransaccion.equalsIgnoreCase("deposito")) {
 				Double nvmonto = clp.getSaldoCuentaDeAhorro() + monto;
@@ -659,17 +662,17 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			} else {
 				return "Monto exedido";
 			}
-		}else { 
+		} else {
 			return "Cuenta Inexistente";
 		}
 		return "Fallido";
 	}
 
-	public String realizarTransferencia(String cedula, String cuentaAhorro2, double monto) { 
-		System.out.println(cedula); 
-		System.out.println(cuentaAhorro2); 
+	public String realizarTransferencia(String cedula, String cuentaAhorro2, double monto) {
+		System.out.println(cedula);
+		System.out.println(cuentaAhorro2);
 		System.out.println(monto);
-		CuentaDeAhorro cuentaAhorro =cuentaDeAhorroDAO.getCuentaCedulaCliente(cedula);
+		CuentaDeAhorro cuentaAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedula);
 		CuentaDeAhorro cuentaAhorroTransferir = cuentaDeAhorroDAO.read(cuentaAhorro2);
 		if (cuentaAhorro.getSaldoCuentaDeAhorro() >= monto) {
 			cuentaAhorro.setSaldoCuentaDeAhorro(cuentaAhorro.getSaldoCuentaDeAhorro() - monto);
@@ -689,25 +692,25 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
 		transferenciaLocalDAO.insert(transfereciaLocal);
-	} 
-	
-	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+	}
+
+	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
 		solicitudDeCreditoDAO.insert(solicitudDeCredito);
-	} 
-	
-	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) { 
+	}
+
+	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
 		solicitudDeCreditoDAO.update(solicitudDeCredito);
-	} 
-	
+	}
+
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
 		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
-	}  
-	
-	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) { 
+	}
+
+	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta);
 		return cuentaDeAhorro.getCliente();
-	} 
-	
+	}
+
 	public byte[] toByteArray(InputStream in) throws IOException {
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -722,55 +725,104 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		}
 
 		return os.toByteArray();
-	} 
-	
-	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {  
-		
 	}
-	
+
+	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {
+
+	}
+
 	public void guardarCredito(Credito credito) {
 		creditoDAO.insert(credito);
 	}
-	 public void actualizarCredito(Credito credito) {
-		 creditoDAO.update(credito);
-	 }
-	 public List<Credito> listarCreditos(){
-		 List<Credito> cred = creditoDAO.getCreditos();
-		 return cred;
-	 }
-	 
-	 public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes) {
-		 	List<DetalleCredito> listaDet = new ArrayList<>();
-		 	//double monto =12000;
-	        //double interes = 5;
 
-	        Date fecha = new Date();
-	        List<Date> fechas = new ArrayList<>();
-	        double vcuota=monto/cuotas;
-	        double icuota=monto*(interes/100);
-	        System.out.println("Fecha "+"| Cuota "+"| Capital "+"| Interes "+"| Saldo");
-	        for (int i = 0; i < cuotas; i++) {
-	        	DetalleCredito detalle = new DetalleCredito();
-	        	detalle.setEstado("Pendiente");
-	            Calendar calendar1 = Calendar.getInstance();
-	            calendar1.setTime(fecha); // Configuramos la fecha que se recibe
-	            calendar1.add(Calendar.MONTH, 1);
-	            fecha = calendar1.getTime();// numero de horas a añadir, o restar en caso de horas<0
-	            fechas.add(fecha);
-	            DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	            monto-=vcuota;
-	            System.out.println(hourdateFormat.format(fecha)+" | "+(vcuota+icuota)+" | "+icuota+" | "+vcuota+" | "+(monto));
-	            detalle.setNumeroCuota(i);
-	            detalle.setFechaPago(fecha);
-	            detalle.setInteres(icuota);
-	            detalle.setSaldo(vcuota+icuota);
-	            detalle.setMonto(monto);
-	            detalle.setCuota(vcuota);
-	            listaDet.add(detalle);
-	        }
-	        return listaDet;
-	 }
-	 
-	 
-	
+	public void actualizarCredito(Credito credito) {
+		creditoDAO.update(credito);
+	}
+
+	public List<Credito> listarCreditos() {
+		List<Credito> cred = creditoDAO.getCreditos();
+		return cred;
+	}
+
+	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes) {
+		List<DetalleCredito> listaDet = new ArrayList<>();
+		// double monto =12000;
+		// double interes = 5;
+
+		Date fecha = new Date();
+		List<Date> fechas = new ArrayList<>();
+		double vcuota = monto / cuotas;
+		double icuota = monto * (interes / 100);
+		System.out.println("Fecha " + "| Cuota " + "| Capital " + "| Interes " + "| Saldo");
+		for (int i = 0; i < cuotas; i++) {
+			DetalleCredito detalle = new DetalleCredito();
+			detalle.setEstado("Pendiente");
+			Calendar calendar1 = Calendar.getInstance();
+			calendar1.setTime(fecha); // Configuramos la fecha que se recibe
+			calendar1.add(Calendar.MONTH, 1);
+			fecha = calendar1.getTime();// numero de horas a añadir, o restar en caso de horas<0
+			fechas.add(fecha);
+			DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			monto -= vcuota;
+			System.out.println(hourdateFormat.format(fecha) + " | " + (vcuota + icuota) + " | " + icuota + " | "
+					+ vcuota + " | " + (monto));
+			detalle.setNumeroCuota(i);
+			detalle.setFechaPago(fecha);
+			detalle.setInteres(icuota);
+			detalle.setSaldo(vcuota + icuota);
+			detalle.setMonto(monto);
+			detalle.setCuota(vcuota);
+			listaDet.add(detalle);
+		}
+		return listaDet;
+	}
+
+	public String obtenerFecha2(Date fecha) {
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		return hourdateFormat.format(fecha);
+	}
+
+	public void aprobarCredito(Credito credito, Cliente cliente) {
+		String destinatario = cliente.getCorreo();
+		String asunto = "APROBACIÓN DE CREDITO";
+		String cuerpo = "JAMVirtual SISTEMA TRANSACCIONAL\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "              Estimado(a): " + cliente.getNombre().toUpperCase() + " "
+				+ cliente.getApellido().toUpperCase() + "\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "COOPERATIVA JAM le informa que la solicitud para su credito ha sido aprobada. \n"
+				+ "                       Fecha: " + obtenerFecha(credito.getFechaRegistro())
+				+ "                                     \n"
+				+ "                           TABLA DE AMORTIZACIÓN                              \n"
+				+                  generarTabla(credito.getDetalles())                         +"\n"
+				+ "                                                                              \n";
+		enviarCorreo(destinatario, asunto, cuerpo);
+//			} 
+	}
+
+	public String generarTabla(List<DetalleCredito> dcreditos) {
+		String[] columnas = { "# Cuota", "Fecha", "Cuota", "Capital", "Interes", "Saldo" };
+		int nfilas = dcreditos.size();
+		String[][] mTablaAmor = new String[nfilas][6];
+		int cont = 0;
+		for (DetalleCredito dc : dcreditos) {
+			mTablaAmor[cont][0] = String.valueOf(dc.getNumeroCuota());
+			mTablaAmor[cont][1] = obtenerFecha2(dc.getFechaPago());
+			mTablaAmor[cont][2] = String.valueOf(dc.getSaldo());
+			mTablaAmor[cont][3] = String.valueOf(dc.getCuota());
+			mTablaAmor[cont][4] = String.valueOf(dc.getInteres());
+			mTablaAmor[cont][5] = String.valueOf(dc.getMonto());
+			cont++;
+		}
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        new TextTable(columnas, mTablaAmor).printTable(new PrintStream(outputStream), 0);
+        String output = null;
+        try {
+            output = outputStream.toString("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+		return output;
+	}
+
 }
