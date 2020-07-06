@@ -2,6 +2,7 @@ package ec.edu.ups.coopjam.data;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 
 import ec.edu.ups.coopjam.model.DetalleCredito;
 
+@Stateless
 public class DetalleCreditoDAO {
 	
 	@PersistenceContext(name = "coopjamPersistenceUnit") 

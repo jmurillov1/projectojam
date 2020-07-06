@@ -1,6 +1,7 @@
 package ec.edu.ups.coopjam.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,8 @@ public class DetalleCredito implements Serializable{
 	private double interes;
 	private double monto;
 	private double saldo;
+	private double cuota;
+	private Date fechaPago;
 	private String estado;
 	
 	
@@ -59,6 +62,20 @@ public class DetalleCredito implements Serializable{
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+	public Date getFechaPago() {
+		return fechaPago;
+	}
+	public void setFechaPago(Date fechaPago) {
+		this.fechaPago = fechaPago;
+	}
+	public double getCuota() {
+		return cuota;
+	}
+	public void setCuota(double cuota) {
+		this.cuota = cuota;
+	}
+	
+	
 	
 	
 
