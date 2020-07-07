@@ -60,4 +60,5 @@ public interface GestionUsuarioLocal {
 	public void actualizarCredito(Credito credito);
 	public List<Credito> listarCreditos();
 	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes);
+	public void aprobarCredito(Credito credito, Cliente cliente);
 }

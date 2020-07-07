@@ -27,15 +27,19 @@ public class Credito implements Serializable {
 	private String estado;
 	private double monto;
 	private double interes;
+	
 	private Date fechaRegistro;
+	
+	@OneToOne
+	@JoinColumn(name="jefe_credito")
 	private Empleado jefeC;
 	
 	@OneToOne
-	@JoinColumn(name="codigoCredito")
+	@JoinColumn(name="codigo_Credito")
 	private SolicitudDeCredito solicitud;
 	
 	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="codigo_cab")
+	@JoinColumn(name="codigo_cabezera")
     private List<DetalleCredito> detalles;
 
 	public int getCodigoCredito() {

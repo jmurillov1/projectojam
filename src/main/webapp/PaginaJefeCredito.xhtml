@@ -6,7 +6,6 @@
 
 <h:head></h:head>
 <h:body>
-
 	<ui:composition template="template/template.xhtml">
 		<ui:define name="title">Jefe De Credito</ui:define>
 
@@ -19,11 +18,9 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
-									
-
 										<h:panelGroup id="panelPersona">
 											<h:form>
-												<h:dataTable value="#{empleadosBean.solicitudes}" var="soli"
+												<h:dataTable value="#{loginBean.solicitudes}" var="soli"
 													class="table">
 													<h:column>
 														<f:facet name="header">Numero Credito</f:facet>
@@ -50,7 +47,7 @@
 													<h:column>
 														<f:facet name="header">Verificar</f:facet>
 														<h:commandButton
-															action="#{empleadosBean.cargarSol(soli.codigoCredito)}"
+															action="#{loginBean.cargarSol(soli.codigoCredito)}"
 															value="Ver Solicitud" class="btn btn-success">
 															<f:ajax render="panelTelefono" />
 														</h:commandButton>
@@ -58,15 +55,15 @@
 													<h:column>
 														<f:facet name="header">Aprobar</f:facet>
 														<h:commandButton
-															action="#{empleadosBean.aprobar(soli.codigoCredito)}"
+															action="#{loginBean.aprobar(soli.codigoCredito)}"
 															value="Aprobar" class="btn btn-success">
-															<f:ajax render="@all" />
+															<f:ajax render="@all panelTelefono" />
 														</h:commandButton>
 													</h:column>
 													<h:column>
 														<f:facet name="header">Rechazar</f:facet>
 														<h:commandButton
-															action="#{empleadosBean.cambio()}"
+															action="#{loginBean.cambio()}"
 															value="Rechazar" class="btn btn-success">
 															<f:ajax render="panelTelefono panelRechazo" />
 														</h:commandButton>
@@ -76,40 +73,38 @@
 												</h:dataTable>
 											</h:form>
 										</h:panelGroup>
-
-
 										<h:panelGroup id="panelTelefono">
-											<h:form id="tels" rendered="#{empleadosBean.editable}">
+											<h:form id="tels" rendered="#{loginBean.editable}">
 												<h1>Detalles del Credito</h1>
 												
 												<div class="form-group">
 											<h3>Cliente de Solicitud</h3>
 												<label>Nombre&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.clienteCredito.nombre}" type="text"
+													value="#{loginBean.solicitudDeCredito.clienteCredito.nombre}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 												<label>Cedula&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.clienteCredito.cedula}" type="text"
+													value="#{loginBean.solicitudDeCredito.clienteCredito.cedula}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 												<label>Direccion&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.clienteCredito.direccion}" type="text"
+													value="#{loginBean.solicitudDeCredito.clienteCredito.direccion}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											
 												<div class="form-group">
 												<label>Proposito del credito</label>
-												<h:outputText value="#{empleadosBean.solicitudDeCredito.propositoCredito}" class="form-control"/>
+												<h:outputText value="#{loginBean.solicitudDeCredito.propositoCredito}" class="form-control"/>
 												
 											</div>
 											<div class="form-group">
 												<label>Monto del credito a solicitar</label>
 												<h:outputText id="nombre"
-													value="#{empleadosBean.solicitudDeCredito.montoCredito}" type="text"
+													value="#{loginBean.solicitudDeCredito.montoCredito}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 												
@@ -117,56 +112,56 @@
 											<div class="form-group">
 												<label>Plazo de credito en meses</label>
 												<h:outputText id="apellido"
-													value="#{empleadosBean.solicitudDeCredito.mesesCredito}" type="text"
+													value="#{loginBean.solicitudDeCredito.mesesCredito}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Tiempo de Empleo&nbsp;&nbsp;</label> 
 												<h:outputText id="a"
-													value="#{empleadosBean.solicitudDeCredito.tiempoEmpleo}" type="text"
+													value="#{loginBean.solicitudDeCredito.tiempoEmpleo}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Estado Civil&nbsp;&nbsp;</label> 
 												<h:outputText id="ap"
-													value="#{empleadosBean.solicitudDeCredito.estadoCivilSexo}" type="text"
+													value="#{loginBean.solicitudDeCredito.estadoCivilSexo}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Avaluo de la vivienda&nbsp;&nbsp;</label> 
 												<h:outputText id="ag"
-													value="#{empleadosBean.solicitudDeCredito.avaluoDeVivienda}" type="text"
+													value="#{loginBean.solicitudDeCredito.avaluoDeVivienda}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Activos&nbsp;&nbsp;</label> 
 												<h:outputText id="ad"
-													value="#{empleadosBean.solicitudDeCredito.activo}" type="text"
+													value="#{loginBean.solicitudDeCredito.activo}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Tipo vivienda&nbsp;&nbsp;</label> 
 												<h:outputText id="as"
-													value="#{empleadosBean.solicitudDeCredito.tipoVivienda}" type="text"
+													value="#{loginBean.solicitudDeCredito.tipoVivienda}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Tipo empleo&nbsp;&nbsp;</label> 
 												<h:outputText id="av"
-													value="#{empleadosBean.solicitudDeCredito.tipoEmpleo}" type="text"
+													value="#{loginBean.solicitudDeCredito.tipoEmpleo}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											<div class="form-group">
 												<label>Trabajador Externo&nbsp;&nbsp;</label> 
 												<h:outputText id="au"
-													value="#{empleadosBean.solicitudDeCredito.trabajadorExtranjero}" type="text"
+													value="#{loginBean.solicitudDeCredito.trabajadorExtranjero}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
@@ -174,47 +169,47 @@
 											<h3>Garante</h3>
 												<label>Nombre&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.garanteCredito.nombre}" type="text"
+													value="#{loginBean.solicitudDeCredito.garanteCredito.nombre}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 												<label>Cedula&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.garanteCredito.cedula}" type="text"
+													value="#{loginBean.solicitudDeCredito.garanteCredito.cedula}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 												<label>Direccion&nbsp;&nbsp;</label> 
 												<h:outputText 
-													value="#{empleadosBean.solicitudDeCredito.garanteCredito.direccion}" type="text"
+													value="#{loginBean.solicitudDeCredito.garanteCredito.direccion}" type="text"
 													class="form-control form-control-line">
 												</h:outputText>
 											</div>
 											
 											<div class="form-group">
 												<label>Copia Cedula</label><br/>
-												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('cedula')}" target="_blank" />
+												<h:commandLink value="Visualizar" action="#{loginBean.ver('cedula')}" target="_blank" />
 											</div>
 											<div class="form-group">
 												<label>Copia Planilla</label><br/> 
-												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('planilla')}" target="_blank" />
+												<h:commandLink value="Visualizar" action="#{loginBean.ver('planilla')}" target="_blank" />
 											</div>
 											<div class="form-group">
 												<label>Copia Rol de Pagos</label><br/> 
-												<h:commandLink value="Visualizar" action="#{empleadosBean.ver('rol')}" target="_blank" />
+												<h:commandLink value="Visualizar" action="#{loginBean.ver('rol')}" target="_blank" />
 											</div>
 											
 											
 											</h:form>
 										</h:panelGroup>
 										<h:panelGroup id="panelRechazo">
-										<h:form id="rech" rendered="#{empleadosBean.editabledos}">
+										<h:form id="rech" rendered="#{loginBean.editabledos}">
 												<h1>Motivo de Rechazo</h1>
 												<div class="form-group">
 												<label>Detallar el Motivo del Rechazo de Credito</label>
-												<h:inputTextarea id="mo" value="#{empleadosBean.motivo}" class="form-control"/>
+												<h:inputTextarea id="mo" value="#{loginBean.motivo}" class="form-control"/>
 												</div>
 												<div>
 														<h:commandButton
-															action="#{empleadosBean.rechazar()}"
+															action="#{loginBean.rechazar()}"
 															value="Confirmar" class="btn btn-success">
 															<f:ajax execute="mo" render="@all" />
 														</h:commandButton>
