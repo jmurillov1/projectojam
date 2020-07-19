@@ -595,7 +595,7 @@ public class ClientesBean {
 		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
 		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
 		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream())); 
-		solicitudDeCredito.setGaranteCredito(garante);
+		solicitudDeCredito.setGaranteCredito(garante); 
 		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);    
 		garante = new Cliente();
 		solicitudDeCredito = new SolicitudDeCredito(); 

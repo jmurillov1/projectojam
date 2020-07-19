@@ -694,8 +694,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		transferenciaLocalDAO.insert(transfereciaLocal);
 	}
 
-	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
-		solicitudDeCreditoDAO.insert(solicitudDeCredito);
+	public void guardarSolicitudCredito(SolicitudDeCredito solicituDeCredito) {  
+		solicituDeCredito.setHistorialCredito(historialCredito(solicituDeCredito)); 
+		solicituDeCredito.setSaldoCuenta(saldoCuenta(solicituDeCredito)); 
+		solicituDeCredito.setGaranteEstado(garanteCreditos(solicituDeCredito)); 
+		solicituDeCredito.setAñosCliente(obtenerEdad(solicituDeCredito.getClienteCredito().getFechaNacimiento()));  
+		solicituDeCredito.setCantidadCreditos(numeroCreditos(solicituDeCredito));
+		solicitudDeCreditoDAO.insert(solicituDeCredito);
 	}
 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
@@ -824,5 +829,113 @@ public class GestionUsuarios implements GestionUsuarioLocal {
         }
 		return output;
 	}
-
+	
+	
+	public String historialCredito(SolicitudDeCredito solicitudCredito) { 
+		List<Credito> lstCreditos = creditoDAO.getCreditos();  
+		List<Credito> lstAprobados = new ArrayList<Credito>(); 
+		boolean confirmar = false; 
+		boolean confirmar2 = false;
+		for(Credito credito: lstCreditos) { 
+			if(credito.getSolicitud().getClienteCredito().getCedula().equals(solicitudCredito.getClienteCredito().getCedula())) { 
+				lstAprobados.add(credito); 
+			}else{ 
+				confirmar = true; 
+				return "A30";
+			}
+		}
+		
+		for(Credito crd: lstAprobados) { 
+			if(crd.getEstado().equalsIgnoreCase("Pagado")) { 
+				for(DetalleCredito detalleCredito: crd.getDetalles()) { 
+					if(detalleCredito.getEstado().equalsIgnoreCase("Retraso")) {  
+						confirmar = true; 
+						return "A33";
+					}
+				} 
+			}
+		}
+		
+		if(!confirmar) { 
+			return "A31";
+		}
+		
+		for(Credito crd: lstAprobados) { 
+			if(crd.getEstado().equalsIgnoreCase("Pagado")) { 
+				for(DetalleCredito detalleCredito: crd.getDetalles()) { 
+					if(detalleCredito.getEstado().equalsIgnoreCase("Pagado")) { 
+						confirmar2 = true;
+					}
+				} 
+			}
+		} 
+		
+		
+		if(confirmar2) { 
+			return "A32";
+		}
+		return null;
+	} 
+	
+	public int obtenerEdad(Date fechaNacimiento) { 
+		Calendar a = Calendar.getInstance();
+        Calendar b = Calendar.getInstance();
+        a.setTime(fechaNacimiento);
+        b.setTime(new Date());
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) &&   
+            a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return diff;
+	} 
+	
+	public String saldoCuenta(SolicitudDeCredito solicitudDeCredito) { 
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(solicitudDeCredito.getClienteCredito().getCedula());  
+		if(cuentaDeAhorro != null) { 
+			double saldo = cuentaDeAhorro.getSaldoCuentaDeAhorro();
+			if(saldo<500) { 
+				return "A61"; 
+			}else if(saldo>=500&&saldo<1000) { 
+				return "A62";
+			}else if(saldo>=1000&&saldo<1500) { 
+				return "A63";
+			}else if (saldo>=1500) { 
+				return "A64";
+			}
+		}  
+		return "A65";
+	} 
+	
+	
+	public String garanteCreditos(SolicitudDeCredito solicitudDeCredito) { 
+		List<SolicitudDeCredito> lstSolicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
+		boolean confirmar = false;
+		for(SolicitudDeCredito solCredito: lstSolicitudes) { 
+			if(solCredito.getGaranteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getGaranteCredito().getCedula())&&solCredito.getEstadoCredito().equalsIgnoreCase("Solicitando")) { 
+				confirmar = true;
+				return "A102";
+			}else if(solCredito.getGaranteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getGaranteCredito().getCedula())&&solCredito.getEstadoCredito().equalsIgnoreCase("Aprobado")) { 
+				confirmar = true; 
+				return "A103";
+			}
+		} 
+		
+		if(!confirmar) { 
+			return "A101";
+		}
+		return null;
+	} 
+	
+	public int numeroCreditos(SolicitudDeCredito solicitudDeCredito) { 
+		List<Credito> lstCreditos = creditoDAO.getCreditos();  
+		int contador = 0; 
+		for(Credito credito: lstCreditos) { 
+			if(credito.getSolicitud().getClienteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getClienteCredito().getCedula())) { 
+				contador++;
+			}
+		} 
+		return contador;
+	}
 }

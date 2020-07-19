@@ -45,9 +45,12 @@ public class SolicitudDeCredito {
 	@Column(length=16777216)
     private byte[] arRolDePagos;  
 	private String historialCredito; 
-	private double saldoCuenta;  
-	private double tasaPago; 
-	private String garanteEstado; 
+	private String saldoCuenta;  
+	private String tasaPago; 
+	private String garanteEstado;  
+	private int añosCliente; 
+	private int cantidadCreditos; 
+	private String tipoCliente;
 	
 	
 	
@@ -153,7 +156,52 @@ public class SolicitudDeCredito {
 	}
 	public void setGaranteCredito(Cliente garanteCredito) {
 		this.garanteCredito = garanteCredito;
-	} 
+	}
+	public String getHistorialCredito() {
+		return historialCredito;
+	}
+	public void setHistorialCredito(String historialCredito) {
+		this.historialCredito = historialCredito;
+	}
+	
+	public String getSaldoCuenta() {
+		return saldoCuenta;
+	}
+	public void setSaldoCuenta(String saldoCuenta) {
+		this.saldoCuenta = saldoCuenta;
+	}
+	public String getTasaPago() {
+		return tasaPago;
+	}
+	public void setTasaPago(String tasaPago) {
+		this.tasaPago = tasaPago;
+	}
+	public int getAñosCliente() {
+		return añosCliente;
+	}
+	public void setAñosCliente(int añosCliente) {
+		this.añosCliente = añosCliente;
+	}
+	public int getCantidadCreditos() {
+		return cantidadCreditos;
+	}
+	public void setCantidadCreditos(int cantidadCreditos) {
+		this.cantidadCreditos = cantidadCreditos;
+	}
+	public String getGaranteEstado() {
+		return garanteEstado;
+	}
+	public void setGaranteEstado(String garanteEstado) {
+		this.garanteEstado = garanteEstado;
+	}
+	public String getTipoCliente() {
+		return tipoCliente;
+	}
+	public void setTipoCliente(String tipoCliente) {
+		this.tipoCliente = tipoCliente;
+	}  
+	
+	
 	
 	
 	
