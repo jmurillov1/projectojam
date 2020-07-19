@@ -43,7 +43,13 @@ public class SolicitudDeCredito {
     private byte[] arPlanillaServicios; 
 	@Lob 
 	@Column(length=16777216)
-    private byte[] arRolDePagos; 
+    private byte[] arRolDePagos;  
+	private String historialCredito; 
+	private double saldoCuenta;  
+	private double tasaPago; 
+	private String garanteEstado; 
+	
+	
 	
 	public int getCodigoCredito() {
 		return codigoCredito;

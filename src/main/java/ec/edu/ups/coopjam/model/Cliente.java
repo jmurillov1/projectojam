@@ -2,6 +2,7 @@ package ec.edu.ups.coopjam.model;
 
 import java.beans.Transient;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,7 +24,8 @@ public class Cliente implements Serializable {
 	private String direccion; 
 	private String telefono1; 
 	private String telefono2; 
-	private String correo; 
+	private String correo;  
+	private Date fechaNacimiento;
 	private String usuario; 
 	private String clave;  
 	
@@ -176,6 +178,14 @@ public class Cliente implements Serializable {
 	public void setClave(String clave) {
 		this.clave = clave;
 	}
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	} 
+	
+	
 	
 	
 }

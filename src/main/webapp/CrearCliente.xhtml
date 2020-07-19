@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
@@ -10,17 +11,48 @@
 <h:body>
 	<ui:composition template="template/templateAdmin.xhtml">
 		<ui:define name="title">Crear Cliente</ui:define>
-		<ui:param name="nombre" value="#{loginBean.usuario}" /> 
+		<ui:param name="nombre" value="#{loginBean.usuario}" />
 		<ui:define name="content">
+			<script type="text/javascript">
+				PrimeFaces.locales['es'] = {
+					closeText : 'Cerrar',
+					prevText : 'Anterior',
+					nextText : 'Siguiente',
+					monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril',
+							'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+							'Octubre', 'Noviembre', 'Diciembre' ],
+					monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May',
+							'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+					dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miércoles',
+							'Jueves', 'Viernes', 'Sábado' ],
+					dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
+							'Sab' ],
+					dayNamesMin : [ 'D', 'L', 'M', 'X', 'J', 'V', 'S' ],
+					weekHeader : 'Semana',
+					firstDay : 1,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : '',
+					timeOnlyTitle : 'Sólo hora',
+					timeText : 'Tiempo',
+					hourText : 'Hora',
+					minuteText : 'Minuto',
+					secondText : 'Segundo',
+					currentText : 'Fecha actual',
+					ampm : false,
+					month : 'Mes',
+					week : 'Semana',
+					day : 'Día',
+					allDayText : 'Todo el día'
+				};
+			</script>
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
 									<h:form role="form">
-
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
 											<h:inputText value="#{crearCliente.cliente.cedula}"
@@ -102,6 +134,12 @@
 											<h:message for="corr" style="color:red" />
 
 										</div>
+										<div class="form-group">
+											<p:outputLabel for="fechaInicio" value="Fecha Nacimiento:  " />
+											<p:calendar id="fechaInicio"
+												value="#{crearCliente.cliente.fechaNacimiento}" showOn="button"
+												pattern="yyyy-MM-dd" locale="es" navigator="true" />
+										</div>
 										<div class="row">
 											<div class="col-lg-12">
 												<h1 class="page-header">Cuenta de Ahorros</h1>
@@ -111,17 +149,16 @@
 														value="#{crearCliente.generarNumeroCuenta()}" />
 												</div>
 												<div class="form-group">
-													<label>Saldo</label>  
-													<br/>
-													<h:inputText id="saldo"
-														value="#{crearCliente.saldoCuenta}"
+													<label>Saldo</label> <br />
+													<h:inputText id="saldo" value="#{crearCliente.saldoCuenta}"
 														placeholder="Joe Down"
 														class="form-control form-control-line" required="true"
-														validatorMessage="Ingresar solo numeros y minimo $10" label=" ">
-														<f:validateLength minimum = "2"/>
+														validatorMessage="Ingresar solo numeros y minimo $10"
+														label=" ">
+														<f:validateLength minimum="2" />
 														<f:validateRegex pattern="^[1-9][0-9]+" />
 													</h:inputText>
-													<h:message for="saldo" style="color:red" />	
+													<h:message for="saldo" style="color:red" />
 												</div>
 											</div>
 											<!-- /.col-lg-12 -->
