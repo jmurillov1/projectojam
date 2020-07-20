@@ -1,6 +1,7 @@
 package ec.edu.ups.coopjam.business;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
@@ -28,6 +30,7 @@ import javax.mail.internet.MimeMessage;
 import javax.management.remote.NotificationResult;
 import javax.persistence.NoResultException;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import dnl.utils.text.table.TextTable;
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CreditoDAO;
@@ -694,8 +697,41 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		transferenciaLocalDAO.insert(transfereciaLocal);
 	}
 
-	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
-		solicitudDeCreditoDAO.insert(solicitudDeCredito);
+	public void guardarSolicitudCredito(SolicitudDeCredito solicituDeCredito) {  
+		solicituDeCredito.setHistorialCredito(historialCredito(solicituDeCredito)); 
+		solicituDeCredito.setSaldoCuenta(saldoCuenta(solicituDeCredito)); 
+		solicituDeCredito.setGaranteEstado(garanteCreditos(solicituDeCredito)); 
+		solicituDeCredito.setAñosCliente(obtenerEdad(solicituDeCredito.getClienteCredito().getFechaNacimiento()));  
+		solicituDeCredito.setCantidadCreditos(numeroCreditos(solicituDeCredito));  
+		
+		String[] credito = {solicituDeCredito.getClienteCredito().getCedula(),  
+				String.valueOf(solicituDeCredito.getMesesCredito()),  
+				solicituDeCredito.getHistorialCredito(), 
+				obtenerCodigo(solicituDeCredito.getPropositoCredito() ), 
+				String.valueOf(solicituDeCredito.getMontoCredito()),
+				solicituDeCredito.getSaldoCuenta(), 
+				obtenerCodigo(solicituDeCredito.getTiempoEmpleo()), 
+				solicituDeCredito.getTasaPago(), 
+				obtenerCodigo(solicituDeCredito.getEstadoCivilSexo()),  
+				solicituDeCredito.getGaranteEstado(),  
+				String.valueOf(solicituDeCredito.getAvaluoDeVivienda()),
+				obtenerCodigo(solicituDeCredito.getActivo()),  
+				String.valueOf(solicituDeCredito.getAñosCliente()), 
+				obtenerCodigo(solicituDeCredito.getTipoVivienda()),   
+				String.valueOf(solicituDeCredito.getCantidadCreditos()),  
+				obtenerCodigo(solicituDeCredito.getTipoEmpleo()),  
+				obtenerCodigo(solicituDeCredito.getTrabajadorExtranjero()),  
+				"0"};
+		System.out.println(Arrays.toString(credito));
+		
+		try {
+			agregarCSV(credito);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		//solicitudDeCreditoDAO.insert(solicituDeCredito);
 	}
 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
@@ -824,5 +860,209 @@ public class GestionUsuarios implements GestionUsuarioLocal {
         }
 		return output;
 	}
+	
+	
+	public String historialCredito(SolicitudDeCredito solicitudCredito) { 
+		List<Credito> lstCreditos = creditoDAO.getCreditos();  
+		List<Credito> lstAprobados = new ArrayList<Credito>(); 
+		boolean confirmar = false; 
+		boolean confirmar2 = false; 
+		
+		if(lstCreditos.size()==0) {  
+			confirmar = true; 
+			return "A30";
+		}else { 
+			for(Credito credito: lstCreditos) {  
+				if(credito.getSolicitud().getClienteCredito().getCedula().equals(solicitudCredito.getClienteCredito().getCedula())) { 
+					lstAprobados.add(credito); 
+				}
+			}
+		}
+		
+		
+		for(Credito crd: lstAprobados) { 
+			if(crd.getEstado().equalsIgnoreCase("Pagado")) { 
+				for(DetalleCredito detalleCredito: crd.getDetalles()) { 
+					if(detalleCredito.getEstado().equalsIgnoreCase("Retraso")) {  
+						confirmar = true; 
+						return "A33";
+					}
+				} 
+			}
+		}
+		
+		if(!confirmar) { 
+			return "A31";
+		}
+		
+		for(Credito crd: lstAprobados) { 
+			if(crd.getEstado().equalsIgnoreCase("Pagado")) { 
+				for(DetalleCredito detalleCredito: crd.getDetalles()) { 
+					if(detalleCredito.getEstado().equalsIgnoreCase("Pagado")) { 
+						confirmar2 = true;
+					}
+				} 
+			}
+		} 
+		
+		
+		if(confirmar2) { 
+			return "A32";
+		}
+		return null;
+	} 
+	
+	public int obtenerEdad(Date fechaNacimiento) { 
+		Calendar a = Calendar.getInstance();
+        Calendar b = Calendar.getInstance();
+        a.setTime(fechaNacimiento);
+        b.setTime(new Date());
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) &&   
+            a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return diff;
+	} 
+	
+	public String saldoCuenta(SolicitudDeCredito solicitudDeCredito) { 
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(solicitudDeCredito.getClienteCredito().getCedula());  
+		if(cuentaDeAhorro != null) { 
+			double saldo = cuentaDeAhorro.getSaldoCuentaDeAhorro();
+			if(saldo<500) { 
+				return "A61"; 
+			}else if(saldo>=500&&saldo<1000) { 
+				return "A62";
+			}else if(saldo>=1000&&saldo<1500) { 
+				return "A63";
+			}else if (saldo>=1500) { 
+				return "A64";
+			}
+		}  
+		return "A65";
+	} 
+	
+	
+	public String garanteCreditos(SolicitudDeCredito solicitudDeCredito) { 
+		List<SolicitudDeCredito> lstSolicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
+		boolean confirmar = false;
+		for(SolicitudDeCredito solCredito: lstSolicitudes) { 
+			if(solCredito.getGaranteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getGaranteCredito().getCedula())&&solCredito.getEstadoCredito().equalsIgnoreCase("Solicitando")) { 
+				confirmar = true;
+				return "A102";
+			}else if(solCredito.getGaranteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getGaranteCredito().getCedula())&&solCredito.getEstadoCredito().equalsIgnoreCase("Aprobado")) { 
+				confirmar = true; 
+				return "A103";
+			}
+		} 
+		
+		if(!confirmar) { 
+			return "A101";
+		}
+		return null;
+	} 
+	
+	public int numeroCreditos(SolicitudDeCredito solicitudDeCredito) { 
+		List<Credito> lstCreditos = creditoDAO.getCreditos();  
+		int contador = 0; 
+		for(Credito credito: lstCreditos) { 
+			if(credito.getSolicitud().getClienteCredito().getCedula().equalsIgnoreCase(solicitudDeCredito.getClienteCredito().getCedula())) { 
+				contador++;
+			}
+		} 
+		return contador;
+	} 
+	
+	
+	public void agregarCSV(String[] dato) throws IOException {
+		
+        String archCSV = "C:/Users/ALEX/Desktop/9ºCiclo/Proyectos de Software/proyectoanalisisdatos-master/apiAnalisis/Datasets/DatasetBanco/3.DatasetBanco.csv";
+        CSVWriter writer = new CSVWriter(new FileWriter(archCSV, true), ';', CSVWriter.NO_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END);
+        writer.writeNext(dato);
 
+        writer.close();
+    } 
+	
+	public String obtenerCodigo(String palabra) { 
+		switch (palabra) {
+		case "inmuebles":
+			return "A40";  
+		case "automovil":
+			return "A41";  
+		case "muebles / equipamiento":
+			return "A42";  
+		case "tecnología":
+			return "A43";  
+		case "electrodomesticos":
+			return "A44";  
+		case "reparaciones":
+			return "A45";
+		case "educacion":
+			return "A46"; 
+		case "vacaciones":
+			return "A47"; 
+		case "capacitacion":
+			return "A48";  
+		case "negocios":
+			return "A49";  
+		case "otros":
+			return "A410";  
+		case "desempleado":
+			return "A71";   
+		case "menos de 1 año":
+			return "A72"; 
+		case "entre 1 y 4 años":
+			return "A73"; 
+		case "entre 4 y 7 años":
+			return "A74"; 
+		case "mas de  7 años":
+			return "A75"; 
+		case "masculino: divorciado/separado": 
+			return"A91"; 
+		case "femenino: dirvorciada/separada/casada": 
+			return"A92";  
+		case "masculino: soltero": 
+			return"A93";  
+		case "masculino: casado/viudo": 
+			return"A94";  
+		case " femenino: soltera": 
+			return"A95";  
+		case "Bienes inmuebles":
+			return "A121";
+		case "Seguro de vida y plan de construcción":
+			return "A122"; 
+		case "automovil u otro":
+			return "A123"; 
+		case "desconocido / sin propiedad":
+			return "A124"; 
+		case "gratis":
+			return "A151"; 
+		case "alquiler":
+			return "A152"; 
+		case "propio":
+			return "A153";   
+		case "sin empleo": 
+			return "A171"; 
+		case "jubilado": 
+			return "A172"; 
+		case "empleado": 
+			return "A173"; 
+		case "autonomo": 
+			return"A174";
+		case "si":
+			return "A201"; 
+		case "no":
+			return "A202"; 
+		default:
+			break;
+		}
+		return null;  
+
+	}
+	
+	
+	
 }
