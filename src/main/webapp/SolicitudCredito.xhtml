@@ -46,10 +46,23 @@
 												value="#{clientesBean.buscarCuentaDeAhorro.cliente.correo}" />
 										</div>
 										<div class="form-group">
-											<label>Proposito del credito</label>
-											<h:inputTextarea
-												value="#{clientesBean.solicitudDeCredito.propositoCredito}"
-												class="form-control" />
+											<label>Proposito del credito:&nbsp;&nbsp;</label>
+											<br />
+											<h:selectOneMenu id="proCredito"
+												value="#{clientesBean.solicitudDeCredito.propositoCredito}">
+												<f:selectItem itemValue="inmuebles" itemLabel="inmuebles" />
+												<f:selectItem itemValue="automovil" itemLabel="automovil" />
+												<f:selectItem itemValue="muebles / equipamiento" itemLabel="muebles / equipamiento" />
+												<f:selectItem itemValue="tecnología" itemLabel="tecnología" /> 
+												<f:selectItem itemValue="electrodomesticos" itemLabel="electrodomesticos" /> 
+												<f:selectItem itemValue="reparaciones" itemLabel="reparaciones" /> 
+												<f:selectItem itemValue="educacion" itemLabel="educacion" /> 
+												<f:selectItem itemValue="vacaciones" itemLabel="vacaciones" /> 
+												<f:selectItem itemValue="capacitacion" itemLabel="capacitacion" /> 
+												<f:selectItem itemValue="negocios" itemLabel="negocios" /> 
+												<f:selectItem itemValue="otros" itemLabel="otros" />
+											</h:selectOneMenu>
+											<br /> <br />
 
 										</div>
 										<div class="form-group">
@@ -141,8 +154,8 @@
 												momento&nbsp;&nbsp;</label> <br />
 											<h:selectOneMenu id="tipempleo"
 												value="#{clientesBean.solicitudDeCredito.tipoEmpleo}">
-												<f:selectItem itemValue="desempleado"
-													itemLabel="desempleado" />
+												<f:selectItem itemValue="sin empleo"
+													itemLabel="sin empleo" />
 												<f:selectItem itemValue="jubilado" itemLabel="jubilado" />
 												<f:selectItem itemValue="empleado" itemLabel="empleado" />
 												<f:selectItem itemValue=" autonomo" itemLabel=" autonomo" />
