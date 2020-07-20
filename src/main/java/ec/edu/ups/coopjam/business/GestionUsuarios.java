@@ -720,7 +720,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				String.valueOf(solicituDeCredito.getMontoCredito()),
 				solicituDeCredito.getSaldoCuenta(), 
 				obtenerCodigo(solicituDeCredito.getTiempoEmpleo()), 
-				solicituDeCredito.getTasaPago(), 
+				String.valueOf(solicituDeCredito.getTasaPago()), 
 				obtenerCodigo(solicituDeCredito.getEstadoCivilSexo()),  
 				solicituDeCredito.getGaranteEstado(),  
 				String.valueOf(solicituDeCredito.getAvaluoDeVivienda()),

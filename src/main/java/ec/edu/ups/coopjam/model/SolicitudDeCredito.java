@@ -29,7 +29,7 @@ public class SolicitudDeCredito {
 	private String mesesCredito;
 	private String tiempoEmpleo; 
 	private String estadoCivilSexo; 
-	private double avaluoDeVivienda; 
+	private double avaluoDeVivienda;  
 	private String activo; 
 	private String tipoVivienda; 
 	private String tipoEmpleo; 
@@ -46,7 +46,7 @@ public class SolicitudDeCredito {
     private byte[] arRolDePagos;  
 	private String historialCredito; 
 	private String saldoCuenta;  
-	private String tasaPago; 
+	private double tasaPago; 
 	private String garanteEstado;  
 	private int añosCliente; 
 	private int cantidadCreditos; 
@@ -170,10 +170,10 @@ public class SolicitudDeCredito {
 	public void setSaldoCuenta(String saldoCuenta) {
 		this.saldoCuenta = saldoCuenta;
 	}
-	public String getTasaPago() {
+	public double getTasaPago() {
 		return tasaPago;
 	}
-	public void setTasaPago(String tasaPago) {
+	public void setTasaPago(double tasaPago) {
 		this.tasaPago = tasaPago;
 	}
 	public int getAñosCliente() {
