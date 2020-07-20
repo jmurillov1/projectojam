@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.ejb.Stateless;
 import javax.faces.context.FacesContext;
@@ -29,6 +31,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.management.remote.NotificationResult;
 import javax.persistence.NoResultException;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import dnl.utils.text.table.TextTable;
@@ -730,6 +739,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		try {
+			System.out.println(obtenerTipoCliente(solicituDeCredito.getClienteCredito().getCedula()));
+		} catch (ForbiddenException | InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//solicitudDeCreditoDAO.insert(solicituDeCredito);
 	}
@@ -977,7 +992,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	
 	public void agregarCSV(String[] dato) throws IOException {
 		
-        String archCSV = "C:/Users/ALEX/Desktop/9ºCiclo/Proyectos de Software/proyectoanalisisdatos-master/apiAnalisis/Datasets/DatasetBanco/3.DatasetBanco.csv";
+        String archCSV = "/home/jmurillo/bin/django/proyectoanalisisdatos-master/apiAnalisis/Datasets/DatasetBanco/3.DatasetBanco.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(archCSV, true), ';', CSVWriter.NO_QUOTE_CHARACTER,
                 CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                 CSVWriter.DEFAULT_LINE_END);
@@ -1064,5 +1079,15 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 	
 	
-	
+	public int obtenerTipoCliente(String tr) throws ForbiddenException, InterruptedException, ExecutionException{
+
+        Form form = new Form();
+        form.param("Dni", tr);
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://127.0.0.1:8000/apiAnalisis/predecir/");
+        System.out.println(target.getUri());
+        Future<String> response = target.request(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.TEXT_PLAIN).buildPost(Entity.form(form)).submit(String.class);
+        //client.close();
+        return Integer.parseInt(response.get());
+    }
 }
