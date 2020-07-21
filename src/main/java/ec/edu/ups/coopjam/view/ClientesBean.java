@@ -55,7 +55,9 @@ public class ClientesBean {
 	private String cedulaGarante;
 	private Part arCedula; 
 	private Part arPlanillaServicios; 
-	private Part arRolDePagos;   
+	private Part arRolDePagos;    
+	private double ingresos; 
+	private double egresos;
 	
 
 	/**
@@ -327,6 +329,24 @@ public class ClientesBean {
 		}
 		return null;
 	}
+	
+	
+	
+	public double getIngresos() {
+		return ingresos;
+	}
+
+	public void setIngresos(double ingresos) {
+		this.ingresos = ingresos;
+	}
+
+	public double getEgresos() {
+		return egresos;
+	}
+
+	public void setEgresos(double egresos) {
+		this.egresos = egresos;
+	}
 
 	/**
 	 * Metodo que permite validar la cedula de un cliente
@@ -595,7 +615,8 @@ public class ClientesBean {
 		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
 		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
 		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream())); 
-		solicitudDeCredito.setGaranteCredito(garante); 
+		solicitudDeCredito.setGaranteCredito(garante);  
+		solicitudDeCredito.setTasaPago((ingresos-egresos)/100);
 		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);    
 		garante = new Cliente();
 		solicitudDeCredito = new SolicitudDeCredito(); 
