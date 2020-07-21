@@ -713,40 +713,33 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		solicituDeCredito.setAñosCliente(obtenerEdad(solicituDeCredito.getClienteCredito().getFechaNacimiento()));  
 		solicituDeCredito.setCantidadCreditos(numeroCreditos(solicituDeCredito));  
 		
-		String[] credito = {solicituDeCredito.getClienteCredito().getCedula(),  
-				String.valueOf(solicituDeCredito.getMesesCredito()),  
-				solicituDeCredito.getHistorialCredito(), 
-				obtenerCodigo(solicituDeCredito.getPropositoCredito() ), 
-				String.valueOf(solicituDeCredito.getMontoCredito()),
-				solicituDeCredito.getSaldoCuenta(), 
-				obtenerCodigo(solicituDeCredito.getTiempoEmpleo()), 
-				String.valueOf(solicituDeCredito.getTasaPago()), 
-				obtenerCodigo(solicituDeCredito.getEstadoCivilSexo()),  
-				solicituDeCredito.getGaranteEstado(),  
-				String.valueOf(solicituDeCredito.getAvaluoDeVivienda()),
-				obtenerCodigo(solicituDeCredito.getActivo()),  
-				String.valueOf(solicituDeCredito.getAñosCliente()), 
-				obtenerCodigo(solicituDeCredito.getTipoVivienda()),   
-				String.valueOf(solicituDeCredito.getCantidadCreditos()),  
-				obtenerCodigo(solicituDeCredito.getTipoEmpleo()),  
-				obtenerCodigo(solicituDeCredito.getTrabajadorExtranjero()),  
-				"0"};
-		System.out.println(Arrays.toString(credito));
-		
+		String credito = "{\"credito\":\""+solicituDeCredito.getClienteCredito().getCedula()+";"+
+				String.valueOf(solicituDeCredito.getMesesCredito())+";"+ 
+				solicituDeCredito.getHistorialCredito()+";"+
+				obtenerCodigo(solicituDeCredito.getPropositoCredito() )+";"+
+				String.valueOf(solicituDeCredito.getMontoCredito())+";"+
+				solicituDeCredito.getSaldoCuenta()+";"+ 
+				obtenerCodigo(solicituDeCredito.getTiempoEmpleo())+";"+ 
+				String.valueOf(solicituDeCredito.getTasaPago())+";"+ 
+				obtenerCodigo(solicituDeCredito.getEstadoCivilSexo())+";"+ 
+				solicituDeCredito.getGaranteEstado()+";"+ 
+				String.valueOf(solicituDeCredito.getAvaluoDeVivienda())+";"+
+				obtenerCodigo(solicituDeCredito.getActivo())+";"+  
+				String.valueOf(solicituDeCredito.getAñosCliente())+";"+
+				obtenerCodigo(solicituDeCredito.getTipoVivienda())+";"+   
+				String.valueOf(solicituDeCredito.getCantidadCreditos())+";"+  
+				obtenerCodigo(solicituDeCredito.getTipoEmpleo())+";"+
+				obtenerCodigo(solicituDeCredito.getTrabajadorExtranjero())+";0\"}";
+		System.out.println(credito);
+		String res = enviarEntidad(credito);
+		System.out.println(res);
 		try {
-			agregarCSV(credito);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		try {
-			System.out.println(obtenerTipoCliente(solicituDeCredito.getClienteCredito().getCedula()));
+			solicituDeCredito.setTipoCliente(String.valueOf(obtenerTipoCliente(solicituDeCredito.getClienteCredito().getCedula())));
 		} catch (ForbiddenException | InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//solicitudDeCreditoDAO.insert(solicituDeCredito);
+		solicitudDeCreditoDAO.insert(solicituDeCredito);
 	}
 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
@@ -1084,10 +1077,18 @@ public class GestionUsuarios implements GestionUsuarioLocal {
         Form form = new Form();
         form.param("Dni", tr);
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://127.0.0.1:8000/apiAnalisis/predecir/");
+        WebTarget target = client.target("http://35.238.98.31:8000/apiAnalisis/predecir/");
         System.out.println(target.getUri());
         Future<String> response = target.request(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.TEXT_PLAIN).buildPost(Entity.form(form)).submit(String.class);
         //client.close();
         return Integer.parseInt(response.get());
+    }
+	
+	public String enviarEntidad(String credito){
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://35.238.98.31:8000/apiAnalisis/enviarSolicitud/");
+        String res = target.request().post(Entity.json(credito), String.class);
+        client.close();
+        return res;
     }
 }
