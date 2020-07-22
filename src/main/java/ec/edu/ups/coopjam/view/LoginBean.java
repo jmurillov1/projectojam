@@ -51,6 +51,8 @@ public class LoginBean {
 	private String motivo;
 	
 	private Empleado empleado;
+	
+	private String tipoC;
 
 	
 	@PostConstruct
@@ -150,6 +152,16 @@ public class LoginBean {
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
+	
+	
+
+	public String getTipoC() {
+		return tipoC;
+	}
+
+	public void setTipoC(String tipoC) {
+		this.tipoC = tipoC;
+	}
 
 	/**
 	 * Metodo para validar rol de Empleado
@@ -197,9 +209,23 @@ public class LoginBean {
 		for (SolicitudDeCredito sol : solicitudes) {
 			if (sol.getCodigoCredito() == cod) {
 				solicitudDeCredito = sol;
+				tipoC = tipoCliente(sol);
 			}
 		}
 		return null;
+	}
+	
+	public String tipoCliente(SolicitudDeCredito credito){
+		String tipo = credito.getTipoCliente();
+		if (tipo.equals("1")) {
+			String mensaje = "Este un Buen cliente para el credito, Se recomienda Aprobar";
+			return mensaje;
+		}else if(tipo.equalsIgnoreCase("2")) {
+			String mensaje2 = "Es un MAL CLIENTE  para el credito, Se recomienda Rechazar";
+			return mensaje2;
+		}
+		
+		return " ";
 	}
 	public String aprobar(int cod) {
 		System.out.println("//////-/////////-/////"+empleado.getNombre());

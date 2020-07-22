@@ -43,6 +43,11 @@
 														<f:facet name="header">Estado Credito</f:facet>
 														#{soli.estadoCredito}
 													</h:column>
+													
+													<h:column>
+														<f:facet name="header">Tipo Cliente</f:facet>
+														#{soli.tipoCliente}
+													</h:column>
 
 													<h:column>
 														<f:facet name="header">Verificar</f:facet>
@@ -76,6 +81,12 @@
 										<h:panelGroup id="panelTelefono">
 											<h:form id="tels" rendered="#{loginBean.editable}">
 												<h1>Detalles del Credito</h1>
+												<h2>Analisis de Datos</h2>
+												<h:outputText 
+													value="#{loginBean.tipoC}" type="text"
+													class="form-control form-control-line">
+												</h:outputText>
+									
 												
 												<div class="form-group">
 											<h3>Cliente de Solicitud</h3>
