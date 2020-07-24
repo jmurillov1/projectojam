@@ -291,7 +291,8 @@ public class EmpleadosBean {
 				System.out.println(li.toString());
 				credito.setDetalles(li);
 				empleadoON.guardarCredito(credito);
-	
+				empleadoON.aprobarCredito(credito, sol.getClienteCredito());
+				
 			}
 		}
 		
