@@ -1097,4 +1097,30 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		client.close();
 		return res;
 	}
+	
+	public List<Credito> listarCreditosCedula(String cedula) {
+		List<Credito> cred = creditoDAO.getCreditos();
+		List<Credito> credLista = new ArrayList<Credito>();
+		for(Credito credito: cred){
+			System.out.println("********************************************************");
+			System.out.println(credito.getSolicitud().getClienteCredito().getCedula());
+			System.out.println("/////////");
+			System.out.println(cedula);
+			System.out.println("********************************************************");
+			if (credito.getSolicitud().getClienteCredito().getCedula().equals(cedula)) {
+				credLista.add(credito);
+			}
+		}
+		
+		return credLista;
+	}
+	
+	public Credito verCredito(int codigo) {
+		Credito cred = creditoDAO.read(codigo);
+		return cred;
+	}
+
+	public void actualizarDetalle(DetalleCredito credito) {
+		detalleCreditoDAO.update(credito);
+	}
 }

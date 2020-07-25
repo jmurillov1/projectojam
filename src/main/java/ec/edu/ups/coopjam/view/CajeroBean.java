@@ -1,5 +1,6 @@
 package ec.edu.ups.coopjam.view;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import javax.inject.Inject;
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Credito;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 
 /**
@@ -34,11 +37,26 @@ public class CajeroBean {
 	private List<Transaccion> listaTra;
 
 	private boolean editable;
+	
+	private boolean editable2;
 
 	private String tipoTransaccion;
+	
+	private List<Credito> credito;
+	
+	private String cedulaAux;
+	
+	private int codigoAux;
+	
+	private int codigoAux2;
+	
+	private int codigoAux3;
+	
+	private Transaccion transaccionAux;
 
 	@PostConstruct
 	public void init() {
+		transaccionAux = new Transaccion();
 		cliente = new Cliente();
 	}
 
@@ -143,6 +161,76 @@ public class CajeroBean {
 	 */
 	public void setTipoTransaccion(String tipoTransaccion) {
 		this.tipoTransaccion = tipoTransaccion;
+	}
+	
+	
+
+	public List<Credito> getCredito() {
+		return credito;
+	}
+
+	public void setCredito(List<Credito> credito) {
+		this.credito = credito;
+	}
+	
+	
+
+	public String getCedulaAux() {
+		return cedulaAux;
+	}
+
+	public void setCedulaAux(String cedulaAux) {
+		this.cedulaAux = cedulaAux;
+	}
+	
+	
+
+	public boolean isEditable2() {
+		return editable2;
+	}
+
+	public void setEditable2(boolean editable2) {
+		this.editable2 = editable2;
+	}
+	
+	
+
+	public int getCodigoAux() {
+		return codigoAux;
+	}
+
+	public void setCodigoAux(int codigoAux) {
+		this.codigoAux = codigoAux;
+	}
+	
+	
+
+	public Transaccion getTransaccionAux() {
+		return transaccionAux;
+	}
+
+	public void setTransaccionAux(Transaccion transaccionAux) {
+		this.transaccionAux = transaccionAux;
+	}
+	
+	
+	
+	
+
+	public int getCodigoAux2() {
+		return codigoAux2;
+	}
+
+	public void setCodigoAux2(int codigoAux2) {
+		this.codigoAux2 = codigoAux2;
+	}
+
+	public int getCodigoAux3() {
+		return codigoAux3;
+	}
+
+	public void setCodigoAux3(int codigoAux3) {
+		this.codigoAux3 = codigoAux3;
 	}
 
 	/**
@@ -309,8 +397,122 @@ public class CajeroBean {
 		if (lis != null) {
 			listaTra = lis;
 			editable = true;
+			editable2 = false;
 		}
 		return null;
 	}
+	
+	public List<Credito> cargarCreditos() {
+		System.out.println("Cargar Creditos ----- ");
+		List<Credito> lis = clienteON.listarCreditosCedula(cedulaAux);
+		System.out.println(lis.size());
+		if (lis != null) {
+			return lis;
+		}
+		return null;
+	}
+	 public void activar() {
+		 System.out.println(cedulaAux);
+		 editable = true;
+		 editable2 = false;
+		 //cedulaAux = "";
+	 }
+	 
+	 public void cambioVar(int cod) {
+		 codigoAux = cod;
+		 editable = false;
+		 editable2 = true;
+		 
+	 }
+	 
+	 public List<DetalleCredito> verDealles(){
+		 List<DetalleCredito> list = clienteON.verCredito(codigoAux).getDetalles();
+		 List<DetalleCredito> list2 = new ArrayList<DetalleCredito>();
+		 for(DetalleCredito credito:list) {
+			 if (!credito.getEstado().equals("Pagado")) {
+				 list2.add(credito);
+			}
+		 }
+		 
+		 return list2;
+	 }
+	 
+	 public void guardar() {
+		 System.out.println("PAGOOOOOOOOOOOOOO");
+		 System.out.println(codigoAux+"****"+transaccionAux.getMonto()+"********"+transaccionAux.getTipo()+"********"+codigoAux2+"***************"+cedulaAux);
+		 
+		 
+		 
+		 List<DetalleCredito> listt = clienteON.verCredito(codigoAux).getDetalles();
+		 if (transaccionAux.getTipo().equals("pagoC")) {
+			for(DetalleCredito credito: listt) {
+				if (transaccionAux.getMonto() >= credito.getSaldo()  && credito.getCodigoDetalle() == codigoAux2) {
+					transaccionAux.setTipo("PagoCredito");
+					transaccionAux.setFecha(new Date());
+					transaccionAux.setSaldoCuenta(credito.getMonto());;
+					credito.setEstado("Pagado");
+					credito.setSaldo(0.00);
+					clienteON.actualizarDetalle(credito);
+				}
+			}
+		}else if (transaccionAux.getTipo().equals("pagoAb")) {
+			for(DetalleCredito credito: listt) {
+				if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+					transaccionAux.setTipo("PagoCredito");
+					transaccionAux.setFecha(new Date());
+					transaccionAux.setSaldoCuenta(credito.getMonto());
+					credito.setEstado("PagoAbono");
+					double valor = credito.getSaldo() - transaccionAux.getMonto();
+					credito.setSaldo(valor);
+					clienteON.actualizarDetalle(credito);
+					
+				}
+			}
+			
+		}else if(transaccionAux.getTipo().equals("pagoA")) {
+			for(DetalleCredito credito: listt) {
+				if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+					transaccionAux.setTipo("PagoCredito");
+					transaccionAux.setFecha(new Date());
+					transaccionAux.setSaldoCuenta(credito.getMonto());
+					credito.setEstado("PagoAbono");
+					double valor = credito.getSaldo() - transaccionAux.getMonto();
+					credito.setSaldo(valor);
+					clienteON.actualizarDetalle(credito);
+					
+					
+				}else if (transaccionAux.getMonto() >= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+					transaccionAux.setTipo("PagoCredito");
+					transaccionAux.setFecha(new Date());
+					transaccionAux.setSaldoCuenta(credito.getMonto());
+					credito.setEstado("Pagado");
+					credito.setSaldo(0.00);
+					clienteON.actualizarDetalle(credito);
+					
+					
+				}
+			}
+		}
+		 
+		
+		 
+		
+		 Cliente cliente = clienteON.buscarCliente(cedulaAux);
+		 transaccionAux.setCliente(cliente);
+		 try {
+			clienteON.guardarTransaccion(transaccionAux);
+			editable = false;
+		    transaccionAux = new Transaccion();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+	 }
+	 
+	 public void buscarCuota(int cod) {
+		 
+		 
+	 }
 
 }
