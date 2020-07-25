@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -808,10 +809,10 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			monto -= vcuota;
 			System.out.println(hourdateFormat.format(fecha) + " | " + (vcuota + icuota) + " | " + icuota + " | "
 					+ vcuota + " | " + (monto));
-			detalle.setNumeroCuota(i);
+			detalle.setNumeroCuota(i+1);
 			detalle.setFechaPago(fecha);
 			detalle.setInteres(icuota);
-			detalle.setSaldo(vcuota + icuota);
+			detalle.setSaldo(valorDecimalCr(vcuota + icuota));
 			detalle.setMonto(monto);
 			detalle.setCuota(vcuota);
 			listaDet.add(detalle);
@@ -1096,5 +1097,42 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		String res = target.request().get(String.class);
 		client.close();
 		return res;
+	}
+	
+	public List<Credito> listarCreditosCedula(String cedula) {
+		List<Credito> cred = creditoDAO.getCreditos();
+		List<Credito> credLista = new ArrayList<Credito>();
+		for(Credito credito: cred){
+			System.out.println("********************************************************");
+			System.out.println(credito.getSolicitud().getClienteCredito().getCedula());
+			System.out.println("/////////");
+			System.out.println(cedula);
+			System.out.println("********************************************************");
+			if (credito.getSolicitud().getClienteCredito().getCedula().equals(cedula)) {
+				credLista.add(credito);
+			}
+		}
+		
+		return credLista;
+	}
+	
+	public Credito verCredito(int codigo) {
+		Credito cred = creditoDAO.read(codigo);
+		return cred;
+	}
+
+	public void actualizarDetalle(DetalleCredito credito) {
+		detalleCreditoDAO.update(credito);
+	}
+	
+	public double valorDecimalCr(double valor) {
+		String num= String.format(Locale.ROOT, "%.2f", valor);
+        System.out.println(num);   
+        return Double.parseDouble(num);
+	}
+	
+	public void actualiza(Credito credito) {
+		creditoDAO.update(credito);
+		
 	}
 }

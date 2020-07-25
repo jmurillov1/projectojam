@@ -61,4 +61,9 @@ public interface GestionUsuarioLocal {
 	public List<Credito> listarCreditos();
 	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes);
 	public void aprobarCredito(Credito credito, Cliente cliente);
+	public String getDatos();
+	public List<Credito> listarCreditosCedula(String cedula);
+	public Credito verCredito(int codigo);
+	public void actualizarDetalle(DetalleCredito credito);
+	public void actualiza(Credito credito);
 }
