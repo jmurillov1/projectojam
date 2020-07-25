@@ -22,8 +22,8 @@ public class RespuestaBean {
         addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
     }
      
-    public void destroyWorld() {
-        addMessage("System Error", "Please try again later.");
+    public void respuestaSolicitudCredito() {
+        addMessage("Confirmacion", "Solicitud Guardada");
     }
      
     public void addMessage(String summary, String detail) {

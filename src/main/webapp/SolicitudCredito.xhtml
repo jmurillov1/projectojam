@@ -253,11 +253,16 @@
 														<p1:inputFile id="file3" label="Cargar"
 															value="#{clientesBean.arRolDePagos}" required="true"
 															requiredMessage="Archivo no seleccionado" />
-													</div> 
-													<h:commandButton action="#{clientesBean.crearSolicitudCredito()}"  
-													value="Guardar"  
-													class="btn btn-success"  
-													/>
+													</div>
+													<p:growl id="message" showDetail="true" />
+
+													<p:commandButton value="Guardar Solicitud" action="#{respuestaBean.respuestaSolicitudCredito()}" update="message">
+														<p:confirm header="Alerta" message="¿Desea guardar la solicitud de credito?" icon="pi pi-exclamation-triangle" />
+													</p:commandButton>
+													<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+														<p:commandButton value="Si" action="#{clientesBean.crearSolicitudCredito()}" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+														<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+													</p:confirmDialog>
 												</div>
 											</div>
 										</div>
