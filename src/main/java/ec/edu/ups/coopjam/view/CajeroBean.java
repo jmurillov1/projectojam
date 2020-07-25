@@ -405,9 +405,15 @@ public class CajeroBean {
 	public List<Credito> cargarCreditos() {
 		System.out.println("Cargar Creditos ----- ");
 		List<Credito> lis = clienteON.listarCreditosCedula(cedulaAux);
+		List<Credito> lisAux = new ArrayList<Credito>();
 		System.out.println(lis.size());
-		if (lis != null) {
-			return lis;
+		for(Credito credito: lis) {
+			if (credito.getEstado().equals("Pendiente")) {
+				lisAux.add(credito);
+			}
+		}
+		if (lisAux  != null) {
+			return lisAux;
 		}
 		return null;
 	}
@@ -440,9 +446,6 @@ public class CajeroBean {
 	 public void guardar() {
 		 System.out.println("PAGOOOOOOOOOOOOOO");
 		 System.out.println(codigoAux+"****"+transaccionAux.getMonto()+"********"+transaccionAux.getTipo()+"********"+codigoAux2+"***************"+cedulaAux);
-		 
-		 
-		 
 		 List<DetalleCredito> listt = clienteON.verCredito(codigoAux).getDetalles();
 		 if (transaccionAux.getTipo().equals("pagoC")) {
 			for(DetalleCredito credito: listt) {
@@ -455,16 +458,26 @@ public class CajeroBean {
 					clienteON.actualizarDetalle(credito);
 				}
 			}
+			
 		}else if (transaccionAux.getTipo().equals("pagoAb")) {
 			for(DetalleCredito credito: listt) {
 				if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
 					transaccionAux.setTipo("PagoCredito");
 					transaccionAux.setFecha(new Date());
 					transaccionAux.setSaldoCuenta(credito.getMonto());
-					credito.setEstado("PagoAbono");
+					//credito.setEstado("PagoAbono");
 					double valor = credito.getSaldo() - transaccionAux.getMonto();
 					credito.setSaldo(valor);
-					clienteON.actualizarDetalle(credito);
+					if (valor > 0) {
+						credito.setEstado("PagoAbono");
+						credito.setSaldo(valor);
+						clienteON.actualizarDetalle(credito);
+					}else if(valor <= 0) {
+						credito.setEstado("Pagado");
+						credito.setSaldo(0);
+						clienteON.actualizarDetalle(credito);
+					}
+					
 					
 				}
 			}
@@ -494,20 +507,38 @@ public class CajeroBean {
 			}
 		}
 		 
-		
 		 
-		
+		 
 		 Cliente cliente = clienteON.buscarCliente(cedulaAux);
 		 transaccionAux.setCliente(cliente);
 		 try {
 			clienteON.guardarTransaccion(transaccionAux);
 			editable = false;
 		    transaccionAux = new Transaccion();
+		    
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 
+		 
+		 //verfico
+		 List<DetalleCredito> lisComprobar = clienteON.verCredito(codigoAux).getDetalles();
+		 int cont = 0;
+		 for(DetalleCredito credito: listt) {
+			 if (credito.getEstado().equals("Pagado")) {
+				cont += 1;
+			}
+		 }
+		 System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooo");
+		 System.out.println(cont);
+		 System.out.println(" ooooooooooooooooooooooooooooooooooooooooooooo");
+		 if (cont == listt.size()) {
+			 System.out.println(lisComprobar.size()+" FINAL CREDITOOOOOOOOOOOOOOOO FINNNNNNNNNNNNNNN ");
+			 Credito nv = clienteON.verCredito(codigoAux);
+			 nv.setEstado("Pagado");
+			 clienteON.actualizarCredito(nv);
+		}
 	 }
 	 
 	 public void buscarCuota(int cod) {
