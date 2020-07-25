@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -352,7 +353,8 @@ public class ClientesBean {
 	 * Metodo que permite validar la cedula de un cliente
 	 * 
 	 * @return Mensaje de confirmacion
-	 */
+	 */ 
+	   
 	public String validarCedula() {
 		if (cliente.getCedula() != null) {
 			Cliente cli = gestionUsuarios.buscarCliente(cliente.getCedula());
@@ -617,7 +619,7 @@ public class ClientesBean {
 		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream())); 
 		solicitudDeCredito.setGaranteCredito(garante);  
 		solicitudDeCredito.setTasaPago((ingresos-egresos)/100);
-		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);    
+		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito); 
 		garante = new Cliente();
 		solicitudDeCredito = new SolicitudDeCredito(); 
 		return "SolicitudCredito"; 
