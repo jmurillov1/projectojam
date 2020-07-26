@@ -2,9 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"> 
 
-<h:head></h:head> 
+
+
+<h:head>
+</h:head> 
 <body> 
 
 
@@ -124,19 +128,26 @@
 											</h:form>
 										</h:panelGroup>
 										
+										
 										<h:panelGroup id="este">
 										<h:form>
-										<h1>Detalles del Credito</h1>
-												<h2>Analisis de Datos</h2>
+										<h1>Grafica Clientes</h1>
 												<h:commandButton
-															action="#{loginBean.datos()}"
-															value="Ocultar" class="btn btn-success">
-															<f:ajax render="este" />
-												</h:commandButton>
+												action="#{cajeroBean.cambioGrafica('A')}"
+															value="Cargar Grafica" class="btn btn-success">
+															<f:ajax render="grafica" />
+												</h:commandButton>				
+										
+										
+										</h:form>
+										<h:form id="grafica" rendered="#{cajeroBean.grafica}">
+										<p:pieChart model="#{cajeroBean.pieModel}" style="width: 100%; height: 500px;"/>
 										</h:form>
 										
-										
 										</h:panelGroup>
+										
+										
+										
 										
 										<h:panelGroup id="panelTelefono">
 											<h:form id="tels" rendered="#{loginBean.editable}">
@@ -278,6 +289,21 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Donut Chart Example
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div class="panel-body">
+                                    <div id="morris-donut-chart"></div>
+                                </div>
+                                <!-- /.panel-body -->
+                            </div>
+                            <!-- /.panel -->
+                        </div>
+			
 		</ui:define>
 	</ui:composition>
 
