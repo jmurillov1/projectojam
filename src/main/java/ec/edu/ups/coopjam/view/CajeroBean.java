@@ -575,7 +575,10 @@ public class CajeroBean {
 		 String[] parts = m.split(";");
 		 String part1 = parts[0]; 
 		 String part2 = parts[1];
-		 System.out.println(parts);
+		 System.out.println(parts[0]+"*******"+parts[1]);
+		 
+		 System.out.println("******************************");
+		 System.out.println("ENTRO graficaaaaaaaaaaaaa");
 		 
 	        pieModel = new PieChartModel();
 	        ChartData data = new ChartData();
@@ -583,22 +586,25 @@ public class CajeroBean {
 	        PieChartDataSet dataSet = new PieChartDataSet();
 	        List<Number> values = new ArrayList<>();
 	        
-	        values.add(300);
+	        for (int i = 0; i < parts.length; i++) {
+	        	values.add(Integer.parseInt(parts[i]));
+			}
+	       /* values.add(300);
 	        values.add(50);
-	        values.add(100);
+	        values.add(100);*/
 	        dataSet.setData(values);
 	         
 	        List<String> bgColors = new ArrayList<>();
 	        bgColors.add("rgb(255, 99, 132)");
 	        bgColors.add("rgb(54, 162, 235)");
-	        bgColors.add("rgb(255, 205, 86)");
+	      //  bgColors.add("rgb(255, 205, 86)");
 	        dataSet.setBackgroundColor(bgColors);
 	         
 	        data.addChartDataSet(dataSet);
 	        List<String> labels = new ArrayList<>();
-	        labels.add("Red");
-	        labels.add("Blue");
-	        labels.add("Yellow");
+	        labels.add("Clientes Buenos");
+	        labels.add("Clientes Malos");
+	      //  labels.add("Yellow");
 	        data.setLabels(labels);
 	         
 	        pieModel.setData(data);
@@ -606,10 +612,14 @@ public class CajeroBean {
 	 
 	 
 	 public void cambioGrafica(String m) {
+		 System.out.println("METODO cambiografica"+"****"+m);
 		 if (m.equals("A")) {
-			grafica = false;
+			createPieModel();
+			 grafica = true;
+			
 		}
-		
+		 System.out.println(grafica);
+		 System.out.println(editable);
 	 }
 	 
 
