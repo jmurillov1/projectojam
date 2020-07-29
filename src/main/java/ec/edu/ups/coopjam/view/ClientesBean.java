@@ -1,6 +1,7 @@
 package ec.edu.ups.coopjam.view;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.servlet.http.Part;
+
+import org.primefaces.event.CloseEvent;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.MoveEvent;
+import org.primefaces.model.file.UploadedFile;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
@@ -54,9 +60,10 @@ public class ClientesBean {
 	private String fechasInvalidas; 
 	private SolicitudDeCredito solicitudDeCredito;    
 	private String cedulaGarante;
-	private Part arCedula; 
-	private Part arPlanillaServicios; 
-	private Part arRolDePagos;    
+	private InputStream arCedula; 
+	private InputStream  arPlanillaServicios; 
+	private InputStream arRolDePagos; 
+	private String mensajeGarante; 
 	private double ingresos; 
 	private double egresos;
 	
@@ -330,9 +337,6 @@ public class ClientesBean {
 		}
 		return null;
 	}
-	
-	
-	
 	public double getIngresos() {
 		return ingresos;
 	}
@@ -347,7 +351,7 @@ public class ClientesBean {
 
 	public void setEgresos(double egresos) {
 		this.egresos = egresos;
-	}
+	} 
 
 	/**
 	 * Metodo que permite validar la cedula de un cliente
@@ -403,30 +407,29 @@ public class ClientesBean {
 	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
 		this.solicitudDeCredito = solicitudDeCredito;
 	}
-
-	public Part getArCedula() {
-		return arCedula;
+	
+	public String getMensajeGarante() {
+		return mensajeGarante;
 	}
 
-	public void setArCedula(Part arCedula) {
-		this.arCedula = arCedula;
-	}
-
-	public Part getArPlanillaServicios() {
-		return arPlanillaServicios;
-	}
-
-	public void setArPlanillaServicios(Part arPlanillaServicios) {
-		this.arPlanillaServicios = arPlanillaServicios;
-	}
-
-	public Part getArRolDePagos() {
-		return arRolDePagos;
-	}
-
-	public void setArRolDePagos(Part arRolDePagos) {
-		this.arRolDePagos = arRolDePagos;
-	}
+	public void setMensajeGarante(String mensajeGarante) {
+		this.mensajeGarante = mensajeGarante;
+	} 
+	
+	public void handleClose(CloseEvent event) {
+        addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
+    }
+     
+    public void handleMove(MoveEvent event) {
+        event.setTop(500);
+    	addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
+    }
+     
+     
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 
 	/**
 	 * Metodo que permite crear la cuenta, cliente y a su vez una transaccion
@@ -610,26 +613,57 @@ public class ClientesBean {
 	} 
 	
 	
-	public String crearSolicitudCredito() throws IOException{   
+	public String crearSolicitudCredito() throws IOException{    
 		System.out.println("ENTRO EN LA SOLICITUD");    
 		solicitudDeCredito.setClienteCredito(gestionUsuarios.buscarCliente(cedulaParametro));   
 		solicitudDeCredito.setEstadoCredito("Solicitando");
-		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula.getInputStream()));
-		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios.getInputStream()));
-		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos.getInputStream())); 
+		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula));
+		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios));
+		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos)); 
 		solicitudDeCredito.setGaranteCredito(garante);  
-		solicitudDeCredito.setTasaPago((ingresos-egresos)/100);
-		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito); 
+		solicitudDeCredito.setTasaPago(((ingresos-egresos)*100)/ingresos);  
+		System.out.println(solicitudDeCredito);
+		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);  
+		addMessage("Confirmacion", "Solicitud Guardada");
 		garante = new Cliente();
 		solicitudDeCredito = new SolicitudDeCredito(); 
 		return "SolicitudCredito"; 
 	}  
 	
-	public String buscarCliente() {  
-		garante = gestionUsuarios.buscarCliente(cedulaGarante);  
-		System.out.println("LA CEDULA ESSSSS:  "+garante.getCedula());
+	public void buscarGarante() {   
+		if(cedulaGarante.equalsIgnoreCase(cedulaParametro)) { 
+			mensajeGarante = "No puede ingresar su propia cedula"; 
+			garante = new Cliente();
+		}else { 
+			garante = gestionUsuarios.buscarCliente(cedulaGarante);   
+			mensajeGarante = null;
+		}
+	}
+	
+	public String confirmarTasaPago(double ingresos, double egresos) { 
+		if(egresos>ingresos) { 
+			return "Los egresos no debe ser mayor a los ingresos";
+		} 
 		return null;
 	}
+	
+	
+	public void archivo1(FileUploadEvent event) throws IOException {
+        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        arCedula=event.getFile().getInputStream();
+    } 
+	
+	public void archivo2(FileUploadEvent event) throws IOException {
+        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        arPlanillaServicios=event.getFile().getInputStream();
+    }
+	public void archivo3(FileUploadEvent event) throws IOException {
+        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        arRolDePagos=event.getFile().getInputStream();
+    }
 	
 	
 }
