@@ -13,12 +13,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+
+import org.primefaces.event.CloseEvent;
+import org.primefaces.event.MoveEvent;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
@@ -208,9 +212,11 @@ public class EmpleadosBean {
 			if (tipoEmpleado.equalsIgnoreCase("cajero")) {
 				empleado.setRol("Cajero");
 				empleadoON.guardarEmpleado(empleado);
+				addMessage("Confirmacion", "Empleado Guardado");
 			} else if (tipoEmpleado.equalsIgnoreCase("jefeCredito")) {
 				empleado.setRol("JefeCredito");
 				empleadoON.guardarEmpleado(empleado);
+				addMessage("Confirmacion", "Empleado Guardada");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -364,6 +370,19 @@ public class EmpleadosBean {
 		facesContext.responseComplete();
 	}
 	
+	public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+ 
+ public void handleClose(CloseEvent event) {
+        addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
+    }
+     
+    public void handleMove(MoveEvent event) {
+        event.setTop(500);
+    	addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
+    }
 	
 
 }

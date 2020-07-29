@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
@@ -21,6 +22,10 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
+								
+								<p:growl id="message" showDetail="true" class="ui-growl"
+									life="3000" />
+								
 									<h:form role="form" onkeypress="if (event.keyCode == 13) { return false; }">
 
 										<div class="form-group">
@@ -117,6 +122,23 @@
 										</div>
 										<h:commandButton action="#{empleadosBean.guardarDatos()}" value="Guardar" class="btn btn-default"/>
 										<button type="reset" class="btn btn-default">Limpiar Ventana</button>
+										
+										<p:commandButton value="Guardar Transaccion"
+										action="#{empleadosBean.guardarDatos()}"
+										update="message" class="btn btn-success btn-lg">
+										<p:confirm header="Confirmacion"
+											message="¿Desea realizar el Registro?"
+											icon="pi pi-exclamation-triangle" />
+									</p:commandButton>
+
+									<p:confirmDialog global="true" showEffect="fade"
+										hideEffect="fade">
+										<p:commandButton value="SI" type="button"
+											styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+										<p:commandButton value="NO" type="button"
+											styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+									</p:confirmDialog>	
+										
 									</h:form>
 
 								</div>
