@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.primefaces.event.CloseEvent;
+import org.primefaces.event.MoveEvent;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.pie.PieChartDataSet;
 import org.primefaces.model.charts.pie.PieChartModel;
@@ -223,10 +226,7 @@ public class CajeroBean {
 	public void setTransaccionAux(Transaccion transaccionAux) {
 		this.transaccionAux = transaccionAux;
 	}
-	
-	
-	
-	
+		
 
 	public PieChartModel getPieModel() {
 		return pieModel;
@@ -381,6 +381,8 @@ public class CajeroBean {
 			try {
 				// editable = false;
 				clienteON.guardarTransaccion(t);
+				addMessage("Confirmacion", "Transaccion Guardada");
+				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
@@ -402,6 +404,9 @@ public class CajeroBean {
 			t2.setSaldoCuenta(nvmonto2);
 			try {
 				clienteON.guardarTransaccion(t2);
+				//addMessage("Confirmacion", "Transaccion Guardada");
+				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cinfirmacion", "Transaccion Guardada");
+		        FacesContext.getCurrentInstance().addMessage(null, message);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
@@ -622,5 +627,20 @@ public class CajeroBean {
 		 System.out.println(editable);
 	 }
 	 
+	 public void addMessage(String summary, String detail) {
+		 System.out.println(summary+"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmkkk"+detail);
+	        /*FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+	        FacesContext.getCurrentInstance().addMessage(null, message);*/
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+	    }
+	 
+	 public void handleClose(CloseEvent event) {
+	        addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
+	    }
+	     
+	    public void handleMove(MoveEvent event) {
+	        event.setTop(500);
+	    	addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
+	    }
 
 }

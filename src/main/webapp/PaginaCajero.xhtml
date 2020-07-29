@@ -10,16 +10,24 @@
 </h:head>
 <h:body>
 
-	<ui:composition template="template/templateCajero.xhtml">
+	<ui:composition template="template/templateCliente.xhtml">
 		<ui:define name="title">Cajero</ui:define>
 		<ui:param name="nombre" value="#{loginBean.usuario}" />
 		<ui:define name="content">
+		
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="panel panel-default">
+					<div class="panel panel-primary">
+					<div class="panel-heading">DATOS DE TRANSACCION</div>
 						<div class="panel-body">
+						
+						<p:growl id="message" showDetail="true"  showSummary="true" class="ui-growl"
+									life="4000" />
+									
 							<div class="row">
 								<div class="col-lg-6">
+								
+								
 									<h:form role="form"
 										onkeypress="if (event.keyCode == 13) { return false; }">
 										<div class="form-group">
@@ -49,12 +57,35 @@
 											<br /> <label>Saldo Cuenta:</label><br />
 											<h:outputText id="Monto" value="#{cajeroBean.valMonto()}" />
 										</div>
-										<h:commandButton action="#{cajeroBean.registrar()}"
-											value="REGISTRAR" class="btn btn-default" />
+										
+										
+										
+
+									<p:commandButton value="Guardar Transaccion"
+										actionListener="#{cajeroBean.registrar()}"
+										update="message" class="btn btn-success btn-lg">
+										<p:confirm header="Confirmacion"
+											message="¿Desea realizar la Transaccion?"
+											icon="pi pi-exclamation-triangle" />
+									</p:commandButton>
+
+									<p:confirmDialog global="true" showEffect="fade"
+										hideEffect="fade">
+										<p:commandButton value="SI" type="button"
+											styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+										<p:commandButton value="NO" type="button"
+											styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+									</p:confirmDialog>
+										
+											
+										
+											
 									</h:form>
-									
-									
-									<h:panelGroup id="panel">
+								</div>
+							</div>
+							
+							<div>
+							<h:panelGroup id="panel">
 									<h:form id="transa" rendered="#{cajeroBean.editable}">
 										<h1>Transacciones</h1>
 
@@ -83,10 +114,10 @@
 										</h:dataTable>
 									</h:form>
 									</h:panelGroup>
-
-								</div>
 							</div>
+								
 						</div>
+						
 					</div>
 				</div>
 			</div>
