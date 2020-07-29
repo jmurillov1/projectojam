@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -189,7 +190,7 @@ public class LoginBean {
 			empleado = emp;
 			if (emp != null && emp.getRol().equalsIgnoreCase("Cajero")) {
 				try {
-
+					addMessage("OK", "Ingreso");
 					FacesContext contex = FacesContext.getCurrentInstance();
 					contex.getExternalContext().redirect("PaginaCajero.xhtml");
 				} catch (Exception e) {
@@ -209,8 +210,10 @@ public class LoginBean {
 				}
 			}
 		} catch (Exception e) {
+			addMessage("ERROR", "NO SE PUEDO INGRESAR, REVISE USUARIO CONTRASEÑA");
 			return "InicioUsuarios";
 		}
+		
 		return null;
 	}
 
@@ -453,5 +456,12 @@ public class LoginBean {
 		return "";
 	}
 	
+	
+	public void addMessage(String summary, String detail) {
+		 System.out.println(summary+"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmkkk"+detail);
+	        /*FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+	        FacesContext.getCurrentInstance().addMessage(null, message);*/
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+	    }
 	
 }

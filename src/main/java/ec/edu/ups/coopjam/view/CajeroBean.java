@@ -380,8 +380,11 @@ public class CajeroBean {
 			t.setSaldoCuenta(nvmonto);
 			try {
 				// editable = false;
+				
 				clienteON.guardarTransaccion(t);
 				addMessage("Confirmacion", "Transaccion Guardada");
+				editable = false;
+				listaTra = new ArrayList<Transaccion>();
 				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -403,19 +406,19 @@ public class CajeroBean {
 			t2.setTipo("retiro");
 			t2.setSaldoCuenta(nvmonto2);
 			try {
+				
 				clienteON.guardarTransaccion(t2);
-				//addMessage("Confirmacion", "Transaccion Guardada");
-				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cinfirmacion", "Transaccion Guardada");
-		        FacesContext.getCurrentInstance().addMessage(null, message);
+				addMessage("Confirmacion", "Transaccion Guardada");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
 			}
-			try {
+			/*try {
+				addMessage("Confirmacion", "Transaccion Guardada");
 				FacesContext contex = FacesContext.getCurrentInstance();
 				contex.getExternalContext().redirect("PaginaCajero.xhtml");
 			} catch (Exception e) {
-			}
+			}*/
 		}
 		return "PaginaCajero";
 	}
@@ -631,7 +634,11 @@ public class CajeroBean {
 		 System.out.println(summary+"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmkkk"+detail);
 	        /*FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 	        FacesContext.getCurrentInstance().addMessage(null, message);*/
-	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+	       //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+	        
+	        FacesContext context = FacesContext.getCurrentInstance();
+	        context.getExternalContext().getFlash().setKeepMessages(true);
+	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
 	    }
 	 
 	 public void handleClose(CloseEvent event) {
