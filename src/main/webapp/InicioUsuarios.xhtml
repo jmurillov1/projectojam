@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head></h:head>
@@ -11,9 +12,10 @@
 		<ui:define name="title">Inicio de Sesion Empleados</ui:define>
 
 		<ui:define name="content">
+			<p:growl id="message" showDetail="true"  showSummary="true" class="ui-growl"
+									life="4000" />
 
-
-			<h:form role="form">
+			<h:form>
 				<fieldset>
 					<div class="form-group">
 						<h:inputText class="form-control" value="#{loginBean.usuario}"
@@ -23,8 +25,14 @@
 						<h:inputSecret class="form-control" value="#{loginBean.contrasena}"
 							name="password" type="password" />
 					</div>
-					<h:commandButton action="#{loginBean.validarUsuario()}"
-						value="INGRESAR" class="btn btn-lg btn-success btn-block" />
+					
+						
+					<p:commandButton value="ING"
+										actionListener="#{loginBean.validarUsuario()}"
+										update="message" class="btn btn-success btn-lg">
+					</p:commandButton>
+
+									
 
 				</fieldset>
 			</h:form>
