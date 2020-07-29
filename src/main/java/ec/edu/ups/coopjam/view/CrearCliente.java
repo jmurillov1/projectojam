@@ -144,7 +144,7 @@ public class CrearCliente {
 	
 	
 	public String crearCuenta() {  
-		try {  
+		try {   
 			cuentaDeAhorro.setNumeroCuentaDeAhorro(numeroCuenta); 
 			cuentaDeAhorro.setFechaDeRegistro(new Date());
 			cuentaDeAhorro.setCliente(cliente);  
@@ -155,7 +155,8 @@ public class CrearCliente {
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro()); 
 			transaccion.setTipo("deposito");
 			transaccion.setCliente(cliente); 
-			gestionUsuarios.guardarTransaccion(transaccion);  
+			transaccion.setSaldoCuenta(cuentaDeAhorro.getSaldoCuentaDeAhorro());
+			gestionUsuarios.guardarTransaccion(transaccion);   
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

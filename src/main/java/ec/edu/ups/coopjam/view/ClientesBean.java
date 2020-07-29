@@ -478,32 +478,6 @@ public class ClientesBean {
 	}
 
 	/**
-	 * Metodo que permite crear la cuenta, cliente y a su vez una transaccion
-	 * 
-	 * @return Pagina que se redirige
-	 */
-	public String crearCuenta() {
-		try {
-			cuentaDeAhorro.setNumeroCuentaDeAhorro(numeroCuenta);
-			cuentaDeAhorro.setFechaDeRegistro(new Date());
-			cuentaDeAhorro.setCliente(cliente);
-			cuentaDeAhorro.setSaldoCuentaDeAhorro(Double.parseDouble(saldoCuenta));
-			gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro);
-			Transaccion transaccion = new Transaccion();
-			transaccion.setFecha(new Date());
-			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro());
-			transaccion.setTipo("deposito");
-			transaccion.setCliente(cliente);
-			transaccion.setSaldoCuenta(Double.parseDouble(saldoCuenta));
-			gestionUsuarios.guardarTransaccion(transaccion);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "CrearCliente";
-	}
-
-	/**
 	 * Metodo que me permite obtener una lista de los clientes y asignarlo a la
 	 * variable lstClientes de la clase
 	 */
