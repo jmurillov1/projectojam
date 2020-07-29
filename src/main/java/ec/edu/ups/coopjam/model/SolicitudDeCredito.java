@@ -1,6 +1,7 @@
 package ec.edu.ups.coopjam.model;
 
 import java.io.File;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -199,6 +200,19 @@ public class SolicitudDeCredito {
 	}
 	public void setTipoCliente(String tipoCliente) {
 		this.tipoCliente = tipoCliente;
+	}
+	@Override
+	public String toString() {
+		return "SolicitudDeCredito [codigoCredito=" + codigoCredito + ", clienteCredito=" + clienteCredito
+				+ ", garanteCredito=" + garanteCredito + ", propositoCredito=" + propositoCredito + ", montoCredito="
+				+ montoCredito + ", mesesCredito=" + mesesCredito + ", tiempoEmpleo=" + tiempoEmpleo
+				+ ", estadoCivilSexo=" + estadoCivilSexo + ", avaluoDeVivienda=" + avaluoDeVivienda + ", activo="
+				+ activo + ", tipoVivienda=" + tipoVivienda + ", tipoEmpleo=" + tipoEmpleo + ", trabajadorExtranjero="
+				+ trabajadorExtranjero + ", estadoCredito=" + estadoCredito + ", arCedula=" + Arrays.toString(arCedula)
+				+ ", arPlanillaServicios=" + Arrays.toString(arPlanillaServicios) + ", arRolDePagos="
+				+ Arrays.toString(arRolDePagos) + ", historialCredito=" + historialCredito + ", saldoCuenta="
+				+ saldoCuenta + ", tasaPago=" + tasaPago + ", garanteEstado=" + garanteEstado + ", añosCliente="
+				+ añosCliente + ", cantidadCreditos=" + cantidadCreditos + ", tipoCliente=" + tipoCliente + "]";
 	}  
 	
 	
