@@ -48,7 +48,7 @@
 													<h1 class="page-header">Historial de Accesos</h1>
 													<div class="panel-body">
 														<div class="table-responsive">
-															<h:dataTable value="#{clientesBean.cargarSesiones(clientesBean.buscarCuentaDeAhorro.cliente.cedula)}" var="sesion" class="table">
+															<h:dataTable value="#{clientesBean.cargarSesiones()}" var="sesion" class="table">
 																<h:column>
 																	<f:facet name="header">Fecha y Ahora</f:facet> 
 																	#{sesion.fechaSesion}

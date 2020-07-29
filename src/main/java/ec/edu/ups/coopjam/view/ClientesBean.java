@@ -25,7 +25,9 @@ import org.primefaces.model.file.UploadedFile;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Credito;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
+import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
@@ -43,7 +45,7 @@ public class ClientesBean {
 	// Atributos de la clase
 	@Inject
 	private GestionUsuarioLocal gestionUsuarios;
-	private Cliente cliente; 
+	private Cliente cliente;
 	private Cliente garante;
 	private String numeroCuenta;
 	private CuentaDeAhorro cuentaDeAhorro;
@@ -52,21 +54,24 @@ public class ClientesBean {
 	private Transaccion transaccion;
 	private List<Cliente> lstClientes;
 	private List<SesionCliente> lstSesionesCliente;
-	private List<Transaccion> lstTransacciones;
+	private List<Transaccion> lstTransacciones; 
+	private List<Credito> lstCreditosAprobados; 
+	private List<DetalleCredito> lstDetallesCredito;
 	private String saldoCuenta;
 	private Date fechaInicio;
 	private Date fechaFinal;
-	private String tipoTransaccion;  
-	private String fechasInvalidas; 
-	private SolicitudDeCredito solicitudDeCredito;    
+	private String tipoTransaccion;
+	private String fechasInvalidas;
+	private SolicitudDeCredito solicitudDeCredito;
 	private String cedulaGarante;
-	private InputStream arCedula; 
-	private InputStream  arPlanillaServicios; 
-	private InputStream arRolDePagos; 
-	private String mensajeGarante; 
-	private double ingresos; 
-	private double egresos;
-	
+	private InputStream arCedula;
+	private InputStream arPlanillaServicios;
+	private InputStream arRolDePagos;
+	private String mensajeGarante;
+	private double ingresos;
+	private double egresos; 
+	private boolean editable; 
+	private int codigoCredito;
 
 	/**
 	 * Metodo que permite inicializar atributos y metodos al momento que se llama a
@@ -74,12 +79,13 @@ public class ClientesBean {
 	 */
 	@PostConstruct
 	private void iniciar() {
-		listarClientes(); 
+		listarClientes();   
 		tipoTransaccion = "Todos";
 		System.out.println(lstClientes.size());
 		cuentaDeAhorro = new CuentaDeAhorro();
-		cliente = new Cliente();  
-		garante = new Cliente();
+		cliente = new Cliente();
+		garante = new Cliente();   
+		lstCreditosAprobados = new ArrayList<Credito>();  
 		solicitudDeCredito = new SolicitudDeCredito();
 	}
 
@@ -185,7 +191,6 @@ public class ClientesBean {
 	public String getCedulaParametro() {
 		return cedulaParametro;
 	}
- 
 
 	public String getFechasInvalidas() {
 		return fechasInvalidas;
@@ -210,7 +215,8 @@ public class ClientesBean {
 				buscarCuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);
 				List<Transaccion> lista = gestionUsuarios.listadeTransacciones(cedulaParametro);
 				transaccion = lista.get(lista.size() - 1);
-				ultimosDias();
+				ultimosDias();  
+				creditosAprovados(cedulaParametro);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -254,6 +260,14 @@ public class ClientesBean {
 	public void setLstClientes(List<Cliente> lstClientes) {
 		this.lstClientes = lstClientes;
 	}
+		
+	public List<Credito> getLstListaCreditosAprobados() {
+		return lstCreditosAprobados;
+	}
+
+	public void setLstListaCreditosAprobados(List<Credito> lstListaCreditosAprobados) {
+		this.lstCreditosAprobados = lstListaCreditosAprobados;
+	}
 
 	/**
 	 * Metodo que permite obtener el atributo de tipo lista lstSesionesClientes de
@@ -283,6 +297,22 @@ public class ClientesBean {
 	public void setLstTransacciones(List<Transaccion> lstTransacciones) {
 		this.lstTransacciones = lstTransacciones;
 	}
+	
+	public List<Credito> getLstCreditosAprobados() {
+		return lstCreditosAprobados;
+	}
+
+	public void setLstCreditosAprobados(List<Credito> lstCreditosAprobados) {
+		this.lstCreditosAprobados = lstCreditosAprobados;
+	}
+
+	public List<DetalleCredito> getLstDetallesCredito() {
+		return lstDetallesCredito;
+	}
+
+	public void setLstDetallesCredito(List<DetalleCredito> lstDetallesCredito) {
+		this.lstDetallesCredito = lstDetallesCredito;
+	}
 
 	public Date getFechaInicio() {
 		return fechaInicio;
@@ -306,7 +336,8 @@ public class ClientesBean {
 
 	public void setTipoTransaccion(String tipoTransaccion) {
 		this.tipoTransaccion = tipoTransaccion;
-	} 
+	}
+
 	public Cliente getGarante() {
 		return garante;
 	}
@@ -314,13 +345,29 @@ public class ClientesBean {
 	public void setGarante(Cliente garante) {
 		this.garante = garante;
 	}
-	
+
 	public String getCedulaGarante() {
 		return cedulaGarante;
 	}
 
 	public void setCedulaGarante(String cedulaGarante) {
 		this.cedulaGarante = cedulaGarante;
+	} 
+	
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	} 
+	
+	public int getCodigoCredito() {
+		return codigoCredito;
+	}
+
+	public void setCodigoCredito(int codigoCredito) {
+		this.codigoCredito = codigoCredito;
 	}
 
 	/**
@@ -337,6 +384,7 @@ public class ClientesBean {
 		}
 		return null;
 	}
+
 	public double getIngresos() {
 		return ingresos;
 	}
@@ -351,14 +399,14 @@ public class ClientesBean {
 
 	public void setEgresos(double egresos) {
 		this.egresos = egresos;
-	} 
+	}
 
 	/**
 	 * Metodo que permite validar la cedula de un cliente
 	 * 
 	 * @return Mensaje de confirmacion
-	 */ 
-	   
+	 */
+
 	public String validarCedula() {
 		if (cliente.getCedula() != null) {
 			Cliente cli = gestionUsuarios.buscarCliente(cliente.getCedula());
@@ -398,8 +446,7 @@ public class ClientesBean {
 	public void setSaldoCuenta(String saldoCuenta) {
 		this.saldoCuenta = saldoCuenta;
 	}
-	
-	
+
 	public SolicitudDeCredito getSolicitudDeCredito() {
 		return solicitudDeCredito;
 	}
@@ -407,29 +454,28 @@ public class ClientesBean {
 	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
 		this.solicitudDeCredito = solicitudDeCredito;
 	}
-	
+
 	public String getMensajeGarante() {
 		return mensajeGarante;
 	}
 
 	public void setMensajeGarante(String mensajeGarante) {
 		this.mensajeGarante = mensajeGarante;
-	} 
-	
+	}
+
 	public void handleClose(CloseEvent event) {
-        addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
-    }
-     
-    public void handleMove(MoveEvent event) {
-        event.setTop(500);
-    	addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
-    }
-     
-     
-    public void addMessage(String summary, String detail) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
+		addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
+	}
+
+	public void handleMove(MoveEvent event) {
+		event.setTop(500);
+		addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
+	}
+
+	public void addMessage(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
 
 	/**
 	 * Metodo que permite crear la cuenta, cliente y a su vez una transaccion
@@ -447,7 +493,7 @@ public class ClientesBean {
 			transaccion.setFecha(new Date());
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro());
 			transaccion.setTipo("deposito");
-			transaccion.setCliente(cliente); 
+			transaccion.setCliente(cliente);
 			transaccion.setSaldoCuenta(Double.parseDouble(saldoCuenta));
 			gestionUsuarios.guardarTransaccion(transaccion);
 		} catch (Exception e) {
@@ -482,8 +528,7 @@ public class ClientesBean {
 	 * @param cedula Cedula del cliente
 	 * @return Lista de sesiones que tiene el cliente
 	 */
-	public List<SesionCliente> cargarSesiones(String cedula) {
-		System.out.println(cedula);
+	public List<SesionCliente> cargarSesiones() {
 		List<SesionCliente> lis = gestionUsuarios.obtenerSesionesCliente(cedulaParametro);
 		if (lis != null) {
 			lstSesionesCliente = lis;
@@ -541,30 +586,30 @@ public class ClientesBean {
 		System.out.println(cedulaParametro);
 	}
 
-	public void validarFechas2() throws Exception { 
-		System.out.println(tipoTransaccion); 
-		
-		if (this.fechaInicio != null && this.fechaFinal != null) { 
-			
-			if(errorFechas() == null) {  
-				fechasInvalidas = errorFechas(); 
+	public void validarFechas2() throws Exception {
+		System.out.println(tipoTransaccion);
+
+		if (this.fechaInicio != null && this.fechaFinal != null) {
+
+			if (errorFechas() == null) {
+				fechasInvalidas = errorFechas();
 				DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				String inicioF = hourdateFormat.format(fechaInicio);
 				String finalF = hourdateFormat.format(fechaFinal);
 				List<Transaccion> listaTrans = gestionUsuarios.obtenerTransaccionesFechaHora(cedulaParametro, inicioF,
 						finalF);
-				
-				if(tipoTransaccion!=null) { 
+
+				if (tipoTransaccion != null) {
 					if (tipoTransaccion.equals("Todos")) {
 						lstTransacciones = listaTrans;
-					} else if (tipoTransaccion.equals("Depositos")) { 
+					} else if (tipoTransaccion.equals("Depositos")) {
 						lstTransacciones = new ArrayList<Transaccion>();
 						for (Transaccion transaccion : listaTrans) {
-							if (transaccion.getTipo().equals("deposito")) { 
+							if (transaccion.getTipo().equals("deposito")) {
 								lstTransacciones.add(transaccion);
 							}
 						}
-					} else { 
+					} else {
 						lstTransacciones = new ArrayList<Transaccion>();
 						for (Transaccion transaccion : listaTrans) {
 							if (transaccion.getTipo().equals("retiro")) {
@@ -573,97 +618,111 @@ public class ClientesBean {
 						}
 					}
 				}
-			}else { 
-				fechasInvalidas = errorFechas(); 
+			} else {
+				fechasInvalidas = errorFechas();
 				lstTransacciones.removeAll(lstTransacciones);
 			}
-			
+
 			/*
 			 * System.out.println("H"+lstTransacciones.size());
 			 * System.out.println(cedulaParametro); System.out.println(new Date());
-			 */ 
-		}   
-		
-		System.out.println("LISTA DE TRANSACCION SIZE :   " + lstTransacciones.size());
-	}  
-	
-	
-	public String errorFechas() {   
-		/*System.out.println(fechaInicio.after(fechaFinal));;
-		System.out.println("Fecha inicio: "+this.fechaInicio); 
-		System.out.println("Fecha final: "+this.fechaFinal); 
-		if(fechaInicio.after(fechaFinal)) {   
-			System.out.println("ENTROOOOO VALIDACION");
-			fechasInvalidas = false; 
-			return "No se puede consultar entre estas fechas";  
-		}else { 
-			fechasInvalidas = true;
-		} 
-		return "si";*/ 
-        Date fechaInicioDate = this.fechaInicio;  //String a date
-        Date fechaFinDate = this.fechaFinal;  //String a date
+			 */
+		}
 
-        System.out.println("Inicial: "+fechaInicioDate);
-        System.out.println("Final: "+fechaFinDate);
-        //comprueba si es que inicio esta después que fecha actual       
-        if (fechaInicioDate.after(fechaFinDate)) {
-           return "Fecha inicio mayor";
-        }
-        return null;
-	} 
-	
-	
-	public String crearSolicitudCredito() throws IOException{    
-		System.out.println("ENTRO EN LA SOLICITUD");    
-		solicitudDeCredito.setClienteCredito(gestionUsuarios.buscarCliente(cedulaParametro));   
+		System.out.println("LISTA DE TRANSACCION SIZE :   " + lstTransacciones.size());
+	}
+
+	public String errorFechas() {
+		/*
+		 * System.out.println(fechaInicio.after(fechaFinal));;
+		 * System.out.println("Fecha inicio: "+this.fechaInicio);
+		 * System.out.println("Fecha final: "+this.fechaFinal);
+		 * if(fechaInicio.after(fechaFinal)) {
+		 * System.out.println("ENTROOOOO VALIDACION"); fechasInvalidas = false; return
+		 * "No se puede consultar entre estas fechas"; }else { fechasInvalidas = true; }
+		 * return "si";
+		 */
+		Date fechaInicioDate = this.fechaInicio; // String a date
+		Date fechaFinDate = this.fechaFinal; // String a date
+
+		System.out.println("Inicial: " + fechaInicioDate);
+		System.out.println("Final: " + fechaFinDate);
+		// comprueba si es que inicio esta después que fecha actual
+		if (fechaInicioDate.after(fechaFinDate)) {
+			return "Fecha inicio mayor";
+		}
+		return null;
+	}
+
+	public String crearSolicitudCredito() throws IOException {
+		System.out.println("ENTRO EN LA SOLICITUD");
+		solicitudDeCredito.setClienteCredito(gestionUsuarios.buscarCliente(cedulaParametro));
 		solicitudDeCredito.setEstadoCredito("Solicitando");
 		solicitudDeCredito.setArCedula(gestionUsuarios.toByteArray(arCedula));
 		solicitudDeCredito.setArPlanillaServicios(gestionUsuarios.toByteArray(arPlanillaServicios));
-		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos)); 
-		solicitudDeCredito.setGaranteCredito(garante);  
-		solicitudDeCredito.setTasaPago(((ingresos-egresos)*100)/ingresos);  
-		System.out.println(solicitudDeCredito);
-		gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);  
-		addMessage("Confirmacion", "Solicitud Guardada");
-		garante = new Cliente();
-		solicitudDeCredito = new SolicitudDeCredito(); 
-		return "SolicitudCredito"; 
-	}  
-	
-	public void buscarGarante() {   
-		if(cedulaGarante.equalsIgnoreCase(cedulaParametro)) { 
-			mensajeGarante = "No puede ingresar su propia cedula"; 
-			garante = new Cliente();
+		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos));
+		solicitudDeCredito.setGaranteCredito(garante);
+		solicitudDeCredito.setTasaPago(((ingresos - egresos) * 100) / ingresos);
+		System.out.println(solicitudDeCredito); 
+		if(gestionUsuarios.verificarSolicitudSolicitando(cedulaParametro)) { 
+			gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);
+			addMessage("Confirmacion", "Solicitud Guardada");
 		}else { 
-			garante = gestionUsuarios.buscarCliente(cedulaGarante);   
+			addMessage("Atencion", "Usted ya ha enviado una solicitud de credito para su aprovacion");
+		}
+		garante = new Cliente();
+		solicitudDeCredito = new SolicitudDeCredito();
+		return "SolicitudCredito";
+	}
+
+	public void buscarGarante() {
+		if (cedulaGarante.equalsIgnoreCase(cedulaParametro)) {
+			mensajeGarante = "No puede ingresar su propia cedula";
+			garante = new Cliente();
+		} else {
+			garante = gestionUsuarios.buscarCliente(cedulaGarante);
 			mensajeGarante = null;
 		}
 	}
-	
-	public String confirmarTasaPago(double ingresos, double egresos) { 
-		if(egresos>ingresos) { 
+
+	public String confirmarTasaPago(double ingresos, double egresos) {
+		if (egresos > ingresos) {
 			return "Los egresos no debe ser mayor a los ingresos";
-		} 
+		}
 		return null;
 	}
-	
-	
+
 	public void archivo1(FileUploadEvent event) throws IOException {
-        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        arCedula=event.getFile().getInputStream();
-    } 
-	
+		FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		arCedula = event.getFile().getInputStream();
+	}
+
 	public void archivo2(FileUploadEvent event) throws IOException {
-        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        arPlanillaServicios=event.getFile().getInputStream();
-    }
+		FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		arPlanillaServicios = event.getFile().getInputStream();
+	}
+
 	public void archivo3(FileUploadEvent event) throws IOException {
-        FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        arRolDePagos=event.getFile().getInputStream();
-    }
+		FacesMessage msg = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		arRolDePagos = event.getFile().getInputStream();
+	} 
 	
+	public void creditosAprovados(String cedula) {   
+		System.out.println("ENTRO EN ESTE PINCHE METODO" + cedulaParametro);
+		lstCreditosAprobados = gestionUsuarios.creditosAprovados(cedula);
+	}  
+	
+	 public void cambioVar(int cod) {
+		 codigoCredito = cod;
+		 editable = true; 
+	 } 
+	 
+	 public List<DetalleCredito> verDealles(){
+		 List<DetalleCredito> list = gestionUsuarios.verCredito(codigoCredito).getDetalles();
+		 return list;
+	 }
 	
 }

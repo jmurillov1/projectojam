@@ -65,5 +65,7 @@ public interface GestionUsuarioLocal {
 	public List<Credito> listarCreditosCedula(String cedula);
 	public Credito verCredito(int codigo);
 	public void actualizarDetalle(DetalleCredito credito);
-	public void actualiza(Credito credito);
+	public void actualiza(Credito credito); 
+	public boolean verificarSolicitudSolicitando(String cedulaCliente); 
+	public List<Credito> creditosAprovados(String cedulaCliente);
 }
