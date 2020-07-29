@@ -10,6 +10,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.pie.PieChartDataSet;
+import org.primefaces.model.charts.pie.PieChartModel;
+
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.business.GestionUsuarios;
 import ec.edu.ups.coopjam.model.Cliente;
@@ -17,6 +21,7 @@ import ec.edu.ups.coopjam.model.Credito;
 import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 import ec.edu.ups.coopjam.model.DetalleCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
+
 
 /**
  * Clase de tipo Bean para el manejo de JSF y archivos xhtml
@@ -53,11 +58,17 @@ public class CajeroBean {
 	private int codigoAux3;
 	
 	private Transaccion transaccionAux;
+	
+	private PieChartModel pieModel;
+	
+	private boolean grafica;
 
 	@PostConstruct
 	public void init() {
+		createPieModel();
 		transaccionAux = new Transaccion();
 		cliente = new Cliente();
+		grafica = false;
 	}
 
 	public GestionUsuarioLocal getClienteON() {
@@ -217,6 +228,14 @@ public class CajeroBean {
 	
 	
 
+	public PieChartModel getPieModel() {
+		return pieModel;
+	}
+
+	public void setPieModel(PieChartModel pieModel) {
+		this.pieModel = pieModel;
+	}
+
 	public int getCodigoAux2() {
 		return codigoAux2;
 	}
@@ -231,6 +250,16 @@ public class CajeroBean {
 
 	public void setCodigoAux3(int codigoAux3) {
 		this.codigoAux3 = codigoAux3;
+	}
+	
+	
+
+	public boolean isGrafica() {
+		return grafica;
+	}
+
+	public void setGrafica(boolean grafica) {
+		this.grafica = grafica;
 	}
 
 	/**
@@ -541,9 +570,57 @@ public class CajeroBean {
 		}
 	 }
 	 
-	 public void buscarCuota(int cod) {
+	 private void createPieModel() {
+		 String m = clienteON.getDatos();
+		 String[] parts = m.split(";");
+		 String part1 = parts[0]; 
+		 String part2 = parts[1];
+		 System.out.println(parts[0]+"*******"+parts[1]);
 		 
+		 System.out.println("******************************");
+		 System.out.println("ENTRO graficaaaaaaaaaaaaa");
 		 
+	        pieModel = new PieChartModel();
+	        ChartData data = new ChartData();
+	         
+	        PieChartDataSet dataSet = new PieChartDataSet();
+	        List<Number> values = new ArrayList<>();
+	        
+	        for (int i = 0; i < parts.length; i++) {
+	        	values.add(Integer.parseInt(parts[i]));
+			}
+	       /* values.add(300);
+	        values.add(50);
+	        values.add(100);*/
+	        dataSet.setData(values);
+	         
+	        List<String> bgColors = new ArrayList<>();
+	        bgColors.add("rgb(255, 99, 132)");
+	        bgColors.add("rgb(54, 162, 235)");
+	      //  bgColors.add("rgb(255, 205, 86)");
+	        dataSet.setBackgroundColor(bgColors);
+	         
+	        data.addChartDataSet(dataSet);
+	        List<String> labels = new ArrayList<>();
+	        labels.add("Clientes Buenos");
+	        labels.add("Clientes Malos");
+	      //  labels.add("Yellow");
+	        data.setLabels(labels);
+	         
+	        pieModel.setData(data);
+	    }
+	 
+	 
+	 public void cambioGrafica(String m) {
+		 System.out.println("METODO cambiografica"+"****"+m);
+		 if (m.equals("A")) {
+			createPieModel();
+			 grafica = true;
+			
+		}
+		 System.out.println(grafica);
+		 System.out.println(editable);
 	 }
+	 
 
 }
