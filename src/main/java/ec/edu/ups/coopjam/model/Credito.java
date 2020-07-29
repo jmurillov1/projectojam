@@ -29,6 +29,7 @@ public class Credito implements Serializable {
 	private double interes;
 	
 	private Date fechaRegistro;
+	private Date fechaVencimiento;
 	
 	@OneToOne
 	@JoinColumn(name="jefe_credito")
@@ -106,6 +107,15 @@ public class Credito implements Serializable {
 		this.detalles = detalles;
 	}
 
+	public Date getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+
+	public void setFechaVencimiento(Date fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+	
+	
 	
 	
 	

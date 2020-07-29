@@ -21,7 +21,7 @@
 							<div class="panel-heading">DATOS DE LA SOLICITUD DE CREDITO</div>
 							<div class="panel-body">
 								<p:growl id="messages" showDetail="true" class="ui-growl"
-									life="3000" />
+									life="5000" />
 								<h:form enctype="multipart/form-data">
 									<div class="row">
 										<div class="col-lg-6">
@@ -283,11 +283,11 @@
 										</div>
 										<!-- /.col-lg-6 (nested) -->
 									</div>
-									<p:growl id="message" showDetail="true" class="ui-growl" />
+									<!-- <p:growl id="message" showDetail="true" class="ui-growl" />-->
 
 									<p:commandButton value="Guardar Solicitud de Credito"
 										action="#{clientesBean.crearSolicitudCredito()}"
-										update="message" class="btn btn-success btn-lg">
+										update="messages" class="btn btn-success btn-lg">
 										<p:confirm header="Confirmacion"
 											message="¿Desea guardar la solicitud de credito?"
 											icon="pi pi-exclamation-triangle" />
@@ -300,7 +300,6 @@
 										<p:commandButton value="NO" type="button"
 											styleClass="ui-confirmdialog-no" icon="pi pi-times" />
 									</p:confirmDialog>
-
 								</h:form>
 							</div>
 

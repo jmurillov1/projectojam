@@ -1134,5 +1134,26 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	public void actualiza(Credito credito) {
 		creditoDAO.update(credito);
 		
+	} 
+	
+	public boolean verificarSolicitudSolicitando(String cedulaCliente) { 
+		List<SolicitudDeCredito> solicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
+		for(SolicitudDeCredito solicitudDeCredito: solicitudes) { 
+			if(solicitudDeCredito.getEstadoCredito().equalsIgnoreCase("Solicitando") && solicitudDeCredito.getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) { 
+				return false;
+			}
+		}
+		return true;
+	} 
+	
+	public List<Credito> creditosAprovados(String cedulaCliente){  
+		List<Credito> listaCreditos = creditoDAO.getCreditos();  
+		List<Credito> listCreditoTotales = new ArrayList<Credito>();
+		for(Credito credito: listaCreditos) { 
+			if(credito.getSolicitud().getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) { 
+				listCreditoTotales.add(credito);
+			}
+		} 
+		return listCreditoTotales;
 	}
 }
