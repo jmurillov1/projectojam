@@ -52,6 +52,8 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-lg-6">
+									<p:growl id="messages" showDetail="true" class="ui-growl"
+										life="5000" />
 									<h:form role="form">
 										<div class="form-group">
 											<label>Ingrese Cedula</label>
@@ -137,8 +139,9 @@
 										<div class="form-group">
 											<p:outputLabel for="fechaInicio" value="Fecha Nacimiento:  " />
 											<p:calendar id="fechaInicio"
-												value="#{crearCliente.cliente.fechaNacimiento}" showOn="button"
-												pattern="yyyy-MM-dd" locale="es" navigator="true" />
+												value="#{crearCliente.cliente.fechaNacimiento}"
+												showOn="button" pattern="yyyy-MM-dd" locale="es"
+												navigator="true" />
 										</div>
 										<div class="row">
 											<div class="col-lg-12">
@@ -163,8 +166,22 @@
 											</div>
 											<!-- /.col-lg-12 -->
 										</div>
-										<h:commandButton action="#{crearCliente.crearCuenta()}"
-											value="Guardar" class="btn btn-success" />
+
+										<p:commandButton value="Guardar Cliente"
+											action="#{crearCliente.crearCuenta()}" update="messages"
+											class="btn btn-success btn-lg">
+											<p:confirm header="Confirmacion"
+												message="¿Desea guardar el cliente?"
+												icon="pi pi-exclamation-triangle" />
+										</p:commandButton>
+
+										<p:confirmDialog global="true" showEffect="fade"
+											hideEffect="fade">
+											<p:commandButton value="SI" type="button"
+												styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+											<p:commandButton value="NO" type="button"
+												styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+										</p:confirmDialog>
 									</h:form>
 
 								</div>
