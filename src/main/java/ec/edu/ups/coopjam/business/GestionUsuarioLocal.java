@@ -3,6 +3,7 @@ package ec.edu.ups.coopjam.business;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -68,4 +69,5 @@ public interface GestionUsuarioLocal {
 	public void actualiza(Credito credito); 
 	public boolean verificarSolicitudSolicitando(String cedulaCliente); 
 	public List<Credito> creditosAprovados(String cedulaCliente);
+	public void registrarCuotaVencida() throws ParseException;
 }
