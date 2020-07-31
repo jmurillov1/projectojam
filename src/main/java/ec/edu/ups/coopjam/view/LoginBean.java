@@ -471,4 +471,12 @@ public class LoginBean {
 	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
 	    }
 	
+	
+	   public String logout() {
+	        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+	        return "InicioUsuarios?faces-redirect=true";
+	        
+	    }
+
+	
 }
