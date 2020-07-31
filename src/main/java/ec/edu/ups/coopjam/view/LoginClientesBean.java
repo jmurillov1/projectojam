@@ -115,7 +115,11 @@ public class LoginClientesBean {
 				sesionCliente.setFechaSesion(new Date());
 				sesionCliente.setEstado("Correcto");  
 				gestionUsuarios.guardarSesion(sesionCliente);
-				try {
+				try { 
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cliente", c);
+
+					
+					
 					FacesContext contex = FacesContext.getCurrentInstance();
 					contex.getExternalContext().redirect("PaginaPrincipalCliente.xhtml?faces-redirect=true&cedula="+c.getCedula());
 				} catch (Exception e) {

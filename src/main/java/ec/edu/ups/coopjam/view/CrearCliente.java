@@ -137,9 +137,12 @@ public class CrearCliente {
 		addMessage(event.getComponent().getId() + " moved", "Left: " + event.getLeft() + ", Top: " + event.getTop());
 	}
 
-	public void addMessage(String summary, String detail) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-		FacesContext.getCurrentInstance().addMessage(null, message);
+	public void addMessage(String summary, String detail) { 
+		FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+		//FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		//FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	public String crearCliente() {
@@ -185,20 +188,27 @@ public class CrearCliente {
 			cuentaDeAhorro.setFechaDeRegistro(new Date());
 			cuentaDeAhorro.setCliente(cliente);
 			cuentaDeAhorro.setSaldoCuentaDeAhorro(Double.parseDouble(saldoCuenta));
-			gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro);
+		    gestionUsuarios.guardarCuentaDeAhorros(cuentaDeAhorro);
 			Transaccion transaccion = new Transaccion();
 			transaccion.setFecha(new Date());
 			transaccion.setMonto(cuentaDeAhorro.getSaldoCuentaDeAhorro());
 			transaccion.setTipo("deposito");
 			transaccion.setCliente(cliente);
 			transaccion.setSaldoCuenta(cuentaDeAhorro.getSaldoCuentaDeAhorro());
-			gestionUsuarios.guardarTransaccion(transaccion); 
-			addMessage("Confirmacion", "Cliente Guardado");
+			gestionUsuarios.guardarTransaccion(transaccion);   
+			addMessage("Confirmacion", "Cliente Guardado");   
+			cliente = new Cliente();
+			try {
+				FacesContext contex = FacesContext.getCurrentInstance();
+				contex.getExternalContext().redirect("CrearCliente.xhtml");
+			} catch (Exception t) { 
+				
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "CrearCliente";
+		return null;
 	}
 
 	public List<Cliente> obtenerClientes() {

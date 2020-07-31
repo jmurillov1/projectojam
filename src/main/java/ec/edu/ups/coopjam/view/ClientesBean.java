@@ -637,7 +637,6 @@ public class ClientesBean {
 		solicitudDeCredito.setArRolDePagos(gestionUsuarios.toByteArray(arRolDePagos));
 		solicitudDeCredito.setGaranteCredito(garante);
 		solicitudDeCredito.setTasaPago(((ingresos - egresos) * 100) / ingresos);
-		System.out.println(solicitudDeCredito); 
 		if(gestionUsuarios.verificarSolicitudSolicitando(cedulaParametro)) { 
 			gestionUsuarios.guardarSolicitudCredito(solicitudDeCredito);
 			addMessage("Confirmacion", "Solicitud Guardada");

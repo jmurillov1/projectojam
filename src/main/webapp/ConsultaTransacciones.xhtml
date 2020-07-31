@@ -6,12 +6,8 @@
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
-	<style type="text/css">
-.ui-growl {
-	position: absolute;
-	top: 15%;
-}
-</style>
+<f:event type="preRenderView"
+		listener="#{verificarSesionBean.verificarSession()}" />
 </h:head>
 <h:body>
 	<ui:composition template="template/templateCliente.xhtml">
