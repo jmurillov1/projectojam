@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1156,4 +1157,118 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		} 
 		return listCreditoTotales;
 	}
+	
+	
+	
+	
+	public void registrarCuotaVencida() throws ParseException {
+		System.out.println("////////////////////// EJECUTO METODO \\\\\\\\\\\\\\\\\\\\\\");
+		
+		List<Credito> listacreditos = creditoDAO.getCreditos();
+		
+		
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha = dateFormat.format(date);
+        Date fechActual = dateFormat.parse(fecha);
+        
+		
+		
+		List<Credito> lisComprabar = new ArrayList<Credito>();
+		for (Credito credito: listacreditos) {
+			if (credito.getEstado().equals("Pendiente")) {
+				lisComprabar.add(credito);
+			}
+		}
+		
+		System.out.println("////////////////////// COMPROBANDO CREDITOS \\\\\\\\\\\\\\\\\\\\\\"+lisComprabar.size());
+		
+		for(Credito cred: lisComprabar) {
+			
+			System.out.println("////////////////////// COMPROBANDO DETALLE \\\\\\\\\\\\\\\\\\\\\\"+cred.getCodigoCredito());
+			for(DetalleCredito detale: cred.getDetalles()) {
+				
+				
+				Date fechaDetalle = detale.getFechaPago();
+				String fechat = dateFormat.format(fechaDetalle);
+		        Date fechDet = dateFormat.parse(fechat);
+		        
+		        if (fechDet.equals(fechActual)) {
+		        	
+		        	System.out.println("////////////////////// FECHA ES IGAUL \\\\\\\\\\\\\\\\\\\\\\");
+					
+		        	CuentaDeAhorro cuenta = cuentaDeAhorroDAO.getCuentaCedulaCliente(cred.getSolicitud().getClienteCredito().getCedula());
+		        	double saldo = cuenta.getSaldoCuentaDeAhorro();
+		        	
+		        	if (detale.getEstado().equals("Pendiente") ) {
+		        		if (saldo >= detale.getSaldo()) {
+			        		
+			        		Double sss = cuenta.getSaldoCuentaDeAhorro() - detale.getSaldo();
+							detale.setEstado("Pagado");
+							detale.setSaldo(0.0);
+							cuenta.setSaldoCuentaDeAhorro(sss);
+							
+							detalleCreditoDAO.update(detale);
+							cuentaDeAhorroDAO.update(cuenta);
+							
+							
+							
+						}else if (saldo == 0.0) {
+							
+							detale.setEstado("Vencido");
+							detalleCreditoDAO.update(detale);
+							
+						}else if(saldo > 0 &&  saldo < detale.getSaldo()) {
+							
+							double valorP = detale.getSaldo() - cuenta.getSaldoCuentaDeAhorro();
+							detale.setSaldo(valorP);
+							cuenta.setSaldoCuentaDeAhorro(0.0);
+							detale.setEstado("Vencido");
+							
+							detalleCreditoDAO.update(detale);
+							cuentaDeAhorroDAO.update(cuenta);
+							
+						}
+						
+					}else if (detale.getEstado().equals("Vencido")) {
+						if (saldo >= detale.getSaldo()) {
+							Double sss = cuenta.getSaldoCuentaDeAhorro() - detale.getSaldo();
+							detale.setEstado("Pagado");
+							detale.setSaldo(0.00);
+							cuenta.setSaldoCuentaDeAhorro(sss);
+							detalleCreditoDAO.update(detale);
+							cuentaDeAhorroDAO.update(cuenta);
+							
+						}else if(saldo > 0 &&  saldo < detale.getSaldo()) {
+							
+							double valorP = detale.getSaldo() - cuenta.getSaldoCuentaDeAhorro();
+							detale.setSaldo(valorP);
+							cuenta.setSaldoCuentaDeAhorro(0.0);
+							//detale.setEstado("Vencido");
+							
+							detalleCreditoDAO.update(detale);
+							cuentaDeAhorroDAO.update(cuenta);
+							
+						}
+						
+					}
+		        	
+		        	
+		        	
+		        	
+		        	
+
+		        	
+				}
+		        
+				
+			}
+		}
+		
+		
+	}
+	
+	
+	
+	
 }
