@@ -11,6 +11,8 @@
 	<meta name="description" content=""/>
 	<meta name="author" content=""/>
 	<title><ui:insert name="title" /></title>
+	<f:event type="preRenderView"
+		listener="#{verificarSesionBean.verificarSessionAdmin()}" />
 
 	<!-- Bootstrap Core CSS -->
 	<link href="template/css/bootstrap.min.css" rel="stylesheet"/>
