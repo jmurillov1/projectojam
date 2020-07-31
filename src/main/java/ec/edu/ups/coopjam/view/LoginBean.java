@@ -191,7 +191,12 @@ public class LoginBean {
 			if (emp != null && emp.getRol().equalsIgnoreCase("Cajero")) {
 				try {
 					addMessage("OK", "Ingreso");
+					
+					
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("empleado", emp);
+					//FacesContext contex2 = FacesContext.getCurrentInstance();
 					FacesContext contex = FacesContext.getCurrentInstance();
+					
 					contex.getExternalContext().redirect("PaginaCajero.xhtml");
 				} catch (Exception e) {
 				}
@@ -199,12 +204,14 @@ public class LoginBean {
 				try {
 					loadDataSol();
 					FacesContext contex = FacesContext.getCurrentInstance();
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("empleado", emp);
 					contex.getExternalContext().redirect("PaginaJefeCredito.xhtml");
 				} catch (Exception e) {
 				}
 			} else if (emp != null && emp.getRol().equalsIgnoreCase("Admin")) {
 				try {
 					FacesContext contex = FacesContext.getCurrentInstance();
+					FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("empleado", emp);
 					contex.getExternalContext().redirect("Admin.xhtml");
 				} catch (Exception e) {
 				}
