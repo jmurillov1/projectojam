@@ -6,7 +6,8 @@
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
-	<title>Crear Cliente</title>
+	<f:event type="preRenderView"
+		listener="#{verificarSesionBean.verificarSessionAdmin()}" />
 </h:head>
 <h:body>
 	<ui:composition template="template/templateAdmin.xhtml">
