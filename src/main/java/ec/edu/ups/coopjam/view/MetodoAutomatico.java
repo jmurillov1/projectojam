@@ -25,8 +25,8 @@ public class MetodoAutomatico {
 
 	    private Logger logger = Logger.getLogger(MetodoAutomatico.class.getName());
 
-	    public static final String hora = "*";
-	    public static final String minuto = "*";
+	    public static final String hora = "17";
+	    public static final String minuto = "0";
 
 	    @PostConstruct
 	    public void init() {
@@ -40,7 +40,7 @@ public class MetodoAutomatico {
 	    }
 
 	    //@Schedule(hour = "18", minute = "0", second = "0", persistent = false)
-	    @Schedule(hour = hora, minute = minuto, second = "*", persistent = false)
+	    @Schedule(hour = hora, minute = minuto, second = "0", persistent = false)
 	    public void execute() {
 	        try {
 	            System.out.println("EJECUNTANDO EL METDO");
