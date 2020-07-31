@@ -477,6 +477,5 @@ public class LoginBean {
 	        return "InicioUsuarios?faces-redirect=true";
 	        
 	    }
-
 	
 }
