@@ -154,13 +154,6 @@
 			<version>8.0</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.massisframework/j-text-utils -->
-		<dependency>
-			<groupId>com.massisframework</groupId>
-			<artifactId>j-text-utils</artifactId>
-			<version>0.3.4</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -168,11 +161,18 @@
 			<version>5.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>5.5.13.1</version>
-        </dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.11.0</version>
+		</dependency>
 
 		<!-- Optional, but highly recommended -->
 		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
@@ -189,7 +189,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 
 	<build>
 		<!-- Tell Maven that the resulting file should not have a file name containing 
