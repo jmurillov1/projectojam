@@ -68,7 +68,7 @@ public class CajeroBean {
 
 	@PostConstruct
 	public void init() {
-		createPieModel();
+		
 		transaccionAux = new Transaccion();
 		cliente = new Cliente();
 		grafica = false;

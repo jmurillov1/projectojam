@@ -475,8 +475,8 @@ public class LoginBean {
 	   public String logout() {
 	        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 	        return "InicioUsuarios?faces-redirect=true";
+		  // return null;
 	        
 	    }
-
 	
 }
