@@ -1,6 +1,8 @@
 package ec.edu.ups.coopjam.business;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,11 +29,14 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.management.remote.NotificationResult;
 import javax.persistence.NoResultException;
 import javax.ws.rs.ForbiddenException;
@@ -42,7 +47,15 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
-import dnl.utils.text.table.TextTable;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CreditoDAO;
 import ec.edu.ups.coopjam.data.CuentaDeAhorroDAO;
@@ -427,8 +440,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					+ "                                     \n"
 					+ "                                                                              \n"
 					+ "------------------------------------------------------------------------------\n";
-
-			enviarCorreo(destinatario, asunto, cuerpo);
+			CompletableFuture.runAsync(() -> {
+	            try {
+	            	enviarCorreo(destinatario, asunto, cuerpo);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        });
 
 		} else {
 			// A quien le quieres escribir.
@@ -850,39 +868,206 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				+ "              Estimado(a): " + cliente.getNombre().toUpperCase() + " "
 				+ cliente.getApellido().toUpperCase() + "\n"
 				+ "------------------------------------------------------------------------------\n"
-				+ "COOPERATIVA JAM le informa que la solicitud para su credito ha sido aprobada. \n"
-				+ "                       Fecha: " + obtenerFecha(credito.getFechaRegistro())
-				+ "                                     \n"
-				+ "                           TABLA DE AMORTIZACIÓN                              \n"
-				+ generarTabla(credito.getDetalles()) + "\n"
-				+ "                                                                              \n";
-		enviarCorreo(destinatario, asunto, cuerpo);
+				+ "COOPERATIVA JAM le informa que su credito ha sido aprobado.                   \n"
+				+ "                                                                              \n"
+				+ "                         Fecha: " + obtenerFecha(credito.getFechaRegistro()) + "\n"
+				+ "                                                                              \n"
+				+ "La informacion de sus cuotas se encuentra en el archivo adjunto.              \n"
+				+ "------------------------------------------------------------------------------\n";
+
+		CompletableFuture.runAsync(() -> {
+			try {
+				enviarCorreo2(destinatario, asunto, cuerpo, credito);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 //			} 
 	}
 
-	public String generarTabla(List<DetalleCredito> dcreditos) {
-		String[] columnas = { "# Cuota", "Fecha", "Cuota", "Capital", "Interes", "Saldo" };
-		int nfilas = dcreditos.size();
-		String[][] mTablaAmor = new String[nfilas][6];
-		int cont = 0;
-		for (DetalleCredito dc : dcreditos) {
-			mTablaAmor[cont][0] = String.valueOf(dc.getNumeroCuota());
-			mTablaAmor[cont][1] = obtenerFecha2(dc.getFechaPago());
-			mTablaAmor[cont][2] = String.valueOf(dc.getSaldo());
-			mTablaAmor[cont][3] = String.valueOf(dc.getCuota());
-			mTablaAmor[cont][4] = String.valueOf(dc.getInteres());
-			mTablaAmor[cont][5] = String.valueOf(dc.getMonto());
-			cont++;
-		}
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		new TextTable(columnas, mTablaAmor).printTable(new PrintStream(outputStream), 0);
-		String output = null;
+	public void enviarCorreo2(String destinatario, String asunto, String cuerpo, Credito credito) {
+		Properties propiedad = new Properties();
+		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
+		propiedad.setProperty("mail.smtp.starttls.enable", "true");
+		propiedad.setProperty("mail.smtp.port", "587");
+
+		Session sesion = Session.getDefaultInstance(propiedad);
+		String correoEnvia = "cooperativajam@gmail.com";
+		String contrasena = "ZJRIcfjy1719";
+
+		MimeMessage mail = new MimeMessage(sesion);
+		Multipart multipart = new MimeMultipart();
+
+		MimeBodyPart attachmentPart = new MimeBodyPart();
+
+		MimeBodyPart textPart = new MimeBodyPart();
+
 		try {
-			output = outputStream.toString("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			mail.setFrom("Cooperativa JAM <" + correoEnvia + ">");
+			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+			mail.setSubject(asunto);
+			File f = generarTablaAmor(credito);
+			attachmentPart.attachFile(f);
+			textPart.setText(cuerpo);
+			multipart.addBodyPart(attachmentPart);
+			multipart.addBodyPart(textPart);
+			mail.setContent(multipart);
+
+			Transport transportar = sesion.getTransport("smtp");
+			transportar.connect(correoEnvia, contrasena);
+			transportar.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
+		} catch (AddressException | IOException ex) {
+			System.out.println(ex.getMessage());
+		} catch (MessagingException ex) {
+			System.out.println(ex.getMessage());
 		}
-		return output;
+	}
+
+	public File generarTablaAmor(Credito credito) {
+		try {
+			Cliente cliente = credito.getSolicitud().getClienteCredito();
+			double monto = credito.getMonto();
+			double interes = credito.getInteres();
+			int meses = Integer.parseInt(credito.getSolicitud().getMesesCredito());
+			Document document = new Document();
+
+			File file = File.createTempFile("TablaAmortizacion", ".pdf");
+			FileOutputStream fos = new FileOutputStream(file);
+			PdfWriter.getInstance(document, fos);
+			document.open();
+			Paragraph par = new Paragraph();
+			par.add(new Phrase("COOP JAM"));
+			par.setAlignment(Element.ALIGN_CENTER);
+			document.add(par);
+			document.add(Chunk.NEWLINE);
+			Paragraph par1 = new Paragraph();
+			par1.add(new Phrase("TABLA DE AMORTIZACIÓN"));
+			par1.setAlignment(Element.ALIGN_CENTER);
+			document.add(par1);
+			document.add(Chunk.NEWLINE);
+			Paragraph par2 = new Paragraph();
+			par2.add(new Phrase("               Detalles de Crédito"));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Cliente: " + cliente));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Fecha Registro: " + obtenerFecha2(credito.getFechaRegistro())));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Fecha Vencimiento: " + obtenerFecha2(credito.getFechaVencimiento())));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Monto: " + monto));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Interes: " + interes + "%"));
+			par2.add(Chunk.NEWLINE);
+			par2.add(new Phrase("               Plazo: " + meses + " meses"));
+			document.add(par2);
+			document.add(Chunk.NEWLINE);
+
+			PdfPTable table = new PdfPTable(6);
+			PdfPCell celdaInicial = new PdfPCell(new Paragraph("Detalles de las Cuotas"));
+			celdaInicial.setColspan(6);
+			celdaInicial.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(celdaInicial);
+			PdfPCell ct1 = new PdfPCell(new Phrase("#Cuota"));
+			ct1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct1);
+			PdfPCell ct2 = new PdfPCell(new Phrase("Fecha"));
+			ct2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct2);
+			PdfPCell ct3 = new PdfPCell(new Phrase("Cuota"));
+			ct3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct3);
+			PdfPCell ct4 = new PdfPCell(new Phrase("Capital"));
+			ct4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct4);
+			PdfPCell ct5 = new PdfPCell(new Phrase("Interes"));
+			ct5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct5);
+			PdfPCell ct6 = new PdfPCell(new Phrase("Saldo"));
+			ct6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(ct6);
+
+			for (DetalleCredito dcre : credito.getDetalles()) {
+				PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(dcre.getNumeroCuota())));
+				cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(cell1);
+				PdfPCell cell2 = new PdfPCell(new Phrase(obtenerFecha2(dcre.getFechaPago())));
+				cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(cell2);
+				PdfPCell cell3 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getCuota()))));
+				cell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				table.addCell(cell3);
+				PdfPCell cell4 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getMonto()))));
+				cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				table.addCell(cell4);
+				PdfPCell cell5 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getInteres()))));
+				cell5.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				table.addCell(cell5);
+				PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getSaldo()))));
+				cell6.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				table.addCell(cell6);
+			}
+			document.add(table);
+
+			document.close();
+			return file;
+
+		} catch (Exception e) {
+			System.err.println("Ocurrio un error al crear el archivo");
+			System.exit(-1);
+		}
+
+		return null;
+	}
+
+	public void rechazarCredito(Cliente cliente, String razon) {
+		String destinatario = cliente.getCorreo();
+		String asunto = "RECHAZO DE CREDITO";
+		String cuerpo = "JAMVirtual SISTEMA TRANSACCIONAL\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "              Estimado(a): " + cliente.getNombre().toUpperCase() + " "
+				+ cliente.getApellido().toUpperCase() + "\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "COOPERATIVA JAM le informa que su credito no ha sido aprobado.                \n"
+				+ "Los detalles del rechazo se muestran a continuación.                          \n"
+				+ "                                   DETALLES                                   \n" + razon
+				+ "						             \n"
+				+ "                                                                              \n"
+				+ "                                                                              \n"
+				+ "------------------------------------------------------------------------------\n";
+		CompletableFuture.runAsync(() -> {
+			try {
+				enviarCorreo(destinatario, asunto, cuerpo);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+//			} 
+	}
+	
+	public void cambioContrasena(Cliente cliente) {
+		String destinatario = cliente.getCorreo();
+		String asunto = "CAMBIO DE CONTRASEÑA";
+		String cuerpo = "JAMVirtual                                               SISTEMA TRANSACCIONAL\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "              Estimado(a): " + cliente.getNombre().toUpperCase() + "          "
+				+ cliente.getApellido().toUpperCase() +                                         "\n"
+				+ "------------------------------------------------------------------------------\n"
+				+ "COOPERATIVA JAM le informa que su contraseña ha sido cambiada exitosamente.   \n"
+				+ "                                                                              \n"
+				+ "                   Su nueva contraseña es:   " + cliente.getClave() + "       \n"
+				+ "                       Fecha: " + fecha() + "                                 \n"
+				+ "                                                                              \n"
+				+ "------------------------------------------------------------------------------\n";
+		CompletableFuture.runAsync(() -> {
+			try {
+				enviarCorreo(destinatario, asunto, cuerpo);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+//			} 
 	}
 
 	public String historialCredito(SolicitudDeCredito solicitudCredito) {
@@ -1276,11 +1461,11 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				lstCreditos = creditosAprovados(cliente.getCedula());
 				List<CreditoRespuesta> lstNuevaCreditos = new ArrayList<CreditoRespuesta>();
 				for (Credito credito : lstCreditos) {
-					CreditoRespuesta creditoRespuesta = new CreditoRespuesta(); 
-					creditoRespuesta.setCodigoCredito(credito.getCodigoCredito()); 
-					creditoRespuesta.setEstado(credito.getEstado()); 
+					CreditoRespuesta creditoRespuesta = new CreditoRespuesta();
+					creditoRespuesta.setCodigoCredito(credito.getCodigoCredito());
+					creditoRespuesta.setEstado(credito.getEstado());
 					creditoRespuesta.setMonto(credito.getMonto());
-					creditoRespuesta.setInteres(credito.getInteres());  
+					creditoRespuesta.setInteres(credito.getInteres());
 					creditoRespuesta.setFechaRegistro(credito.getFechaRegistro());
 					creditoRespuesta.setFechaVencimiento(credito.getFechaVencimiento());
 					creditoRespuesta.setDetalles(credito.getDetalles());

@@ -73,4 +73,5 @@ public interface GestionUsuarioLocal {
 	public void registrarCuotaVencida() throws ParseException; 
 	public Respuesta loginServicio(String username, String password); 
 	public Respuesta cambioContraseña(String correo, String contraseñaActual, String nuevaContraseña);
+	public void rechazarCredito(Cliente cliente, String razon);
 }
