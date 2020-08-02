@@ -135,7 +135,15 @@ public class LoginClientesBean {
 			}
 		} 
 		return "InicioClientes";
-	}
+	} 
+	
+	
+	public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "InicioClientes?faces-redirect=true";
+	  // return null;
+        
+    }
 	
 	
 	
