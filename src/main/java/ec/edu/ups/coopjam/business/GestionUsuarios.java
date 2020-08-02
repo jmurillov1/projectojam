@@ -886,7 +886,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public void enviarCorreo2(String destinatario, String asunto, String cuerpo, Credito credito) {
-		generarTablaAmor(credito);
+		//generarTablaAmor(credito);
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
 		propiedad.setProperty("mail.smtp.starttls.enable", "true");
