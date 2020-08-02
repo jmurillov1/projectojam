@@ -886,6 +886,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public void enviarCorreo2(String destinatario, String asunto, String cuerpo, Credito credito) {
+		generarTablaAmor(credito);
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
 		propiedad.setProperty("mail.smtp.starttls.enable", "true");
@@ -906,8 +907,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			mail.setFrom("Cooperativa JAM <" + correoEnvia + ">");
 			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 			mail.setSubject(asunto);
-			File f = generarTablaAmor(credito);
-			attachmentPart.attachFile(f);
+			//File f = generarTablaAmor(credito);
+			//attachmentPart.attachFile(f);
 			textPart.setText(cuerpo);
 			multipart.addBodyPart(attachmentPart);
 			multipart.addBodyPart(textPart);
@@ -916,7 +917,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			Transport transportar = sesion.getTransport("smtp");
 			transportar.connect(correoEnvia, contrasena);
 			transportar.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
-		} catch (AddressException | IOException ex) {
+		} catch (AddressException ex) {
 			System.out.println(ex.getMessage());
 		} catch (MessagingException ex) {
 			System.out.println(ex.getMessage());
@@ -924,6 +925,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public File generarTablaAmor(Credito credito) {
+		System.out.println(credito.toString());
 		try {
 			Cliente cliente = credito.getSolicitud().getClienteCredito();
 			double monto = credito.getMonto();
