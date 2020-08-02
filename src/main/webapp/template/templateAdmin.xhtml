@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html" lang="es">
 
 <h:head>
@@ -51,11 +52,9 @@
 				</a>
 					<ul class="dropdown-menu dropdown-user">
 						<li class="divider"></li>
-						<li><a href="InicioUsuarios.xhtml"> <f:event
-									type="preRenderView"
-									listener="#{loginBean.logout()}" /><i
-								class="fa fa-sign-out fa-fw"></i> Salir
-						</a></li>
+						<li>p:commandButton icon="fa fa-fw fa-sign-out"
+							action="#{loginBean.logout()}" value="Cerrar Sesión"
+							styleClass="red-button" /></li>
 					</ul></li>
 			</ul>
 			<!-- /.navbar-top-links -->
