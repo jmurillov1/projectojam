@@ -90,5 +90,22 @@ public class ClienteDAO {
 			 throw new Exception("Credenciaales Inocorrectas"); 
 		}
 		//return null;
+	}  
+	
+	public Cliente obtenerClienteCorreoContraseña(String correo,String contra) throws Exception {
+		try {
+			String jpl = "select c from Cliente c Where c.correo =:corr AND c.clave =:contr";
+			Query q = em.createQuery(jpl, Cliente.class);
+			q.setParameter("corr", correo);
+			q.setParameter("contr", contra);
+			return (Cliente)q.getSingleResult();
+			
+		} catch (NoResultException e) {
+			//System.out.println(e.getMessage());
+			 throw new Exception("Revisar datos de cambio"); 
+		}
+		//return null;
 	}
+	
+	
 }

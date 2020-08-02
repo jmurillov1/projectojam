@@ -18,6 +18,7 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
+import ec.edu.ups.coopjam.servicios.Respuesta;
 @Local
 public interface GestionUsuarioLocal {
 	public String generarNumeroDeCuenta();
@@ -69,5 +70,7 @@ public interface GestionUsuarioLocal {
 	public void actualiza(Credito credito); 
 	public boolean verificarSolicitudSolicitando(String cedulaCliente); 
 	public List<Credito> creditosAprovados(String cedulaCliente);
-	public void registrarCuotaVencida() throws ParseException;
+	public void registrarCuotaVencida() throws ParseException; 
+	public Respuesta loginServicio(String username, String password); 
+	public Respuesta cambioContraseña(String correo, String contraseñaActual, String nuevaContraseña);
 }

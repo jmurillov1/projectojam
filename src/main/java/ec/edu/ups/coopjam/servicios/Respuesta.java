@@ -1,13 +1,21 @@
 package ec.edu.ups.coopjam.servicios;
 
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.Credito;
+import ec.edu.ups.coopjam.model.CuentaDeAhorro;
 
 public class Respuesta {
 	
 	private int codigo;
 	private String descripcion;
-	private Cliente cliente; 
+	private @JsonProperty("Cliente")Cliente cliente;   
+	private @JsonProperty("Cuenta")CuentaDeAhorro cuentaDeAhorro; 
+	private @JsonProperty("Creditos")List<CreditoRespuesta> listaCreditos;
 	
 	public int getCodigo() {
 		return codigo;
@@ -26,6 +34,18 @@ public class Respuesta {
 	}
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	public CuentaDeAhorro getCuentaDeAhorro() {
+		return cuentaDeAhorro;
+	}
+	public void setCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
+		this.cuentaDeAhorro = cuentaDeAhorro;
+	}
+	public List<CreditoRespuesta> getListaCreditos() {
+		return listaCreditos;
+	}
+	public void setListaCreditos(List<CreditoRespuesta> listaCreditos) {
+		this.listaCreditos = listaCreditos;
 	}
 	
 	

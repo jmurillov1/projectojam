@@ -18,6 +18,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -41,7 +42,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import dnl.utils.text.table.TextTable;
 import ec.edu.ups.coopjam.data.ClienteDAO;
 import ec.edu.ups.coopjam.data.CreditoDAO;
@@ -61,6 +61,8 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
+import ec.edu.ups.coopjam.servicios.CreditoRespuesta;
+import ec.edu.ups.coopjam.servicios.Respuesta;
 
 /**
  * Esta clase me permite hacer diferentes validaciones o metodos necesarios
@@ -337,7 +339,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					+ "                       Fecha: " + fecha() + "                                     \n"
 					+ "                                                                              \n"
 					+ "------------------------------------------------------------------------------\n";
-			enviarCorreo(destinatario, asunto, cuerpo);
+			CompletableFuture.runAsync(() -> {
+				try {
+					enviarCorreo(destinatario, asunto, cuerpo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 			cuentaDeAhorroDAO.insert(c);
 		}
 
@@ -419,7 +427,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					+ "                                     \n"
 					+ "                                                                              \n"
 					+ "------------------------------------------------------------------------------\n";
+
 			enviarCorreo(destinatario, asunto, cuerpo);
+
 		} else {
 			// A quien le quieres escribir.
 
@@ -434,8 +444,14 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					+ "                                     \n"
 					+ "                                                                              \n"
 					+ "------------------------------------------------------------------------------\n";
-			enviarCorreo(destinatario, asunto, cuerpo);
 
+			CompletableFuture.runAsync(() -> {
+				try {
+					enviarCorreo(destinatario, asunto, cuerpo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 		}
 
 		sesionClienteDAO.insert(sesionCliente);
@@ -810,7 +826,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			monto -= vcuota;
 			System.out.println(hourdateFormat.format(fecha) + " | " + (vcuota + icuota) + " | " + icuota + " | "
 					+ vcuota + " | " + (monto));
-			detalle.setNumeroCuota(i+1);
+			detalle.setNumeroCuota(i + 1);
 			detalle.setFechaPago(fecha);
 			detalle.setInteres(icuota);
 			detalle.setSaldo(valorDecimalCr(vcuota + icuota));
@@ -984,16 +1000,6 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return contador;
 	}
 
-	public void agregarCSV(String[] dato) throws IOException {
-
-		String archCSV = "/home/jmurillo/bin/django/proyectoanalisisdatos-master/apiAnalisis/Datasets/DatasetBanco/3.DatasetBanco.csv";
-		CSVWriter writer = new CSVWriter(new FileWriter(archCSV, true), ';', CSVWriter.NO_QUOTE_CHARACTER,
-				CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-		writer.writeNext(dato);
-
-		writer.close();
-	}
-
 	public String obtenerCodigo(String palabra) {
 		switch (palabra) {
 		case "inmuebles":
@@ -1099,11 +1105,11 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		client.close();
 		return res;
 	}
-	
+
 	public List<Credito> listarCreditosCedula(String cedula) {
 		List<Credito> cred = creditoDAO.getCreditos();
 		List<Credito> credLista = new ArrayList<Credito>();
-		for(Credito credito: cred){
+		for (Credito credito : cred) {
 			System.out.println("********************************************************");
 			System.out.println(credito.getSolicitud().getClienteCredito().getCedula());
 			System.out.println("/////////");
@@ -1113,10 +1119,10 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				credLista.add(credito);
 			}
 		}
-		
+
 		return credLista;
 	}
-	
+
 	public Credito verCredito(int codigo) {
 		Credito cred = creditoDAO.read(codigo);
 		return cred;
@@ -1125,112 +1131,106 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	public void actualizarDetalle(DetalleCredito credito) {
 		detalleCreditoDAO.update(credito);
 	}
-	
+
 	public double valorDecimalCr(double valor) {
-		String num= String.format(Locale.ROOT, "%.2f", valor);
-        System.out.println(num);   
-        return Double.parseDouble(num);
+		String num = String.format(Locale.ROOT, "%.2f", valor);
+		System.out.println(num);
+		return Double.parseDouble(num);
 	}
-	
+
 	public void actualiza(Credito credito) {
 		creditoDAO.update(credito);
-		
-	} 
-	
-	public boolean verificarSolicitudSolicitando(String cedulaCliente) { 
+
+	}
+
+	public boolean verificarSolicitudSolicitando(String cedulaCliente) {
 		List<SolicitudDeCredito> solicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
-		for(SolicitudDeCredito solicitudDeCredito: solicitudes) { 
-			if(solicitudDeCredito.getEstadoCredito().equalsIgnoreCase("Solicitando") && solicitudDeCredito.getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) { 
+		for (SolicitudDeCredito solicitudDeCredito : solicitudes) {
+			if (solicitudDeCredito.getEstadoCredito().equalsIgnoreCase("Solicitando")
+					&& solicitudDeCredito.getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) {
 				return false;
 			}
 		}
 		return true;
-	} 
-	
-	public List<Credito> creditosAprovados(String cedulaCliente){  
-		List<Credito> listaCreditos = creditoDAO.getCreditos();  
+	}
+
+	public List<Credito> creditosAprovados(String cedulaCliente) {
+		List<Credito> listaCreditos = creditoDAO.getCreditos();
 		List<Credito> listCreditoTotales = new ArrayList<Credito>();
-		for(Credito credito: listaCreditos) { 
-			if(credito.getSolicitud().getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) { 
+		for (Credito credito : listaCreditos) {
+			if (credito.getSolicitud().getClienteCredito().getCedula().equalsIgnoreCase(cedulaCliente)) {
 				listCreditoTotales.add(credito);
 			}
-		} 
+		}
 		return listCreditoTotales;
 	}
-	
-	
-	
-	
+
 	public void registrarCuotaVencida() throws ParseException {
 		System.out.println("////////////////////// EJECUTO METODO \\\\\\\\\\\\\\\\\\\\\\");
-		
+
 		List<Credito> listacreditos = creditoDAO.getCreditos();
-		
-		
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String fecha = dateFormat.format(date);
-        Date fechActual = dateFormat.parse(fecha);
-        
-		
-		
+
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String fecha = dateFormat.format(date);
+		Date fechActual = dateFormat.parse(fecha);
+
 		List<Credito> lisComprabar = new ArrayList<Credito>();
-		for (Credito credito: listacreditos) {
+		for (Credito credito : listacreditos) {
 			if (credito.getEstado().equals("Pendiente")) {
 				lisComprabar.add(credito);
 			}
 		}
-		
-		System.out.println("////////////////////// COMPROBANDO CREDITOS \\\\\\\\\\\\\\\\\\\\\\"+lisComprabar.size());
-		
-		for(Credito cred: lisComprabar) {
-			
-			System.out.println("////////////////////// COMPROBANDO DETALLE \\\\\\\\\\\\\\\\\\\\\\"+cred.getCodigoCredito());
-			for(DetalleCredito detale: cred.getDetalles()) {
-				
-				
+
+		System.out.println("////////////////////// COMPROBANDO CREDITOS \\\\\\\\\\\\\\\\\\\\\\" + lisComprabar.size());
+
+		for (Credito cred : lisComprabar) {
+
+			System.out.println(
+					"////////////////////// COMPROBANDO DETALLE \\\\\\\\\\\\\\\\\\\\\\" + cred.getCodigoCredito());
+			for (DetalleCredito detale : cred.getDetalles()) {
+
 				Date fechaDetalle = detale.getFechaPago();
 				String fechat = dateFormat.format(fechaDetalle);
-		        Date fechDet = dateFormat.parse(fechat);
-		        
-		        if (fechDet.equals(fechActual)) {
-		        	
-		        	System.out.println("////////////////////// FECHA ES IGAUL \\\\\\\\\\\\\\\\\\\\\\");
-					
-		        	CuentaDeAhorro cuenta = cuentaDeAhorroDAO.getCuentaCedulaCliente(cred.getSolicitud().getClienteCredito().getCedula());
-		        	double saldo = cuenta.getSaldoCuentaDeAhorro();
-		        	
-		        	if (detale.getEstado().equals("Pendiente") ) {
-		        		if (saldo >= detale.getSaldo()) {
-			        		
-			        		Double sss = cuenta.getSaldoCuentaDeAhorro() - detale.getSaldo();
+				Date fechDet = dateFormat.parse(fechat);
+
+				if (fechDet.equals(fechActual)) {
+
+					System.out.println("////////////////////// FECHA ES IGAUL \\\\\\\\\\\\\\\\\\\\\\");
+
+					CuentaDeAhorro cuenta = cuentaDeAhorroDAO
+							.getCuentaCedulaCliente(cred.getSolicitud().getClienteCredito().getCedula());
+					double saldo = cuenta.getSaldoCuentaDeAhorro();
+
+					if (detale.getEstado().equals("Pendiente")) {
+						if (saldo >= detale.getSaldo()) {
+
+							Double sss = cuenta.getSaldoCuentaDeAhorro() - detale.getSaldo();
 							detale.setEstado("Pagado");
 							detale.setSaldo(0.0);
 							cuenta.setSaldoCuentaDeAhorro(sss);
-							
+
 							detalleCreditoDAO.update(detale);
 							cuentaDeAhorroDAO.update(cuenta);
-							
-							
-							
-						}else if (saldo == 0.0) {
-							
+
+						} else if (saldo == 0.0) {
+
 							detale.setEstado("Vencido");
 							detalleCreditoDAO.update(detale);
-							
-						}else if(saldo > 0 &&  saldo < detale.getSaldo()) {
-							
+
+						} else if (saldo > 0 && saldo < detale.getSaldo()) {
+
 							double valorP = detale.getSaldo() - cuenta.getSaldoCuentaDeAhorro();
 							detale.setSaldo(valorP);
 							cuenta.setSaldoCuentaDeAhorro(0.0);
 							detale.setEstado("Vencido");
-							
+
 							detalleCreditoDAO.update(detale);
 							cuentaDeAhorroDAO.update(cuenta);
-							
+
 						}
-						
-					}else if (detale.getEstado().equals("Vencido")) {
+
+					} else if (detale.getEstado().equals("Vencido")) {
 						if (saldo >= detale.getSaldo()) {
 							Double sss = cuenta.getSaldoCuentaDeAhorro() - detale.getSaldo();
 							detale.setEstado("Pagado");
@@ -1238,37 +1238,80 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 							cuenta.setSaldoCuentaDeAhorro(sss);
 							detalleCreditoDAO.update(detale);
 							cuentaDeAhorroDAO.update(cuenta);
-							
-						}else if(saldo > 0 &&  saldo < detale.getSaldo()) {
-							
+
+						} else if (saldo > 0 && saldo < detale.getSaldo()) {
+
 							double valorP = detale.getSaldo() - cuenta.getSaldoCuentaDeAhorro();
 							detale.setSaldo(valorP);
 							cuenta.setSaldoCuentaDeAhorro(0.0);
-							//detale.setEstado("Vencido");
-							
+							// detale.setEstado("Vencido");
+
 							detalleCreditoDAO.update(detale);
 							cuentaDeAhorroDAO.update(cuenta);
-							
-						}
-						
-					}
-		        	
-		        	
-		        	
-		        	
-		        	
 
-		        	
+						}
+
+					}
+
 				}
-		        
-				
+
 			}
 		}
-		
-		
+
 	}
-	
-	
-	
-	
+
+	public Respuesta loginServicio(String username, String password) {
+		Cliente cliente = new Cliente();
+		Respuesta respuesta = new Respuesta();
+		CuentaDeAhorro cuentaDeAhorro = new CuentaDeAhorro();
+		List<Credito> lstCreditos = new ArrayList<Credito>();
+		try {
+			cliente = clienteDAO.obtenerClienteUsuarioContraseña(username, password);
+			if (cliente != null) {
+				respuesta.setCodigo(1);
+				respuesta.setDescripcion("Ha ingresado exitosamente");
+				respuesta.setCliente(cliente);
+				cuentaDeAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cliente.getCedula());
+				respuesta.setCuentaDeAhorro(cuentaDeAhorro);
+				lstCreditos = creditosAprovados(cliente.getCedula());
+				List<CreditoRespuesta> lstNuevaCreditos = new ArrayList<CreditoRespuesta>();
+				for (Credito credito : lstCreditos) {
+					CreditoRespuesta creditoRespuesta = new CreditoRespuesta(); 
+					creditoRespuesta.setCodigoCredito(credito.getCodigoCredito()); 
+					creditoRespuesta.setEstado(credito.getEstado()); 
+					creditoRespuesta.setMonto(credito.getMonto());
+					creditoRespuesta.setInteres(credito.getInteres());  
+					creditoRespuesta.setFechaRegistro(credito.getFechaRegistro());
+					creditoRespuesta.setFechaVencimiento(credito.getFechaVencimiento());
+					creditoRespuesta.setDetalles(credito.getDetalles());
+					lstNuevaCreditos.add(creditoRespuesta);
+				}
+				respuesta.setListaCreditos(lstNuevaCreditos);
+			}
+		} catch (Exception e) {
+			respuesta.setCodigo(2);
+			respuesta.setDescripcion("Error " + e.getMessage());
+		}
+		return respuesta;
+	}
+
+	public Respuesta cambioContraseña(String correo, String contraAntigua, String contraActual) {
+		System.out.println(correo + "" + contraAntigua);
+		Cliente cliente = new Cliente();
+		Respuesta respuesta = new Respuesta();
+		try {
+			cliente = clienteDAO.obtenerClienteCorreoContraseña(correo, contraAntigua);
+			System.out.println(cliente.toString());
+			cliente.setClave(contraActual);
+			clienteDAO.update(cliente);
+			respuesta.setCodigo(1);
+			respuesta.setDescripcion("Se ha actualizado su contrseña exitosamente");
+		} catch (Exception e) {
+			respuesta.setCodigo(2);
+			respuesta.setDescripcion("Error " + e.getMessage());
+		}
+
+		return respuesta;
+	}
+
 }
