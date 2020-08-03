@@ -63,8 +63,9 @@ public class LoginBean {
 	@PostConstruct
 	public void init() {
 		solicitudes = new ArrayList<SolicitudDeCredito>();
-		empleado = new Empleado();
 		loadDataSol();
+		empleado = new Empleado();
+		
 	}
 
 	public GestionUsuarioLocal getEmpleadoON() {
@@ -238,6 +239,20 @@ public class LoginBean {
 		}
 		solicitudes = actual;
 	}
+	
+	public List<SolicitudDeCredito> loTTT() {
+		System.out.println("ENTRAAAAAAAA EN LOADDATASOL");
+		// solicitudes = empleadoON.listadoSolicitudDeCreditos();
+		List<SolicitudDeCredito> soli = empleadoON.listadoSolicitudDeCreditos();
+		System.out.println(soli.size());
+		List<SolicitudDeCredito> actual = new ArrayList<SolicitudDeCredito>();
+		for (SolicitudDeCredito sol : soli) {
+			if (sol.getEstadoCredito().equals("Solicitando")) {
+				actual.add(sol);
+			}
+		}
+		return actual;
+	}
 
 	public List<SolicitudDeCredito> loadDataSolAR(String apr) {
 		System.out.println("ENTRAAAAAAAA APROBADOS RECHAZADOS");
@@ -316,6 +331,7 @@ public class LoginBean {
 				List<DetalleCredito> li = empleadoON.crearTablaAmortizacion(Integer.parseInt(sol.getMesesCredito()),
 						sol.getMontoCredito(), 12.00);
 				System.out.println(li.toString());
+				credito.setFechaVencimiento(li.get(li.size()-1).getFechaPago());
 				credito.setDetalles(li);
 				empleadoON.guardarCredito(credito);
 				empleadoON.aprobarCredito(credito, sol.getClienteCredito());
