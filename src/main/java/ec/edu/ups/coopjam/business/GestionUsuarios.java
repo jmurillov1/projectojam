@@ -441,12 +441,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					+ "                                                                              \n"
 					+ "------------------------------------------------------------------------------\n";
 			CompletableFuture.runAsync(() -> {
-	            try {
-	            	enviarCorreo(destinatario, asunto, cuerpo);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        });
+				try {
+					enviarCorreo(destinatario, asunto, cuerpo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 
 		} else {
 			// A quien le quieres escribir.
@@ -824,14 +824,10 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes) {
 		List<DetalleCredito> listaDet = new ArrayList<>();
-		// double monto =12000;
-		// double interes = 5;
-
 		Date fecha = new Date();
 		List<Date> fechas = new ArrayList<>();
 		double vcuota = monto / cuotas;
 		double icuota = monto * (interes / 100);
-		System.out.println("Fecha " + "| Cuota " + "| Capital " + "| Interes " + "| Saldo");
 		for (int i = 0; i < cuotas; i++) {
 			DetalleCredito detalle = new DetalleCredito();
 			detalle.setEstado("Pendiente");
@@ -840,16 +836,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			calendar1.add(Calendar.MONTH, 1);
 			fecha = calendar1.getTime();// numero de horas a añadir, o restar en caso de horas<0
 			fechas.add(fecha);
-			DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			monto -= vcuota;
-			System.out.println(hourdateFormat.format(fecha) + " | " + (vcuota + icuota) + " | " + icuota + " | "
-					+ vcuota + " | " + (monto));
 			detalle.setNumeroCuota(i + 1);
 			detalle.setFechaPago(fecha);
-			detalle.setInteres(icuota);
+			detalle.setInteres(valorDecimalCr(icuota));
 			detalle.setSaldo(valorDecimalCr(vcuota + icuota));
-			detalle.setMonto(monto);
-			detalle.setCuota(vcuota);
+			detalle.setMonto(valorDecimalCr(monto));
+			detalle.setCuota(valorDecimalCr(vcuota));
 			listaDet.add(detalle);
 		}
 		return listaDet;
@@ -886,7 +879,6 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public void enviarCorreo2(String destinatario, String asunto, String cuerpo, Credito credito) {
-		//generarTablaAmor(credito);
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
 		propiedad.setProperty("mail.smtp.starttls.enable", "true");
@@ -907,8 +899,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			mail.setFrom("Cooperativa JAM <" + correoEnvia + ">");
 			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 			mail.setSubject(asunto);
-			//File f = generarTablaAmor(credito);
-			//attachmentPart.attachFile(f);
+			File f = generarTablaAmor(credito);
+			attachmentPart.attachFile(f);
 			textPart.setText(cuerpo);
 			multipart.addBodyPart(attachmentPart);
 			multipart.addBodyPart(textPart);
@@ -917,7 +909,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			Transport transportar = sesion.getTransport("smtp");
 			transportar.connect(correoEnvia, contrasena);
 			transportar.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
-		} catch (AddressException ex) {
+		} catch (AddressException | IOException ex) {
 			System.out.println(ex.getMessage());
 		} catch (MessagingException ex) {
 			System.out.println(ex.getMessage());
@@ -925,7 +917,6 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	}
 
 	public File generarTablaAmor(Credito credito) {
-		System.out.println(credito.toString());
 		try {
 			Cliente cliente = credito.getSolicitud().getClienteCredito();
 			double monto = credito.getMonto();
@@ -950,7 +941,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			Paragraph par2 = new Paragraph();
 			par2.add(new Phrase("               Detalles de Crédito"));
 			par2.add(Chunk.NEWLINE);
-			par2.add(new Phrase("               Cliente: " + cliente));
+			par2.add(new Phrase("               Cliente: " + cliente.getNombre()+" "+cliente.getApellido()));
 			par2.add(Chunk.NEWLINE);
 			par2.add(new Phrase("               Fecha Registro: " + obtenerFecha2(credito.getFechaRegistro())));
 			par2.add(Chunk.NEWLINE);
@@ -992,19 +983,20 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(dcre.getNumeroCuota())));
 				cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell1);
+				System.out.println(dcre.getFechaPago());
 				PdfPCell cell2 = new PdfPCell(new Phrase(obtenerFecha2(dcre.getFechaPago())));
 				cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell2);
-				PdfPCell cell3 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getCuota()))));
+				PdfPCell cell3 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getSaldo()))));
 				cell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				table.addCell(cell3);
-				PdfPCell cell4 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getMonto()))));
+				PdfPCell cell4 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getCuota()))));
 				cell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				table.addCell(cell4);
 				PdfPCell cell5 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getInteres()))));
 				cell5.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				table.addCell(cell5);
-				PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getSaldo()))));
+				PdfPCell cell6 = new PdfPCell(new Phrase(String.valueOf(valorDecimalCr(dcre.getMonto()))));
 				cell6.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				table.addCell(cell6);
 			}
@@ -1014,8 +1006,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			return file;
 
 		} catch (Exception e) {
-			System.err.println("Ocurrio un error al crear el archivo");
-			System.exit(-1);
+			e.printStackTrace();
+			System.out.println(e.getMessage()+" Ocurrio un error al crear el archivo");
 		}
 
 		return null;
@@ -1046,14 +1038,14 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 //			} 
 	}
-	
+
 	public void cambioContrasena(Cliente cliente) {
 		String destinatario = cliente.getCorreo();
 		String asunto = "CAMBIO DE CONTRASEÑA";
 		String cuerpo = "JAMVirtual                                               SISTEMA TRANSACCIONAL\n"
 				+ "------------------------------------------------------------------------------\n"
 				+ "              Estimado(a): " + cliente.getNombre().toUpperCase() + "          "
-				+ cliente.getApellido().toUpperCase() +                                         "\n"
+				+ cliente.getApellido().toUpperCase() + "\n"
 				+ "------------------------------------------------------------------------------\n"
 				+ "COOPERATIVA JAM le informa que su contraseña ha sido cambiada exitosamente.   \n"
 				+ "                                                                              \n"
