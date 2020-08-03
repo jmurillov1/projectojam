@@ -3,10 +3,12 @@ package ec.edu.ups.coopjam.servicios;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
@@ -18,6 +20,14 @@ public class ServiciosBancoREST {
 	@Inject
 	private GestionUsuarioLocal on;
 
+	@GET 
+	@Path("/obtenerCliente") 
+	@Produces("application/json") 
+	public Cliente obtenerCliente(@QueryParam("numeroCuenta") String numeroCuenta) { 
+		return on.obtenerClienteCuentaAhorro(numeroCuenta);
+	}
+	
+	
 	@POST
 	@Path("/login")
 	@Produces("application/json;charset=utf-8")
@@ -49,7 +59,7 @@ public class ServiciosBancoREST {
 	@Path("/transferencia")
 	@Produces("application/json")
 	@Consumes("application/json")
-	public String realizarTransferencia(TransferenciaRest transferenciaRest) {
+	public Respuesta realizarTransferencia(TransferenciaRest transferenciaRest) {
 		return on.realizarTransferencia(transferenciaRest.getCedula(), transferenciaRest.getCuentaDeAhorro(),
 				transferenciaRest.getMonto());
 	}
