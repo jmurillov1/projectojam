@@ -18,7 +18,7 @@ public class ServiciosBancoSOAP {
 	} 
 	
 	@WebMethod 
-	public String realizarTransferencia(String cedula, String cuentaDeAhorro, double monto) { 
+	public Respuesta realizarTransferencia(String cedula, String cuentaDeAhorro, double monto) { 
 		return gestionUsuario.realizarTransferencia(cedula, cuentaDeAhorro, monto);
 	}		 
 

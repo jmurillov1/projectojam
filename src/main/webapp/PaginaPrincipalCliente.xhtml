@@ -17,7 +17,8 @@
 			value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" />
 		<ui:define name="content">
 			<h:form>
-				<div class="panel-body">
+				<div class="panel-body"> 
+				<h1 class="page-header">Cuenta de Ahorros</h1>
 					<div class="table-responsive">
 						<h:dataTable value="#{clientesBean.buscarCuentaDeAhorro}"
 							var="cuenta" class="table table-bordered table-hover table-striped">
@@ -45,7 +46,8 @@
 									/>
 							</h:column>
 						</h:dataTable>
-					</div>
+					</div> 
+					<h1 class="page-header">Creditos Aprobados</h1>
 					<div class="table-responsive">
 						<h:dataTable value="#{clientesBean.lstListaCreditosAprobados}"
 							var="credito" class="table table-bordered table-hover table-striped">

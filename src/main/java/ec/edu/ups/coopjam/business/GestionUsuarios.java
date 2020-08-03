@@ -716,26 +716,35 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return "Fallido";
 	}
 
-	public String realizarTransferencia(String cedula, String cuentaAhorro2, double monto) {
+	public Respuesta realizarTransferencia(String cedula, String cuentaAhorro2, double monto) {
 		System.out.println(cedula);
 		System.out.println(cuentaAhorro2);
-		System.out.println(monto);
+		System.out.println(monto); 
+		Respuesta respuesta = new Respuesta(); 
 		CuentaDeAhorro cuentaAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedula);
 		CuentaDeAhorro cuentaAhorroTransferir = cuentaDeAhorroDAO.read(cuentaAhorro2);
-		if (cuentaAhorro.getSaldoCuentaDeAhorro() >= monto) {
-			cuentaAhorro.setSaldoCuentaDeAhorro(cuentaAhorro.getSaldoCuentaDeAhorro() - monto);
-			actualizarCuentaDeAhorro(cuentaAhorro);
-			cuentaAhorroTransferir.setSaldoCuentaDeAhorro(cuentaAhorroTransferir.getSaldoCuentaDeAhorro() + monto);
-			actualizarCuentaDeAhorro(cuentaAhorroTransferir);
-			TransfereciaLocal transfereciaLocal = new TransfereciaLocal();
-			transfereciaLocal.setCliente(cuentaAhorro.getCliente());
-			transfereciaLocal.setCuentaDeAhorroDestino(cuentaAhorroTransferir);
-			transfereciaLocal.setMonto(monto);
-			guardarTransferenciaLocal(transfereciaLocal);
-			return "Transferencia Satisfactoria";
-		} else {
-			return "Monto exedido";
-		}
+		try {
+			if (cuentaAhorro.getSaldoCuentaDeAhorro() >= monto) {
+				cuentaAhorro.setSaldoCuentaDeAhorro(cuentaAhorro.getSaldoCuentaDeAhorro() - monto);
+				actualizarCuentaDeAhorro(cuentaAhorro);
+				cuentaAhorroTransferir.setSaldoCuentaDeAhorro(cuentaAhorroTransferir.getSaldoCuentaDeAhorro() + monto);
+				actualizarCuentaDeAhorro(cuentaAhorroTransferir);
+				TransfereciaLocal transfereciaLocal = new TransfereciaLocal();
+				transfereciaLocal.setCliente(cuentaAhorro.getCliente());
+				transfereciaLocal.setCuentaDeAhorroDestino(cuentaAhorroTransferir);
+				transfereciaLocal.setMonto(monto);
+				guardarTransferenciaLocal(transfereciaLocal); 
+				respuesta.setCodigo(1); 
+				respuesta.setDescripcion("Transferencia Satisfactoria");
+			} else { 
+				respuesta.setCodigo(2); 
+				respuesta.setDescripcion("Monto Excedido");
+			}
+		} catch (Exception e) {
+			respuesta.setCodigo(3); 
+			respuesta.setDescripcion(e.getMessage());
+		} 
+		return respuesta;
 	}
 
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
@@ -1484,7 +1493,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			cliente.setClave(contraActual);
 			clienteDAO.update(cliente);
 			respuesta.setCodigo(1);
-			respuesta.setDescripcion("Se ha actualizado su contrseña exitosamente");
+			respuesta.setDescripcion("Se ha actualizado su contraseña exitosamente"); 
+			cambioContrasena(cliente);
 		} catch (Exception e) {
 			respuesta.setCodigo(2);
 			respuesta.setDescripcion("Error " + e.getMessage());
