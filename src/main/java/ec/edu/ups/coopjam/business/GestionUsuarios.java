@@ -1528,6 +1528,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(transferenciaExterna.getCuentaPersonaLocal()); 
 			if(cuentaDeAhorro!=null) { 
 				if(cuentaDeAhorro.getSaldoCuentaDeAhorro()>=transferenciaExterna.getMontoTransferencia()) { 
+					transferenciaExterna.setFechaTransaccion(new Date());
 					transferenciaExternaDAO.insert(transferenciaExterna);  
 					cuentaDeAhorro.setSaldoCuentaDeAhorro(cuentaDeAhorro.getSaldoCuentaDeAhorro()-transferenciaExterna.getMontoTransferencia()); 
 					cuentaDeAhorroDAO.update(cuentaDeAhorro);

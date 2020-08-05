@@ -69,6 +69,12 @@ public class TransferenciaExterna {
 	}
 	public void setApellidoPersonaExterna(String apellidoPersonaExterna) {
 		this.apellidoPersonaExterna = apellidoPersonaExterna;
+	}
+	public String getCuentaPersonaExterna() {
+		return cuentaPersonaExterna;
+	}
+	public void setCuentaPersonaExterna(String cuentaPersonaExterna) {
+		this.cuentaPersonaExterna = cuentaPersonaExterna;
 	} 
 	
 	
