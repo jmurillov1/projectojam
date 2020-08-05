@@ -20,11 +20,11 @@
 					<div class="panel panel-default">
 
 						<div class="panel-body">
+						
+						<p:growl id="message" showDetail="true" class="ui-growl"
+									life="4000" />
 							<div class="row">
 								<div class="col-lg-6">
-								
-								<p:growl id="message" showDetail="true" class="ui-growl"
-									life="3000" />
 								
 									<h:form role="form" onkeypress="if (event.keyCode == 13) { return false; }">
 
@@ -120,24 +120,22 @@
 											</h:inputSecret>
 											<h:message for="contra" style="color:red" /> 
 										</div>
-										<h:commandButton action="#{empleadosBean.guardarDatos()}" value="Guardar" class="btn btn-default"/>
-										<button type="reset" class="btn btn-default">Limpiar Ventana</button>
 										
-										<p:commandButton value="Guardar Transaccion"
-										action="#{empleadosBean.guardarDatos()}"
-										update="message" class="btn btn-success btn-lg">
-										<p:confirm header="Confirmacion"
-											message="¿Desea realizar el Registro?"
-											icon="pi pi-exclamation-triangle" />
-									</p:commandButton>
+									<p:commandButton value="Guardar Empleado"
+											action="#{empleadosBean.guardarDatos()}" update="message"
+											class="btn btn-success btn-lg">
+											<p:confirm header="Confirmacion"
+												message="¿Desea guardar el Empleado"
+												icon="pi pi-exclamation-triangle" />
+										</p:commandButton>
 
-									<p:confirmDialog global="true" showEffect="fade"
-										hideEffect="fade">
-										<p:commandButton value="SI" type="button"
-											styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-										<p:commandButton value="NO" type="button"
-											styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-									</p:confirmDialog>	
+										<p:confirmDialog global="true" showEffect="fade"
+											hideEffect="fade">
+											<p:commandButton value="SI" type="button"
+												styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+											<p:commandButton value="NO" type="button"
+												styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+										</p:confirmDialog>
 										
 									</h:form>
 

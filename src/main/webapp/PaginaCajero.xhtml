@@ -19,14 +19,12 @@
 				<div class="col-lg-12">
 					<div class="panel panel-primary">
 					<div class="panel-heading">DATOS DE TRANSACCION</div>
-						<div class="panel-body">
-						
-						<p:growl id="message" showDetail="true"  showSummary="true" class="ui-growl"
-									life="4000" />
-									
+						<div class="panel-body">		
 							<div class="row">
 								<div class="col-lg-6">
 								
+								<p:growl id="message" showDetail="true"  showSummary="true" class="ui-growl"
+									life="4000" />
 								
 									<h:form enctype="multipart/form-data"
 										onkeypress="if (event.keyCode == 13) { return false; }">
@@ -60,7 +58,7 @@
 										
 										
 										
-
+									
 									<p:commandButton value="Guardar Transaccion"
 										actionListener="#{cajeroBean.registrar()}"
 										update="message" class="btn btn-success btn-lg">
