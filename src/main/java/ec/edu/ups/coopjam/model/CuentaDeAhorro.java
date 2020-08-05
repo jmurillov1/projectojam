@@ -1,4 +1,4 @@
-package ec.edu.ups.coopjam.model;
+ package ec.edu.ups.coopjam.model;
 
 import java.io.Serializable;
 import java.util.Date;
