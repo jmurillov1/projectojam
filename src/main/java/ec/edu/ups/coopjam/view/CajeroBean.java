@@ -270,14 +270,11 @@ public class CajeroBean {
 	 *         cliente no esta registrado
 	 */
 	public String valCedula() {
-		System.out.println("*-------*" + cliente.getCedula());
 		if (cliente.getCedula() != null) {
 			try {
 				boolean c = clienteON.validadorDeCedula(cliente.getCedula());
 				if (c) {
 					Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
-
-					// cliente = usuarioRegistrado;
 					if (usuarioRegistrado != null) {
 						CuentaDeAhorro cuen = clienteON.buscarCuentaDeAhorroCliente(usuarioRegistrado.getCedula());
 						System.out.println("Registrado");
@@ -299,7 +296,7 @@ public class CajeroBean {
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 		}
@@ -313,18 +310,15 @@ public class CajeroBean {
 			c = clienteON.validadorDeCedula(cliente.getCedula());
 			if (c) {
 				Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
-				// cliente = usuarioRegistrado;
 				if (usuarioRegistrado != null) {
 					CuentaDeAhorro cuen = clienteON.buscarCuentaDeAhorroCliente(usuarioRegistrado.getCedula());
-					System.out.println("Si entra a la cuenta");
 					return cuen.getNumeroCuentaDeAhorro();
 				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		System.out.println("No entro");
 		return null;
 
 	}
@@ -336,28 +330,30 @@ public class CajeroBean {
 	 *         transaccion que se esta realizando
 	 */
 	public String valMonto() {
-		System.out.println("*-------*" + cliente.getCedula());
-		if (cliente.getCedula() != null) {
-			Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
-			// cliente = usuarioRegistrado;
-			if (usuarioRegistrado != null) {
-				System.out.println("Registrado");
-				CuentaDeAhorro cl = clienteON.buscarCuentaDeAhorroCliente(cliente.getCedula());
-				String l = String.valueOf(cl.getSaldoCuentaDeAhorro());
-				System.out.println("------MONTO--+++++++++" + tipoTransaccion + cl.getSaldoCuentaDeAhorro() + monto);
-				if (tipoTransaccion.equalsIgnoreCase("retiro") && monto == null) {
-					return l;
-				} else if (tipoTransaccion.equalsIgnoreCase("retiro") && cl.getSaldoCuentaDeAhorro() < monto) {
-					String ms = "La cuenta no cuenta con el saldo suficiente, Su saldo es: "
-							+ cl.getSaldoCuentaDeAhorro();
-					return ms;
+		try {
+			if (cliente.getCedula() != null) {
+				Cliente usuarioRegistrado = clienteON.buscarCliente(cliente.getCedula());
+				if (usuarioRegistrado != null) {
+					CuentaDeAhorro cl = clienteON.buscarCuentaDeAhorroCliente(cliente.getCedula());
+					String l = String.valueOf(cl.getSaldoCuentaDeAhorro());
+					if (tipoTransaccion.equalsIgnoreCase("retiro") && monto == null) {
+						return l;
+					} else if (tipoTransaccion.equalsIgnoreCase("retiro") && cl.getSaldoCuentaDeAhorro() < monto) {
+						String ms = "La cuenta no cuenta con el saldo suficiente, Su saldo es: "
+								+ cl.getSaldoCuentaDeAhorro();
+						return ms;
 
-				} else {
-					return l;
+					} else {
+						return l;
+					}
+
 				}
-
 			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
 		return " ";
 	}
 
@@ -380,8 +376,6 @@ public class CajeroBean {
 			t.setTipo("deposito");
 			t.setSaldoCuenta(nvmonto);
 			try {
-				// editable = false;
-				
 				clienteON.guardarTransaccion(t);
 				addMessage("Confirmacion", "Transaccion Guardada");
 				editable = false;
@@ -578,11 +572,8 @@ public class CajeroBean {
 				cont += 1;
 			}
 		 }
-		 System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooo");
-		 System.out.println(cont);
-		 System.out.println(" ooooooooooooooooooooooooooooooooooooooooooooo");
+
 		 if (cont == listt.size()) {
-			 System.out.println(lisComprobar.size()+" FINAL CREDITOOOOOOOOOOOOOOOO FINNNNNNNNNNNNNNN ");
 			 Credito nv = clienteON.verCredito(codigoAux);
 			 nv.setEstado("Pagado");
 			 clienteON.actualizarCredito(nv);
@@ -600,11 +591,7 @@ public class CajeroBean {
 		 String[] parts = m.split(";");
 		 String part1 = parts[0]; 
 		 String part2 = parts[1];
-		 System.out.println(parts[0]+"*******"+parts[1]);
-		 
-		 System.out.println("******************************");
-		 System.out.println("ENTRO graficaaaaaaaaaaaaa");
-		 
+		
 	        pieModel = new PieChartModel();
 	        ChartData data = new ChartData();
 	         
@@ -637,22 +624,13 @@ public class CajeroBean {
 	 
 	 
 	 public void cambioGrafica(String m) {
-		 System.out.println("METODO cambiografica"+"****"+m);
 		 if (m.equals("A")) {
 			createPieModel();
-			 grafica = true;
-			
+			 grafica = true;	
 		}
-		 System.out.println(grafica);
-		 System.out.println(editable);
 	 }
 	 
-	 public void addMessage(String summary, String detail) {
-		 System.out.println(summary+"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmkkk"+detail);
-	        /*FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-	        FacesContext.getCurrentInstance().addMessage(null, message);*/
-	       //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
-	        
+	 public void addMessage(String summary, String detail) {   
 	        FacesContext context = FacesContext.getCurrentInstance();
 	        context.getExternalContext().getFlash().setKeepMessages(true);
 	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
