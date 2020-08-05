@@ -1536,7 +1536,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 					respuestaTransferenciaExterna.setDescripcion("Transferencia se ha realizado exitosamente"); 
 				}else { 
 					respuestaTransferenciaExterna.setCodigo(2);
-					respuestaTransferenciaExterna.setDescripcion("Esta persona no se encuentra registrada en la cooperativa");
+					respuestaTransferenciaExterna.setDescripcion("No tiene esa cantidad en su cuenta");
 				}
 			}else { 
 				respuestaTransferenciaExterna.setCodigo(3); 
