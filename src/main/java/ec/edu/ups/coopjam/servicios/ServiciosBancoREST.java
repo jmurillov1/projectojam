@@ -67,7 +67,7 @@ public class ServiciosBancoREST {
 	
 	
 	@POST 
-	@Path("/transferencia") 
+	@Path("/transferenciaExterna") 
 	@Produces("application/json") 
 	@Consumes("application/json") 
 	public RespuestaTransferenciaExterna realizarTransferenciaExterna(TransferenciaExterna transferenciaExterna) { 
