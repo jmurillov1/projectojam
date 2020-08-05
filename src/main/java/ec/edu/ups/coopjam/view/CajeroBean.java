@@ -409,16 +409,19 @@ public class CajeroBean {
 				
 				clienteON.guardarTransaccion(t2);
 				addMessage("Confirmacion", "Transaccion Guardada");
+				editable = false;
+				listaTra = new ArrayList<Transaccion>();
+				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.getMessage();
 			}
-			/*try {
-				addMessage("Confirmacion", "Transaccion Guardada");
+			try {
+				
 				FacesContext contex = FacesContext.getCurrentInstance();
 				contex.getExternalContext().redirect("PaginaCajero.xhtml");
 			} catch (Exception e) {
-			}*/
+			}
 		}
 		return "PaginaCajero";
 	}
@@ -493,6 +496,7 @@ public class CajeroBean {
 					credito.setEstado("Pagado");
 					credito.setSaldo(0.00);
 					clienteON.actualizarDetalle(credito);
+
 				}
 			}
 			
@@ -513,6 +517,7 @@ public class CajeroBean {
 						credito.setEstado("Pagado");
 						credito.setSaldo(0);
 						clienteON.actualizarDetalle(credito);
+
 					}
 					
 					
@@ -529,6 +534,7 @@ public class CajeroBean {
 					double valor = credito.getSaldo() - transaccionAux.getMonto();
 					credito.setSaldo(valor);
 					clienteON.actualizarDetalle(credito);
+
 					
 					
 				}else if (transaccionAux.getMonto() >= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
@@ -538,6 +544,7 @@ public class CajeroBean {
 					credito.setEstado("Pagado");
 					credito.setSaldo(0.00);
 					clienteON.actualizarDetalle(credito);
+
 					
 					
 				}
@@ -549,6 +556,7 @@ public class CajeroBean {
 		 Cliente cliente = clienteON.buscarCliente(cedulaAux);
 		 transaccionAux.setCliente(cliente);
 		 try {
+			//addMessage("Confirmacion", "Transaccion Guardada");
 			clienteON.guardarTransaccion(transaccionAux);
 			editable = false;
 		    transaccionAux = new Transaccion();
@@ -576,6 +584,12 @@ public class CajeroBean {
 			 nv.setEstado("Pagado");
 			 clienteON.actualizarCredito(nv);
 		}
+		 /*try {
+				
+				FacesContext contex = FacesContext.getCurrentInstance();
+				contex.getExternalContext().redirect("PaginaPagoCredito.xhtml");
+			} catch (Exception e) {
+			}*/
 	 }
 	 
 	 private void createPieModel() {

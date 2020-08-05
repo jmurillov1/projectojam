@@ -357,6 +357,7 @@ public class LoginBean {
 		empleadoON.actualizarSolicitudCredito(solicitudDeCredito);
 		System.out.println(motivo);
 		// System.out.println(solicitudDeCredito.getCodigoCredito());
+		empleadoON.rechazarCredito(solicitudDeCredito.getClienteCredito(), motivo);
 		solicitudDeCredito = new SolicitudDeCredito();
 		editable = false;
 		editabledos = false;

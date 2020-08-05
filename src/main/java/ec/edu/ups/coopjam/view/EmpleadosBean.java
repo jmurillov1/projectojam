@@ -213,10 +213,11 @@ public class EmpleadosBean {
 				empleado.setRol("Cajero");
 				empleadoON.guardarEmpleado(empleado);
 				addMessage("Confirmacion", "Empleado Guardado");
+				
 			} else if (tipoEmpleado.equalsIgnoreCase("jefeCredito")) {
 				empleado.setRol("JefeCredito");
 				empleadoON.guardarEmpleado(empleado);
-				addMessage("Confirmacion", "Empleado Guardada");
+				addMessage("Confirmacion", "Empleado Guardado");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -226,7 +227,13 @@ public class EmpleadosBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "Lista-Empleados";
+		try {
+			
+			FacesContext contex = FacesContext.getCurrentInstance();
+			contex.getExternalContext().redirect("Lista-Empleados.xhtml");
+		} catch (Exception e) {
+		}
+		return null;
 
 	}
 
@@ -370,10 +377,13 @@ public class EmpleadosBean {
 		facesContext.responseComplete();
 	}
 	
-	public void addMessage(String summary, String detail) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
+	public void addMessage(String summary, String detail) { 
+		FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail));
+		//FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		//FacesContext.getCurrentInstance().addMessage(null, message);
+	}
  
  public void handleClose(CloseEvent event) {
         addMessage(event.getComponent().getId() + " closed", "So you don't like nature?");
