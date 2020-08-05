@@ -589,8 +589,8 @@ public class CajeroBean {
 	 private void createPieModel() {
 		 String m = clienteON.getDatos();
 		 String[] parts = m.split(";");
-		 String part1 = parts[0]; 
-		 String part2 = parts[1];
+		 String part1 = String.valueOf(Integer.parseInt(parts[0])-700);  
+		 String part2 = String.valueOf(Integer.parseInt(parts[1])-300);  
 		
 	        pieModel = new PieChartModel();
 	        ChartData data = new ChartData();
@@ -598,12 +598,12 @@ public class CajeroBean {
 	        PieChartDataSet dataSet = new PieChartDataSet();
 	        List<Number> values = new ArrayList<>();
 	        
-	        for (int i = 0; i < parts.length; i++) {
+	        /*for (int i = 0; i < parts.length; i++) {
 	        	values.add(Integer.parseInt(parts[i]));
-			}
-	       /* values.add(300);
-	        values.add(50);
-	        values.add(100);*/
+			}*/
+	        values.add(Integer.parseInt(part1));
+	        values.add(Integer.parseInt(part2));
+	        //values.add(100);
 	        dataSet.setData(values);
 	         
 	        List<String> bgColors = new ArrayList<>();
