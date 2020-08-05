@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import ec.edu.ups.coopjam.business.GestionUsuarioLocal;
 import ec.edu.ups.coopjam.model.Cliente;
+import ec.edu.ups.coopjam.model.TransferenciaExterna;
 
 @Path("/banco")
 public class ServiciosBancoREST {
@@ -23,7 +24,7 @@ public class ServiciosBancoREST {
 	@GET 
 	@Path("/obtenerCliente") 
 	@Produces("application/json") 
-	public Cliente obtenerCliente(@QueryParam("numeroCuenta") String numeroCuenta) { 
+	public Respuesta obtenerCliente(@QueryParam("numeroCuenta") String numeroCuenta) { 
 		return on.obtenerClienteCuentaAhorro(numeroCuenta);
 	}
 	
@@ -62,6 +63,16 @@ public class ServiciosBancoREST {
 	public Respuesta realizarTransferencia(TransferenciaRest transferenciaRest) {
 		return on.realizarTransferencia(transferenciaRest.getCedula(), transferenciaRest.getCuentaDeAhorro(),
 				transferenciaRest.getMonto());
-	}
+	} 
+	
+	
+	@POST 
+	@Path("/transferencia") 
+	@Produces("application/json") 
+	@Consumes("application/json") 
+	public RespuestaTransferenciaExterna realizarTransferenciaExterna(TransferenciaExterna transferenciaExterna) { 
+		return on.realizarTransferenciaExterna(transferenciaExterna);
+	} 
+	
 
 }

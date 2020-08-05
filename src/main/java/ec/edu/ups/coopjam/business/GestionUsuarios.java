@@ -64,6 +64,7 @@ import ec.edu.ups.coopjam.data.EmpleadoDAO;
 import ec.edu.ups.coopjam.data.SesionClienteDAO;
 import ec.edu.ups.coopjam.data.SolicitudDeCreditoDAO;
 import ec.edu.ups.coopjam.data.TransaccionDAO;
+import ec.edu.ups.coopjam.data.TransferenciaExternaDAO;
 import ec.edu.ups.coopjam.data.TransferenciaLocalDAO;
 import ec.edu.ups.coopjam.model.Cliente;
 import ec.edu.ups.coopjam.model.Credito;
@@ -74,8 +75,10 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
+import ec.edu.ups.coopjam.model.TransferenciaExterna;
 import ec.edu.ups.coopjam.servicios.CreditoRespuesta;
 import ec.edu.ups.coopjam.servicios.Respuesta;
+import ec.edu.ups.coopjam.servicios.RespuestaTransferenciaExterna;
 
 /**
  * Esta clase me permite hacer diferentes validaciones o metodos necesarios
@@ -103,7 +106,9 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	@Inject
 	private CreditoDAO creditoDAO;
 	@Inject
-	private DetalleCreditoDAO detalleCreditoDAO;
+	private DetalleCreditoDAO detalleCreditoDAO; 
+	@Inject 
+	private TransferenciaExternaDAO transferenciaExternaDAO;
 
 	/**
 	 * Metodo que permite la validacion de una cedula correcta
@@ -793,9 +798,23 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
 	}
 
-	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta) {
-		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta);
-		return cuentaDeAhorro.getCliente();
+	public Respuesta obtenerClienteCuentaAhorro(String numeroCuenta) {
+		Respuesta respuesta = new Respuesta();
+		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta); 
+		try {
+			if(cuentaDeAhorro!=null) {
+				 respuesta.setCodigo(1); 
+				 respuesta.setDescripcion("Se ha obtenido la cuenta exitosamente"); 
+				 respuesta.setCuentaDeAhorro(cuentaDeAhorro);
+			}else{ 
+				respuesta.setCodigo(2); 
+				respuesta.setDescripcion("La Cuenta de Ahorro no existe");
+			}
+		} catch (Exception e) {
+			respuesta.setCodigo(3); 
+			respuesta.setDescripcion("Error "+e.getMessage());
+		}
+		return respuesta;
 	}
 
 	public byte[] toByteArray(InputStream in) throws IOException {
@@ -1501,6 +1520,32 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		}
 
 		return respuesta;
+	} 
+	
+	public RespuestaTransferenciaExterna realizarTransferenciaExterna(TransferenciaExterna transferenciaExterna) {  
+		RespuestaTransferenciaExterna respuestaTransferenciaExterna = new RespuestaTransferenciaExterna();
+		try {  
+			CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(transferenciaExterna.getCuentaPersonaLocal()); 
+			if(cuentaDeAhorro!=null) { 
+				if(cuentaDeAhorro.getSaldoCuentaDeAhorro()>=transferenciaExterna.getMontoTransferencia()) { 
+					transferenciaExternaDAO.insert(transferenciaExterna);  
+					cuentaDeAhorro.setSaldoCuentaDeAhorro(cuentaDeAhorro.getSaldoCuentaDeAhorro()-transferenciaExterna.getMontoTransferencia()); 
+					cuentaDeAhorroDAO.update(cuentaDeAhorro);
+					respuestaTransferenciaExterna.setCodigo(1); 
+					respuestaTransferenciaExterna.setDescripcion("Transferencia se ha realizado exitosamente"); 
+				}else { 
+					respuestaTransferenciaExterna.setCodigo(2);
+					respuestaTransferenciaExterna.setDescripcion("Esta persona no se encuentra registrada en la cooperativa");
+				}
+			}else { 
+				respuestaTransferenciaExterna.setCodigo(3); 
+				respuestaTransferenciaExterna.setDescripcion("La cuenta no existe");
+			}
+		}catch (Exception e) {
+			respuestaTransferenciaExterna.setCodigo(4); 
+			respuestaTransferenciaExterna.setDescripcion("Error : " + e.getMessage());
+		}
+		return respuestaTransferenciaExterna;
 	}
 
 }

@@ -18,7 +18,9 @@ import ec.edu.ups.coopjam.model.SesionCliente;
 import ec.edu.ups.coopjam.model.SolicitudDeCredito;
 import ec.edu.ups.coopjam.model.Transaccion;
 import ec.edu.ups.coopjam.model.TransfereciaLocal;
+import ec.edu.ups.coopjam.model.TransferenciaExterna;
 import ec.edu.ups.coopjam.servicios.Respuesta;
+import ec.edu.ups.coopjam.servicios.RespuestaTransferenciaExterna;
 @Local
 public interface GestionUsuarioLocal {
 	public String generarNumeroDeCuenta();
@@ -56,7 +58,7 @@ public interface GestionUsuarioLocal {
 	public void guardarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito); 
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos(); 
-	public Cliente obtenerClienteCuentaAhorro(String numeroCuenta); 
+	public Respuesta obtenerClienteCuentaAhorro(String numeroCuenta); 
 	public byte[] toByteArray(InputStream in) throws IOException;
 	public void guardarCredito(Credito credito);
 	public void actualizarCredito(Credito credito);
@@ -73,5 +75,6 @@ public interface GestionUsuarioLocal {
 	public void registrarCuotaVencida() throws ParseException; 
 	public Respuesta loginServicio(String username, String password); 
 	public Respuesta cambioContraseña(String correo, String contraseñaActual, String nuevaContraseña);
-	public void rechazarCredito(Cliente cliente, String razon);
+	public void rechazarCredito(Cliente cliente, String razon); 
+	public RespuestaTransferenciaExterna realizarTransferenciaExterna(TransferenciaExterna transferenciaExterna);
 }
