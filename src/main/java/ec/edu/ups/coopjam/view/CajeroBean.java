@@ -438,25 +438,37 @@ public class CajeroBean {
 	}
 	
 	public List<Credito> cargarCreditos() {
-		System.out.println("Cargar Creditos ----- ");
-		List<Credito> lis = clienteON.listarCreditosCedula(cedulaAux);
 		List<Credito> lisAux = new ArrayList<Credito>();
-		System.out.println(lis.size());
-		for(Credito credito: lis) {
-			if (credito.getEstado().equals("Pendiente")) {
-				lisAux.add(credito);
+		try {
+			System.out.println("Cargar Creditos ----- ");
+			List<Credito> lis = clienteON.listarCreditosCedula(cedulaAux);
+			
+			System.out.println(lis.size());
+			for(Credito credito: lis) {
+				if (credito.getEstado().equals("Pendiente")) {
+					lisAux.add(credito);
+				}
 			}
+			if (lisAux  != null) {
+				return lisAux;
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			//return lisAux;
 		}
-		if (lisAux  != null) {
-			return lisAux;
-		}
-		return null;
+		return lisAux;
+		
 	}
 	 public void activar() {
-		 System.out.println(cedulaAux);
-		 editable = true;
-		 editable2 = false;
-		 //cedulaAux = "";
+		 try {
+			 editable = true;
+			 editable2 = false;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	 }
 	 
 	 public void cambioVar(int cod) {
@@ -479,111 +491,119 @@ public class CajeroBean {
 	 }
 	 
 	 public void guardar() {
-		 System.out.println("PAGOOOOOOOOOOOOOO");
-		 System.out.println(codigoAux+"****"+transaccionAux.getMonto()+"********"+transaccionAux.getTipo()+"********"+codigoAux2+"***************"+cedulaAux);
-		 List<DetalleCredito> listt = clienteON.verCredito(codigoAux).getDetalles();
-		 if (transaccionAux.getTipo().equals("pagoC")) {
-			for(DetalleCredito credito: listt) {
-				if (transaccionAux.getMonto() >= credito.getSaldo()  && credito.getCodigoDetalle() == codigoAux2) {
-					transaccionAux.setTipo("PagoCredito");
-					transaccionAux.setFecha(new Date());
-					transaccionAux.setSaldoCuenta(credito.getMonto());;
-					credito.setEstado("Pagado");
-					credito.setSaldo(0.00);
-					clienteON.actualizarDetalle(credito);
-
-				}
-			}
-			
-		}else if (transaccionAux.getTipo().equals("pagoAb")) {
-			for(DetalleCredito credito: listt) {
-				if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
-					transaccionAux.setTipo("PagoCredito");
-					transaccionAux.setFecha(new Date());
-					transaccionAux.setSaldoCuenta(credito.getMonto());
-					//credito.setEstado("PagoAbono");
-					double valor = credito.getSaldo() - transaccionAux.getMonto();
-					String num = String.format(Locale.ROOT, "%.2f", valor);
-					credito.setSaldo(Double.parseDouble(num));
-					if (valor > 0) {
-						credito.setEstado("PagoAbono");
-						credito.setSaldo(Double.parseDouble(num));
-						clienteON.actualizarDetalle(credito);
-					}else if(valor <= 0) {
+		 try {
+			 
+			 System.out.println("PAGOOOOOOOOOOOOOO");
+			 System.out.println(codigoAux+"****"+transaccionAux.getMonto()+"********"+transaccionAux.getTipo()+"********"+codigoAux2+"***************"+cedulaAux);
+			 List<DetalleCredito> listt = clienteON.verCredito(codigoAux).getDetalles();
+			 if (transaccionAux.getTipo().equals("pagoC")) {
+				for(DetalleCredito credito: listt) {
+					if (transaccionAux.getMonto() >= credito.getSaldo()  && credito.getCodigoDetalle() == codigoAux2) {
+						transaccionAux.setTipo("PagoCredito");
+						transaccionAux.setFecha(new Date());
+						transaccionAux.setSaldoCuenta(credito.getMonto());;
 						credito.setEstado("Pagado");
-						credito.setSaldo(0);
+						credito.setSaldo(0.00);
 						clienteON.actualizarDetalle(credito);
 
 					}
-					
-					
 				}
-			}
-			
-		}else if(transaccionAux.getTipo().equals("pagoA")) {
-			for(DetalleCredito credito: listt) {
-				if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
-					transaccionAux.setTipo("PagoCredito");
-					transaccionAux.setFecha(new Date());
-					transaccionAux.setSaldoCuenta(credito.getMonto());
-					credito.setEstado("PagoAbono");
-					double valor = credito.getSaldo() - transaccionAux.getMonto();
-					String num = String.format(Locale.ROOT, "%.2f", valor);
-					credito.setSaldo(Double.parseDouble(num));
-					clienteON.actualizarDetalle(credito);
-
-					
-					
-				}else if (transaccionAux.getMonto() >= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
-					transaccionAux.setTipo("PagoCredito");
-					transaccionAux.setFecha(new Date());
-					transaccionAux.setSaldoCuenta(credito.getMonto());
-					credito.setEstado("Pagado");
-					credito.setSaldo(0.00);
-					clienteON.actualizarDetalle(credito);
-
-					
-					
-				}
-			}
-		}
-		 
-		 
-		 
-		 Cliente cliente = clienteON.buscarCliente(cedulaAux);
-		 transaccionAux.setCliente(cliente);
-		 try {
-			//addMessage("Confirmacion", "Transaccion Guardada");
-			clienteON.guardarTransaccion(transaccionAux);
-			editable = false;
-		    transaccionAux = new Transaccion();
-		    
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 
-		 
-		 //verfico
-		 List<DetalleCredito> lisComprobar = clienteON.verCredito(codigoAux).getDetalles();
-		 int cont = 0;
-		 for(DetalleCredito credito: listt) {
-			 if (credito.getEstado().equals("Pagado")) {
-				cont += 1;
-			}
-		 }
-
-		 if (cont == listt.size()) {
-			 Credito nv = clienteON.verCredito(codigoAux);
-			 nv.setEstado("Pagado");
-			 clienteON.actualizarCredito(nv);
-		}
-		 /*try {
 				
-				FacesContext contex = FacesContext.getCurrentInstance();
-				contex.getExternalContext().redirect("PaginaPagoCredito.xhtml");
+			}else if (transaccionAux.getTipo().equals("pagoAb")) {
+				for(DetalleCredito credito: listt) {
+					if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+						transaccionAux.setTipo("PagoCredito");
+						transaccionAux.setFecha(new Date());
+						transaccionAux.setSaldoCuenta(credito.getMonto());
+						//credito.setEstado("PagoAbono");
+						double valor = credito.getSaldo() - transaccionAux.getMonto();
+						String num = String.format(Locale.ROOT, "%.2f", valor);
+						credito.setSaldo(Double.parseDouble(num));
+						if (valor > 0) {
+							credito.setEstado("PagoAbono");
+							credito.setSaldo(Double.parseDouble(num));
+							clienteON.actualizarDetalle(credito);
+						}else if(valor <= 0) {
+							credito.setEstado("Pagado");
+							credito.setSaldo(0);
+							clienteON.actualizarDetalle(credito);
+
+						}
+						
+						
+					}
+				}
+				
+			}else if(transaccionAux.getTipo().equals("pagoA")) {
+				for(DetalleCredito credito: listt) {
+					if (transaccionAux.getMonto() <= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+						transaccionAux.setTipo("PagoCredito");
+						transaccionAux.setFecha(new Date());
+						transaccionAux.setSaldoCuenta(credito.getMonto());
+						credito.setEstado("PagoAbono");
+						double valor = credito.getSaldo() - transaccionAux.getMonto();
+						String num = String.format(Locale.ROOT, "%.2f", valor);
+						credito.setSaldo(Double.parseDouble(num));
+						clienteON.actualizarDetalle(credito);
+
+						
+						
+					}else if (transaccionAux.getMonto() >= credito.getSaldo() && credito.getCodigoDetalle() == codigoAux2) {
+						transaccionAux.setTipo("PagoCredito");
+						transaccionAux.setFecha(new Date());
+						transaccionAux.setSaldoCuenta(credito.getMonto());
+						credito.setEstado("Pagado");
+						credito.setSaldo(0.00);
+						clienteON.actualizarDetalle(credito);
+
+						
+						
+					}
+				}
+			}
+			 
+			 
+			 
+			 Cliente cliente = clienteON.buscarCliente(cedulaAux);
+			 transaccionAux.setCliente(cliente);
+			 try {
+				//addMessage("Confirmacion", "Transaccion Guardada");
+				clienteON.guardarTransaccion(transaccionAux);
+				editable = false;
+			    transaccionAux = new Transaccion();
+			    
 			} catch (Exception e) {
-			}*/
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 
+			 
+			 //verfico
+			 List<DetalleCredito> lisComprobar = clienteON.verCredito(codigoAux).getDetalles();
+			 int cont = 0;
+			 for(DetalleCredito credito: listt) {
+				 if (credito.getEstado().equals("Pagado")) {
+					cont += 1;
+				}
+			 }
+
+			 if (cont == listt.size()) {
+				 Credito nv = clienteON.verCredito(codigoAux);
+				 nv.setEstado("Pagado");
+				 clienteON.actualizarCredito(nv);
+			}
+			 /*try {
+					
+					FacesContext contex = FacesContext.getCurrentInstance();
+					contex.getExternalContext().redirect("PaginaPagoCredito.xhtml");
+				} catch (Exception e) {
+				}*/
+			 
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	 }
 	 
 	 private void createPieModel() {
