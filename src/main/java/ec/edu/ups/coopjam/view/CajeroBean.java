@@ -3,6 +3,7 @@ package ec.edu.ups.coopjam.view;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -508,10 +509,11 @@ public class CajeroBean {
 					transaccionAux.setSaldoCuenta(credito.getMonto());
 					//credito.setEstado("PagoAbono");
 					double valor = credito.getSaldo() - transaccionAux.getMonto();
-					credito.setSaldo(valor);
+					String num = String.format(Locale.ROOT, "%.2f", valor);
+					credito.setSaldo(Double.parseDouble(num));
 					if (valor > 0) {
 						credito.setEstado("PagoAbono");
-						credito.setSaldo(valor);
+						credito.setSaldo(Double.parseDouble(num));
 						clienteON.actualizarDetalle(credito);
 					}else if(valor <= 0) {
 						credito.setEstado("Pagado");
@@ -532,7 +534,8 @@ public class CajeroBean {
 					transaccionAux.setSaldoCuenta(credito.getMonto());
 					credito.setEstado("PagoAbono");
 					double valor = credito.getSaldo() - transaccionAux.getMonto();
-					credito.setSaldo(valor);
+					String num = String.format(Locale.ROOT, "%.2f", valor);
+					credito.setSaldo(Double.parseDouble(num));
 					clienteON.actualizarDetalle(credito);
 
 					
