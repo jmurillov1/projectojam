@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class DetalleCredito implements Serializable{
@@ -21,6 +23,7 @@ public class DetalleCredito implements Serializable{
 	private double monto;
 	private double saldo;
 	private double cuota;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaPago;
 	private String estado;
 	

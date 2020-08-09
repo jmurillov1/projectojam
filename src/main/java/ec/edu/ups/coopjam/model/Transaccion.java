@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /**
  * Esta clase Representa una Entidad (Tabla) en la Base de Datos.
  * Es para el registro de las transacciones que puede realizar un Cliente
@@ -20,7 +22,8 @@ public class Transaccion implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int codigoTransaccion;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
 	private Double monto;
 	private String tipo;
