@@ -65,7 +65,9 @@ public class LoginBean {
 		solicitudes = new ArrayList<SolicitudDeCredito>();
 		loadDataSol();
 		empleado = new Empleado();
-		
+	//	solicitudDeCredito = new SolicitudDeCredito();
+		editable = false;
+		editabledos = false;
 	}
 
 	public GestionUsuarioLocal getEmpleadoON() {
@@ -367,13 +369,30 @@ public class LoginBean {
 	 * @return Una solicitud de credito
 	 */
 	public String cargarSol(int cod) {
-		editable = true;
+		//editable = true;
 		System.out.println("**********/****/--" + cod + editable);
 
 		for (SolicitudDeCredito sol : solicitudes) {
 			if (sol.getCodigoCredito() == cod) {
 				solicitudDeCredito = sol;
 				tipoC = tipoCliente(sol);
+				editable = true;
+			}
+		}
+		return null;
+	}
+	
+	public String cargarSol2(int cod) {
+		//editable = true;
+		System.out.println("**********/****/--" + cod + editable);
+		SolicitudDeCredito aux = new SolicitudDeCredito();
+		List<SolicitudDeCredito> tt = empleadoON.listadoSolicitudDeCreditos();
+		for (SolicitudDeCredito sol : tt) {
+			if (sol.getCodigoCredito() == cod) {
+				aux = sol;
+				solicitudDeCredito = sol;
+				tipoC = tipoCliente(sol);
+				editable = true;
 			}
 		}
 		return null;
@@ -422,7 +441,8 @@ public class LoginBean {
 	 */
 	public String aprobar(int cod) {
 		System.out.println("//////-/////////-/////" + empleado.getNombre());
-		for (SolicitudDeCredito sol : solicitudes) {
+		List<SolicitudDeCredito> tt = empleadoON.listadoSolicitudDeCreditos();
+		for (SolicitudDeCredito sol : tt) {
 			if (sol.getCodigoCredito() == cod && sol.getEstadoCredito().equalsIgnoreCase("Solicitando")) {
 
 				Credito credito = new Credito();

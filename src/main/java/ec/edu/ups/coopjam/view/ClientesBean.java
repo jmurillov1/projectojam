@@ -160,6 +160,7 @@ public class ClientesBean {
 	 *                       clase
 	 */
 	public void setCuentaDeAhorro(CuentaDeAhorro cuentaDeAhorro) {
+		cuentaDeAhorro = gestionUsuarios.buscarCuentaDeAhorroCliente(cedulaParametro);
 		this.cuentaDeAhorro = cuentaDeAhorro;
 	}
 
@@ -169,6 +170,7 @@ public class ClientesBean {
 	 * @return Atributo buscarCuentaDeAhorro de la clase
 	 */
 	public CuentaDeAhorro getBuscarCuentaDeAhorro() {
+		
 		return buscarCuentaDeAhorro;
 	}
 
@@ -267,6 +269,7 @@ public class ClientesBean {
 	 *                    la clase
 	 */
 	public void setLstClientes(List<Cliente> lstClientes) {
+		
 		this.lstClientes = lstClientes;
 	}
 	
@@ -285,6 +288,7 @@ public class ClientesBean {
 	 *                    la clase
 	 */
 	public void setLstListaCreditosAprobados(List<Credito> lstListaCreditosAprobados) {
+		lstCreditosAprobados = gestionUsuarios.creditosAprovados(cedulaParametro);
 		this.lstCreditosAprobados = lstListaCreditosAprobados;
 	}
 
