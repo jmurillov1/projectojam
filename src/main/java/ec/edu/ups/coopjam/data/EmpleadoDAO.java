@@ -13,8 +13,8 @@ import ec.edu.ups.coopjam.model.Empleado;
 /**
  * Clase que me permite manejar la Entidad Empleado con la Base de Datos
  * Es para el manejo de los datos registrados en la Base de datos con respecto a la Entidad Empleado
- * @author Usuario
- *
+ * @author Malki Yupanki
+ * @version 1.0
  */
 @Stateless
 public class EmpleadoDAO {
