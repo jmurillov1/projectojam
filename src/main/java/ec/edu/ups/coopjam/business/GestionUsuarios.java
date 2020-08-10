@@ -255,7 +255,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 	 * Metodo que permite cambiar el formato de la fecha
 	 * 
 	 * @param fecha Fecha que se cambiara el formato
-	 * @return
+	 * @return La fecha en un formato requerido de tipo texto.
 	 */
 	public String obtenerFecha(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -659,11 +659,18 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		}
 	}
 
+	/**
+	 * Metodo que permite buscar las transacciones de un usuario entre fechas
+	 * 
+	 * @param cedula Numero de cedula de la persona que busca
+	 * @param fechaI La fecha de inicio desde donde se quieren ver las transacciones.
+	 * @param fechaF La fecha de fin hasta donde se quieren ver las transacciones.
+	 * @return Una lista de las transacciones/movimientos del usuario entre las fechas indicadas.
+	 * @throws Exception Excepción por si el cliente no tiene transacciones.
+	 */
 	public List<Transaccion> obtenerTransaccionesFechaHora(String cedula, String fechaI, String fechaF) {
 		String fechaInicio = fechaI + " 00:00:00.000000";
-		System.out.println(fechaInicio);
 		String fechaFinal = fechaF + " 23:59:59.000000";
-		System.out.println(fechaFinal);
 		try {
 			return transaccionDAO.getListaTransaccionesFechas(cedula, fechaInicio, fechaFinal);
 		} catch (Exception e) {
@@ -673,10 +680,19 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return null;
 	}
 
+	/**
+	 * Metodo que permite realizar una transacción por parte del cajero
+	 * 
+	 * @param cuenta Numero de cuenta de la persona a la que se hace la transacción.
+	 * @param monto El valor de transacción.
+	 * @param tipoTransaccion El tipo de transacción que se realiza depósito o retiro;
+	 * @return Un mensaje indicado si se completo correctamente el proceso o algo error que pueda ocurrir.
+	 * @throws Exception Excepción por si sucede algún error.
+	 */
+	
 	public String realizarTransaccion(String cuenta, double monto, String tipoTransaccion) {
 		CuentaDeAhorro clp = cuentaDeAhorroDAO.read(cuenta);
 		if (clp != null) {
-			System.out.println(clp.getNumeroCuentaDeAhorro());
 			if (tipoTransaccion.equalsIgnoreCase("deposito")) {
 				Double nvmonto = clp.getSaldoCuentaDeAhorro() + monto;
 				clp.setSaldoCuentaDeAhorro(nvmonto);
@@ -721,10 +737,16 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return "Fallido";
 	}
 
+	/**
+	 * Metodo que permite realizar una transferencia
+	 * 
+	 * @param cedula Numero de cedula de la persona que hace la transferencia.
+	 * @param cuentaAhorro2 El numero de cuenta de la persona a la que se hace la transferencia.
+	 * @param monto El valor de la transferencia.
+	 * @return Un clase Respuesta indicando los datos del desarrollo del proceso, con un codigo, una descripción.
+	 * @throws Exception Excepción por si sucede algún error en el proceso.
+	 */
 	public Respuesta realizarTransferencia(String cedula, String cuentaAhorro2, double monto) {
-		System.out.println(cedula);
-		System.out.println(cuentaAhorro2);
-		System.out.println(monto); 
 		Respuesta respuesta = new Respuesta(); 
 		CuentaDeAhorro cuentaAhorro = cuentaDeAhorroDAO.getCuentaCedulaCliente(cedula);
 		CuentaDeAhorro cuentaAhorroTransferir = cuentaDeAhorroDAO.read(cuentaAhorro2);
@@ -752,10 +774,28 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return respuesta;
 	}
 
+	/**
+	 * Método que permite guardar una transferencia local.
+	 * 
+	 * @param transfereciaLocal Una clase TransferenciaLocal para realizar el proceso de guardado.
+	 */
+	
 	public void guardarTransferenciaLocal(TransfereciaLocal transfereciaLocal) {
 		transferenciaLocalDAO.insert(transfereciaLocal);
 	}
 
+	/**
+	 * Método que permite guardar una solicitud de credito conjuntamente con el procesado para determinar el tipo de cliente.
+	 * 
+	 * @param solicituDeCredito Una clase SolicitudDeCredito para realizar el proceso de guardado.
+	 * @throws ForbiddenException Una excepción de tiempo de ejecución que indica que el servidor 
+	 * 								ha prohibido el acceso a un recurso solicitado por un cliente.
+	 * @throws InterruptedException Se lanza cuando un hilo está esperando, durmiendo u ocupado de otra manera, 
+	 * 									y el hilo se interrumpe, ya sea antes o durante la actividad.
+	 * @throws ExecutionException Se lanza una excepción al intentar recuperar el resultado de una 
+	 * 								tarea que se canceló al lanzar una excepción
+	 */
+	
 	public void guardarSolicitudCredito(SolicitudDeCredito solicituDeCredito) {
 		solicituDeCredito.setHistorialCredito(historialCredito(solicituDeCredito));
 		solicituDeCredito.setSaldoCuenta(saldoCuenta(solicituDeCredito));
@@ -777,9 +817,7 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				+ String.valueOf(solicituDeCredito.getCantidadCreditos()) + ";"
 				+ obtenerCodigo(solicituDeCredito.getTipoEmpleo()) + ";"
 				+ obtenerCodigo(solicituDeCredito.getTrabajadorExtranjero()) + ";0\"}";
-		System.out.println(credito);
-		String res = enviarEntidad(credito);
-		System.out.println(res);
+		enviarEntidad(credito);
 		try {
 			solicituDeCredito.setTipoCliente(
 					String.valueOf(obtenerTipoCliente(solicituDeCredito.getClienteCredito().getCedula())));
@@ -790,14 +828,33 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		solicitudDeCreditoDAO.insert(solicituDeCredito);
 	}
 
+	/**
+	 * Método que permite actualizar una solicitud de crédito.
+	 * 
+	 * @param solicitudDeCredito Una clase SolicitudDeCredito para realizar el proceso de actualización.
+	 */
+	
 	public void actualizarSolicitudCredito(SolicitudDeCredito solicitudDeCredito) {
 		solicitudDeCreditoDAO.update(solicitudDeCredito);
 	}
 
+	/**
+	 * Método que permite listar las solicitudes de crédito.
+	 * 
+	 * @return Un lista con clases SolicitudDeCredito con los datos de las solicitudes de credito;
+	 */
+	
 	public List<SolicitudDeCredito> listadoSolicitudDeCreditos() {
 		return solicitudDeCreditoDAO.getSolicitudDeCreditos();
 	}
 
+	/**
+	 * Metodo que permite obtener un cliente para el proceso de transacciones o transferencias.
+	 * 
+	 * @param numeroCuenta El numero de cuenta de la persona a la que se hace la transaccion o transferencia.
+	 * @return Un clase Respuesta indicando los datos del desarrollo del proceso, con un codigo, una descripción.
+	 * @throws Exception Excepción por si sucede algún error en el proceso.
+	 */
 	public Respuesta obtenerClienteCuentaAhorro(String numeroCuenta) {
 		Respuesta respuesta = new Respuesta();
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO.read(numeroCuenta); 
@@ -817,6 +874,14 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return respuesta;
 	}
 
+	/**
+	 * Metodo que permite convertir una clase InputStream en un byte [] arreglo de bytes para su posterior guardado en la base de datos.
+	 * 
+	 * @param in Una clase InputStream que continue la información de un archivo que se selecciona en el proceso de la solicitud de credito.
+	 * @return Un clase byte [] un arreglo de bytes del InputStream pasado como parametro.
+	 * @throws IOException Excepción para el manejo de clases que tengan que ver con archivos.
+	 */
+	
 	public byte[] toByteArray(InputStream in) throws IOException {
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -833,23 +898,46 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return os.toByteArray();
 	}
 
-	public static void guardarCSV(SolicitudDeCredito solicitudDeCredito) {
-
-	}
-
+	/**
+	 * Método que permite guardar un crédito;
+	 * 
+	 * @param credito Una clase Credito para realizar el proceso de guardado.
+	 */
+	
 	public void guardarCredito(Credito credito) {
 		creditoDAO.insert(credito);
 	}
 
+	/**
+	 * Método que permite actualizar un crédito;
+	 * 
+	 * @param credito Una clase Credito para realizar el proceso de actualización.
+	 */
+	
 	public void actualizarCredito(Credito credito) {
 		creditoDAO.update(credito);
 	}
 
+	/**
+	 * Método que permite listar los créditos.
+	 * 
+	 * @return Una lista con clases Credito con los datos de los créditos.
+	 */
+	
 	public List<Credito> listarCreditos() {
 		List<Credito> cred = creditoDAO.getCreditos();
 		return cred;
 	}
 
+	/**
+	 * Metodo que permite crear la tabla de amortización de un crédito aprobado que se convertiran en los detalles de un crédito.
+	 * 
+	 * @param cuotas El numero de meses que el cliente indica cuando solicita un credito.
+	 * @param monto El valor del credito indicado por el cliente en la solicitud.
+	 * @param interes El valor calculado de los datos de la solicitud indicados por el cliente en base a sus ingresos y egresos.
+	 * @return Una lista con clases DetalleCredito con los datos de la tabla de amortización.
+	 */
+	
 	public List<DetalleCredito> crearTablaAmortizacion(int cuotas, double monto, double interes) {
 		List<DetalleCredito> listaDet = new ArrayList<>();
 		Date fecha = new Date();
@@ -876,11 +964,25 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return listaDet;
 	}
 
+	/**
+	 * Metodo que permite cambiar el formato de la fecha
+	 * 
+	 * @param fecha Fecha que se cambiara el formato
+	 * @return La fecha en un formato requerido de tipo texto.
+	 */
+	
 	public String obtenerFecha2(Date fecha) {
 		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return hourdateFormat.format(fecha);
 	}
 
+	/**
+	 * Metodo que permite indicar los datos para enviar mediante el correo de la aprobación de crédito.
+	 * 
+	 * @param credito Una clase Credito con los datos del credito.
+	 * @param cliente Una clase Cliente con los datos del cliente.
+	 * @throws Exception Excepción por si sucede algún error en el proceso de envio.
+	 */
 	public void aprobarCredito(Credito credito, Cliente cliente) {
 		String destinatario = cliente.getCorreo();
 		String asunto = "APROBACIÓN DE CREDITO";
@@ -906,6 +1008,19 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 //			} 
 	}
 
+	/**
+	 * Método que permite enviar el correo electronico con los datos dados en el método aprobarCredito.
+	 * 
+	 * @param destinatario El correo electronico del cliente al que se envia el correo.
+	 * @param asunto El asunto del correo electronico.
+	 * @param cuerpo El cuerpo del correo electronico.
+	 * @param credito Una clase Credito que se envia en un metodo para generar la tabla 
+	 * 					de amortización en un documento pdf y guardar en un archivo.
+	 * @throws AddressException La excepción que se lanza cuando se encuentra una dirección con formato incorrecto.
+	 * @throws IOException Señala que se ha producido una excepción de E / S de algún tipo. Esta clase es la clase 
+							general de excepciones producidas por operaciones de E / S fallidas o interrumpidas.
+	 * @throws MessagingException La clase base para todas las excepciones lanzadas por las clases de mensajería.
+	 */
 	public void enviarCorreo2(String destinatario, String asunto, String cuerpo, Credito credito) {
 		Properties propiedad = new Properties();
 		propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
@@ -944,6 +1059,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		}
 	}
 
+	/**
+	 * Metodo que permite generar la tabla de amortizacion en un documento pdf en base a los datos del crédito.
+	 * 
+	 * @param credito Una clase Credito con los datos del credito.
+	 * @return Un archivo pdf con los datos de la tabla de amortización.
+	 */
 	public File generarTablaAmor(Credito credito) {
 		try {
 			Cliente cliente = credito.getSolicitud().getClienteCredito();
@@ -1011,7 +1132,6 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				PdfPCell cell1 = new PdfPCell(new Phrase(String.valueOf(dcre.getNumeroCuota())));
 				cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell1);
-				System.out.println(dcre.getFechaPago());
 				PdfPCell cell2 = new PdfPCell(new Phrase(obtenerFecha2(dcre.getFechaPago())));
 				cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(cell2);
@@ -1035,12 +1155,18 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage()+" Ocurrio un error al crear el archivo");
 		}
 
 		return null;
 	}
 
+	/**
+	 * Metodo que permite indicar los datos para enviar mediante el correo el rechazo de la solicitud de crédito.
+	 * 
+	 * @param cliente Una clase Cliente con los datos del cliente.
+	 * @param razon La descripción del rechazo de la solictud de credito.
+	 * @throws Exception Excepción por si sucede algún error en el proceso de envio.
+	 */
 	public void rechazarCredito(Cliente cliente, String razon) {
 		String destinatario = cliente.getCorreo();
 		String asunto = "RECHAZO DE CREDITO";
@@ -1067,6 +1193,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 //			} 
 	}
 
+	/**
+	 * Metodo que permite indicar los datos para enviar mediante el correo el mensaje de cambio de contraseña.
+	 * 
+	 * @param cliente Una clase Cliente con los datos del cliente.
+	 * @throws Exception Excepción por si sucede algún error en el proceso de envio.
+	 */
 	public void cambioContrasena(Cliente cliente) {
 		String destinatario = cliente.getCorreo();
 		String asunto = "CAMBIO DE CONTRASEÑA";
@@ -1092,6 +1224,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 //			} 
 	}
 
+	/**
+	 * Método que permite calcular el historial de credito del cliente.
+	 * 
+	 * @param solicitudCredito Una clase SolicitudDeCredito con los datos de la solicitud de credito.
+	 * @return Un mensaje indicado el valor del historial de crédito.
+	 */
 	public String historialCredito(SolicitudDeCredito solicitudCredito) {
 		List<Credito> lstCreditos = creditoDAO.getCreditos();
 		List<Credito> lstAprobados = new ArrayList<Credito>();
@@ -1141,6 +1279,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return null;
 	}
 
+	/**
+	 * Método que permite calcular la edad del cliente.
+	 * 
+	 * @param fechaNacimiento La fecha de nacimiento del cliente.
+	 * @return La edad del cliente en base a su fecha de nacimiento.
+	 */
 	public int obtenerEdad(Date fechaNacimiento) {
 		Calendar a = Calendar.getInstance();
 		Calendar b = Calendar.getInstance();
@@ -1154,6 +1298,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return diff;
 	}
 
+	/**
+	 * Método que permite determinar el rango de saldo de cuenta del cliente.
+	 * 
+	 * @param solicitudDeCredito Una clase SolicitudDeCredito con los datos de la solicitud de credito.
+	 * @return Un mensaje indicado el valor del saldo de crédito en rangos.
+	 */
 	public String saldoCuenta(SolicitudDeCredito solicitudDeCredito) {
 		CuentaDeAhorro cuentaDeAhorro = cuentaDeAhorroDAO
 				.getCuentaCedulaCliente(solicitudDeCredito.getClienteCredito().getCedula());
@@ -1172,6 +1322,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return "A65";
 	}
 
+	/**
+	 * Método que permite determinar el estado del garante en la solicitud.
+	 * 
+	 * @param solicitudDeCredito Una clase SolicitudDeCredito con los datos de la solicitud de credito.
+	 * @return Un mensaje indicado el valor del garante de crédito.
+	 */
 	public String garanteCreditos(SolicitudDeCredito solicitudDeCredito) {
 		List<SolicitudDeCredito> lstSolicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
 		boolean confirmar = false;
@@ -1195,6 +1351,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return null;
 	}
 
+	/**
+	 * Método que permite determinar el numero de creditos aprobados del cliente que solicta el credito.
+	 * 
+	 * @param solicitudDeCredito Una clase SolicitudDeCredito con los datos de la solicitud de credito.
+	 * @return Un mensaje indicando el numero de crédito del cliente.
+	 */
 	public int numeroCreditos(SolicitudDeCredito solicitudDeCredito) {
 		List<Credito> lstCreditos = creditoDAO.getCreditos();
 		int contador = 0;
@@ -1207,6 +1369,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return contador;
 	}
 
+	/**
+	 * Método que permite codificar en codigo especificos los datos de la solicitud de credito.
+	 * 
+	 * @param palabra El texto que se encuentar en la interfaz de solicitud de credito que se validara.
+	 * @return El texto del parametro codificado.
+	 */
+	
 	public String obtenerCodigo(String palabra) {
 		switch (palabra) {
 		case "inmuebles":
@@ -1284,19 +1453,37 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	}
 
+	/**
+	 * Método que permite calcular el tipo de cliente de una solicitud de credito.
+	 * 
+	 * @param tr El número de cedula de la persona a obtener el tipo de cliente.
+	 * @throws ForbiddenException Una excepción de tiempo de ejecución que indica que el servidor 
+	 * 								ha prohibido el acceso a un recurso solicitado por un cliente.
+	 * @throws InterruptedException Se lanza cuando un hilo está esperando, durmiendo u ocupado de otra manera, 
+	 * 									y el hilo se interrumpe, ya sea antes o durante la actividad.
+	 * @throws ExecutionException Se lanza una excepción al intentar recuperar el resultado de una 
+	 * 								tarea que se canceló al lanzar una excepción
+	 * @return El tipo de cliente para el crédito.
+	 */
+	
 	public int obtenerTipoCliente(String tr) throws ForbiddenException, InterruptedException, ExecutionException {
 
 		Form form = new Form();
 		form.param("Dni", tr);
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://35.238.98.31:8000/apiAnalisis/predecir/");
-		System.out.println(target.getUri());
 		Future<String> response = target.request(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.TEXT_PLAIN)
 				.buildPost(Entity.form(form)).submit(String.class);
 		// client.close();
 		return Integer.parseInt(response.get());
 	}
 
+	/**
+	 * Método que permite enviar los datos de la solicitud de credito ene l archivo en servidor Django para el procesado del tipo de cliente.
+	 * 
+	 * @param credito Los datos de la solicitud de credito.
+	 * @return Un mensaje indicando el resultado del proceso de guardado.
+	 */
 	public String enviarEntidad(String credito) {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://35.238.98.31:8000/apiAnalisis/enviarSolicitud/");
@@ -1305,6 +1492,11 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return res;
 	}
 
+	/**
+	 * Método que permite obtener los datos de los tipos de cliente para hacer una gráfica, del servicio web de Django.
+	 * 
+	 * @return Un mensaje indicando los resultados separados por ";" para su posterior gráfica.
+	 */
 	public String getDatos() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://35.238.98.31:8000/apiAnalisis/verDiagrama/");
@@ -1312,16 +1504,18 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		client.close();
 		return res;
 	}
-
+	
+	/**
+	 * Método que permite obtener los creditos par un cliente específico en base a su número de cédula.
+	 * 
+	 * @param cedula El numero de cédula del cliente.
+	 * @return Una lista con clases Credito con los datos de los créditos del cliente en cuestión.
+	 */
+	
 	public List<Credito> listarCreditosCedula(String cedula) {
 		List<Credito> cred = creditoDAO.getCreditos();
 		List<Credito> credLista = new ArrayList<Credito>();
 		for (Credito credito : cred) {
-			System.out.println("********************************************************");
-			System.out.println(credito.getSolicitud().getClienteCredito().getCedula());
-			System.out.println("/////////");
-			System.out.println(cedula);
-			System.out.println("********************************************************");
 			if (credito.getSolicitud().getClienteCredito().getCedula().equals(cedula)) {
 				credLista.add(credito);
 			}
@@ -1330,26 +1524,53 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return credLista;
 	}
 
+	/**
+	 * Método que permite obtener los datos de un crédito en especifico para ver sus detalles de cuotas.
+	 * 
+	 * @param codigo El codigo del credito en cuestión.
+	 * @return Una clase Credito con los datos del credito del cliente.
+	 */
+	
 	public Credito verCredito(int codigo) {
 		Credito cred = creditoDAO.read(codigo);
 		return cred;
 	}
 
+	/**
+	 * Método que permite actualizar un detalle de un credito
+	 * 
+	 * @param credito Una clase DetalleCredito que tare los nuevos valores del detalle para actualizar.
+	 */
 	public void actualizarDetalle(DetalleCredito credito) {
 		detalleCreditoDAO.update(credito);
 	}
 
+	/**
+	 * Método que permite cambiar el formato de los nuemros que se generen.
+	 * 
+	 * @param valor El valor del double para transformar.
+	 */
 	public double valorDecimalCr(double valor) {
 		String num = String.format(Locale.ROOT, "%.2f", valor);
-		System.out.println(num);
 		return Double.parseDouble(num);
 	}
 
+	/**
+	 * Método que permite actualizar un credito.
+	 * 
+	 * @param credito Una clase Credito con los nuevos datos para actualizar.
+	 */
 	public void actualiza(Credito credito) {
 		creditoDAO.update(credito);
 
 	}
 
+	/**
+	 * Método que permite verificar una solicitud ce credito en base a la cedula del cliente.
+	 * 
+	 * @param cedulaCliente El numero de cédula del cliente.
+	 * @return Un valor booleano que indica el estado de una solicitud.
+	 */
 	public boolean verificarSolicitudSolicitando(String cedulaCliente) {
 		List<SolicitudDeCredito> solicitudes = solicitudDeCreditoDAO.getSolicitudDeCreditos();
 		for (SolicitudDeCredito solicitudDeCredito : solicitudes) {
@@ -1361,6 +1582,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return true;
 	}
 
+	/**
+	 * Método que permite obtener los creditos aprovados para un cliente específico en base a su número de cédula.
+	 * 
+	 * @param cedula El numero de cédula del cliente.
+	 * @return Una lista con clases Credito con los datos de los créditos aprobados del cliente en cuestión.
+	 */
+	
 	public List<Credito> creditosAprovados(String cedulaCliente) {
 		List<Credito> listaCreditos = creditoDAO.getCreditos();
 		List<Credito> listCreditoTotales = new ArrayList<Credito>();
@@ -1372,9 +1600,12 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return listCreditoTotales;
 	}
 
+	/**
+	 * Método que permite actualizar las cuotas vencidas en base a las fechas de las cuotas de los clientes.
+	 * 
+	 * @throws ParseException Una excepción que señala que se ha alcanzado un error inesperadamente durante el análisis.
+	 */
 	public void registrarCuotaVencida() throws ParseException {
-		System.out.println("////////////////////// EJECUTO METODO \\\\\\\\\\\\\\\\\\\\\\");
-
 		List<Credito> listacreditos = creditoDAO.getCreditos();
 
 		Date date = new Date();
@@ -1389,12 +1620,8 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 			}
 		}
 
-		System.out.println("////////////////////// COMPROBANDO CREDITOS \\\\\\\\\\\\\\\\\\\\\\" + lisComprabar.size());
-
 		for (Credito cred : lisComprabar) {
 
-			System.out.println(
-					"////////////////////// COMPROBANDO DETALLE \\\\\\\\\\\\\\\\\\\\\\" + cred.getCodigoCredito());
 			for (DetalleCredito detale : cred.getDetalles()) {
 
 				Date fechaDetalle = detale.getFechaPago();
@@ -1402,8 +1629,6 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 				Date fechDet = dateFormat.parse(fechat);
 
 				if (fechDet.equals(fechActual)) {
-
-					System.out.println("////////////////////// FECHA ES IGAUL \\\\\\\\\\\\\\\\\\\\\\");
 
 					CuentaDeAhorro cuenta = cuentaDeAhorroDAO
 							.getCuentaCedulaCliente(cred.getSolicitud().getClienteCredito().getCedula());
@@ -1467,6 +1692,14 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 
 	}
 
+	/**
+	 * Metodo que permite dar acceso al cliente en la aplicación móvil mediante un servicio web.
+	 * 
+	 * @param username El nombre de usuario del cliente que se envio en el correo.
+	 * @param password La contraseña del cliente que se envio en el correo de creación de la cuenta.
+	 * @return Un clase Respuesta indicando los datos del desarrollo del proceso, con un codigo, una descripción.
+	 * @throws Exception Excepción por si sucede algún error en el proceso.
+	 */
 	public Respuesta loginServicio(String username, String password) {
 		Cliente cliente = new Cliente();
 		Respuesta respuesta = new Respuesta();
@@ -1502,6 +1735,16 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return respuesta;
 	}
 
+	/**
+	 * Metodo que permite cambiar la contraseña del cliente en la aplicación móvil mediante un servicio web.
+	 * 
+	 * @param correo El correo del cliente que describio cuando creo una cuenta de ahorros.
+	 * @param contraAntigua La contraseña del cliente antigua.
+	 * @param contraActual La contraseña del cliente nueva.
+	 * @return Un clase Respuesta indicando los datos del desarrollo del proceso, con un codigo, una descripción.
+	 * @throws Exception Excepción por si sucede algún error en el proceso.
+	 */
+	
 	public Respuesta cambioContraseña(String correo, String contraAntigua, String contraActual) {
 		System.out.println(correo + "" + contraAntigua);
 		Cliente cliente = new Cliente();
@@ -1522,6 +1765,13 @@ public class GestionUsuarios implements GestionUsuarioLocal {
 		return respuesta;
 	} 
 	
+	/**
+	 * Método que permite realizar una transferencia externa en la aplicación móvil mediante un servicio web.
+	 * 
+	 * @param transferenciaExterna Una clase TransferenciaExterna que se envia en formato json  mediante el servicio web.
+	 * @return Un clase RespuestaTransferenciaExterna indicando los datos del desarrollo del proceso, con un codigo, una descripción.
+	 * @throws Exception Excepción por si sucede algún error en el proceso.
+	 */
 	public RespuestaTransferenciaExterna realizarTransferenciaExterna(TransferenciaExterna transferenciaExterna) {  
 		RespuestaTransferenciaExterna respuestaTransferenciaExterna = new RespuestaTransferenciaExterna();
 		try {  
