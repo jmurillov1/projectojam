@@ -91,7 +91,13 @@ public class ClienteDAO {
 		}
 		//return null;
 	}  
-	
+	/** 
+	 * Metodo que permite obtener un cliente dependiendo de su correo y cotraseña 
+	 * @param correo Variable de tipo String en donde se asigna el correo de la persona que se desea obtener
+	 * @param contra Variable de tipo String en donde se asigna la contraseña de la persona que se desea obtener
+	 * @return Cliente que tenga la el correo y contraseña que se han pasado como paramatro
+	 * @throws Exception
+	 */
 	public Cliente obtenerClienteCorreoContraseña(String correo,String contra) throws Exception {
 		try {
 			String jpl = "select c from Cliente c Where c.correo =:corr AND c.clave =:contr";

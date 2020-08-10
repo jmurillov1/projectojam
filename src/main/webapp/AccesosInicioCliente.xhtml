@@ -26,8 +26,12 @@
 												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.nombre}" />
 											</div>
 											<div class="form-group">
-												<label> Cedula:&nbsp;&nbsp;</label>
+												<label> Apellido:&nbsp;&nbsp;</label>
 												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.apellido}" />
+											</div> 
+											<div class="form-group">
+												<label>Cedula:&nbsp;&nbsp;</label>
+												<h:outputText value="#{clientesBean.buscarCuentaDeAhorro.cliente.cedula}" />
 											</div>
 
 											<div class="form-group">
@@ -47,9 +51,9 @@
 													<h1 class="page-header">Historial de Accesos</h1>
 													<div class="panel-body">
 														<div class="table-responsive">
-															<h:dataTable value="#{clientesBean.cargarSesiones()}" var="sesion" class="table">
+															<h:dataTable value="#{clientesBean.cargarSesiones()}" var="sesion" class="table table-bordered table-hover table-striped">
 																<h:column>
-																	<f:facet name="header">Fecha y Ahora</f:facet> 
+																	<f:facet name="header">Fecha y Hora</f:facet> 
 																	#{sesion.fechaSesion}
 																</h:column>
 																<h:column>

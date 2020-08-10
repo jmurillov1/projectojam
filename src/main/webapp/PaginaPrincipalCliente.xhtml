@@ -64,11 +64,11 @@
 								#{credito.monto}
 							</h:column>
 							<h:column>
-								<f:facet name="header">Fecha Vencimiento</f:facet>
-								#{credito.fechaVencimiento}
+								<f:facet name="header">Fecha Vencimiento</f:facet> 
+								#{clientesBean.obtenerFecha(credito.fechaVencimiento)}
 							</h:column>
 							<h:column>
-								<f:facet name="header">Consultar Tasa de Pago</f:facet>
+								<f:facet name="header">Consultar coutas de credito</f:facet>
 								<h:commandButton
 									action="#{clientesBean.cambioVar(credito.codigoCredito)}"
 									value="Consultar" class="btn btn-success">
@@ -103,8 +103,8 @@
 												#{tra.estado}
 											</h:column>
 						<h:column>
-							<f:facet name="header">Fecha de Pago</f:facet>
-												#{tra.fechaPago}
+							<f:facet name="header">Fecha de Pago</f:facet> 
+												#{clientesBean.obtenerFecha(tra.fechaPago)}
 											</h:column>
 
 					</h:dataTable>
