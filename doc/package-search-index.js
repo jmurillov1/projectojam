@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"ec.edu.ups.coopjam.business"},{"l":"ec.edu.ups.coopjam.data"},{"l":"ec.edu.ups.coopjam.model"},{"l":"ec.edu.ups.coopjam.view"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"ec.edu.ups.coopjam.business"},{"l":"ec.edu.ups.coopjam.data"},{"l":"ec.edu.ups.coopjam.model"},{"l":"ec.edu.ups.coopjam.servicios"},{"l":"ec.edu.ups.coopjam.test"},{"l":"ec.edu.ups.coopjam.view"}]
