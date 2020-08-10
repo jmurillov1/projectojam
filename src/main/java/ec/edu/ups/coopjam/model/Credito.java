@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 
@@ -28,7 +30,9 @@ public class Credito implements Serializable {
 	private double monto;
 	private double interes;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaRegistro;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaVencimiento;
 	
 	@OneToOne

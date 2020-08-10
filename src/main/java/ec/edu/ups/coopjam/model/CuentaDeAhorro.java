@@ -20,7 +20,7 @@ public class CuentaDeAhorro implements Serializable {
 	//Atributos de la clase
 	@Id  
 	@Column(name="numero_cuenta")
-	private String numeroCuentaDeAhorro;  
+	private String numeroCuentaDeAhorro;
 	private Date fechaDeRegistro;  
 	private Double saldoCuentaDeAhorro; 
 	@OneToOne(fetch = FetchType.EAGER,cascade = {CascadeType.ALL })

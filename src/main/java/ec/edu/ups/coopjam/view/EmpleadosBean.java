@@ -152,49 +152,88 @@ public class EmpleadosBean {
 	public void setTipoEmpleado(String tipoEmpleado) {
 		this.tipoEmpleado = tipoEmpleado;
 	}
-
+	
+	/**
+	 * Metodo para obtneter Solicitudes de Credito
+	 * @return Una lista de solicitues de credito
+	 */
 	public List<SolicitudDeCredito> getSolicitudes() {
 		return solicitudes;
 	}
-
+	
+	/**
+	 * Asignar solicitudes
+	 * @param solicitudes El parametro solicitudes me permite asignar aquellas
+	 * solicitudes de credito deseadas
+	 */
 	public void setSolicitudes(List<SolicitudDeCredito> solicitudes) {
 		this.solicitudes = solicitudes;
 	}
-
+	
+	/**
+	 * Metodo para obtener una Solicitud de credito
+	 * @return Una solicitud de credito
+	 */
 	public SolicitudDeCredito getSolicitudDeCredito() {
 		return solicitudDeCredito;
 	}
-
+	
+	/**
+	 * Asignar los valor de solicitud de credito
+	 * @param solicitudDeCredito El parametro solicitudDeCredito me permite 
+	 * asignar los valores de una solicutud de credito
+	 */
 	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
 		this.solicitudDeCredito = solicitudDeCredito;
 	}
 	
 	
-
+	/**
+	 * Metodo para asiganr un booleano 
+	 * @return Un boleano con TRUE O FALSE
+	 */
 	public boolean getEditable() {
 		return editable;
 	}
-
+	
+	/**
+	 * Asignar el valor a editable
+	 * @param editable El parametro editable me permite asignar los valores de true o false
+	 */
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtner el valor de la variable motivo
+	 * @return El valor de la variable motivo
+	 */
 	public String getMotivo() {
 		return motivo;
 	}
-
+	
+	/**
+	 * Asignar el valor de la variable motivo
+	 * @param motivo El parametro motivo me permite asignar el valor
+	 * del motivo
+	 */
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
 	}
 	
-	
-
+	/**
+	 * Metofo para obtner el valor de la variable editabledos
+	 * @return El valor de la variable editabledos que puede ser true o false
+	 */
 	public boolean getEditabledos() {
 		return editabledos;
 	}
-
+	
+	/**
+	 * Asignar el valor a la variable editabledos
+	 * @param editabledos El parametro editabledos me permite asiganar el
+	 * valor de true o false
+	 */
 	public void setEditabledos(boolean editabledos) {
 		this.editabledos = editabledos;
 	}
@@ -272,11 +311,19 @@ public class EmpleadosBean {
 	public void loadData() {
 		listaEmpleados = empleadoON.listadoEmpleados();
 	}
-
+	
+	/**
+	 * Metodo para cargar las solicitudes de Credito
+	 */
 	public void loadDataSol() {
 		solicitudes = empleadoON.listadoSolicitudDeCreditos();
 	}
-
+	
+	/**
+	 * Metodo para cargar las solicitudes de Credito
+	 * @param cod el parametro codigho me permite mostrar la solicitud con el codigo
+	 * igual al parametro cod
+	 */
 	public String cargarSol(int cod) {
 		editable = true;
 		System.out.println("**********/****/--"+cod+editable);
@@ -288,6 +335,12 @@ public class EmpleadosBean {
 		}
 		return null;
 	}
+	
+	/**
+	 * Metodo para actualizar el estado de una salicitud de credito
+	 * @param cod El parametro cod me permite actualizar la solicitud con el codigo igual al parametro cod
+	 * @return El nombre de la pagina del Jefe de credito
+	 */
 	public String aprobar(int cod) {	
 		for (SolicitudDeCredito sol : solicitudes) {
 			if (sol.getCodigoCredito() == cod && sol.getEstadoCredito().equalsIgnoreCase("Solicitando") ) {
@@ -311,6 +364,11 @@ public class EmpleadosBean {
 		
 		return "PaginaJefeCredito";
 	}
+	
+	/**
+	 * Metodo para rechazar una solicitud de Credito
+	 * @return El nombre de la pagina del Jefe de credito
+	 */
 	public String rechazar() {
 		solicitudDeCredito.setEstadoCredito("Rechazado");
 		
@@ -325,6 +383,11 @@ public class EmpleadosBean {
 		editabledos = true;
 	}
 	
+	/**
+	 * Metodo para visualizar los documentos de una solicitud
+	 * @param tipo El parametro tipo nos permite asignar el nombre del documento que se desea visualizar
+	 * @throws IOException Excepcion para errores de visualizacion
+	 */
 	public void ver(String tipo) throws IOException {
 		
 		FacesContext facesContext = FacesContext.getCurrentInstance();

@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /** 
  * Esta clase representa una entidad o tabla llamada Cliente de la base de datos y sus columnas
  * @author ALEX
@@ -24,7 +26,8 @@ public class Cliente implements Serializable {
 	private String direccion; 
 	private String telefono1; 
 	private String telefono2; 
-	private String correo;  
+	private String correo;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaNacimiento;
 	private String usuario; 
 	private String clave;  

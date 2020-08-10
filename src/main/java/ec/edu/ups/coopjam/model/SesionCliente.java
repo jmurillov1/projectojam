@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /** 
  * Esta clase representa una entidad o tabla llamada SesionCliente de la base de datos y sus columnas
  * @author ALEX
@@ -20,7 +22,8 @@ public class SesionCliente implements Serializable{
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private int codigoSesion;  
-	private String estado;   
+	private String estado;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaSesion; 
 	@OneToOne
 	@JoinColumn(name="cedula_cliente")

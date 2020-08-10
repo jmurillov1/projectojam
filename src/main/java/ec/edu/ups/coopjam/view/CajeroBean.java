@@ -178,61 +178,104 @@ public class CajeroBean {
 		this.tipoTransaccion = tipoTransaccion;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtener los creditos
+	 * @return Una lista de creditos
+	 */
 	public List<Credito> getCredito() {
 		return credito;
 	}
-
+	
+	/**
+	 * Asignar las transacciones
+	 * @param credito El parametro credito asigna los creditos de un cliente
+	 */
 	public void setCredito(List<Credito> credito) {
 		this.credito = credito;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtener la cedulaAux
+	 * @return La cedula de la persona que va a realizar el pago de la transaccion
+	 */
 	public String getCedulaAux() {
 		return cedulaAux;
 	}
-
+	
+	/**
+	 * Asignar el valor de la cedula del cliente que va a realizar un pago de Credito
+	 * @param cedulaAux El parametro cedulaAux me permite asignar la cedula del cliente que va
+	 * a realizar el pago de credito.
+	 */
 	public void setCedulaAux(String cedulaAux) {
 		this.cedulaAux = cedulaAux;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtener el valor de visualizacion
+	 * @return Devuelve true o false para poder visualizar los paneles en la
+	 * pagina del cajero
+	 */
 	public boolean isEditable2() {
 		return editable2;
 	}
-
+	
+	/**
+	 * Metoo para asignar el valor a editable2
+	 * @param editable2 El parametro editable2 me permite visualizar o no formularios
+	 * el la pagina del cajero
+	 */
 	public void setEditable2(boolean editable2) {
 		this.editable2 = editable2;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtener el codigo de un Credito
+	 * @return El codigo del credito que se va a realizar el pago
+	 */
 	public int getCodigoAux() {
 		return codigoAux;
 	}
-
+	
+	/**
+	 * Meoto para asignar el codifo de un credito
+	 * @param codigoAux El parametro codigoAux me permite asignar el codigo 
+	 * de una transaccion que se desea
+	 */
 	public void setCodigoAux(int codigoAux) {
 		this.codigoAux = codigoAux;
 	}
 	
-	
-
+	/**
+	 * Metodo para obtener una transaacion
+	 * @return Una transaccion para poder realizar su respetivo registro
+	 */
 	public Transaccion getTransaccionAux() {
 		return transaccionAux;
 	}
-
+	
+	/**
+	 * Asignar una Transaccion
+	 * @param transaccionAux El parametro transaccionAux mepermite asignar
+	 * una transaccion y sus valores
+	 */
 	public void setTransaccionAux(Transaccion transaccionAux) {
 		this.transaccionAux = transaccionAux;
 	}
 		
-
+	/**
+	 * Metodo para obtener la grafica Pie
+	 * @return Una grafica que representa los tipos de clientes
+	 */
 	public PieChartModel getPieModel() {
 		return pieModel;
 	}
-
+	
+	/**
+	 * Asigna los valores al Pie
+	 * @param pieModel El parametro pieModel me permite
+	 * asignar valores para crear la grafica tipo Pie
+	 */
 	public void setPieModel(PieChartModel pieModel) {
 		this.pieModel = pieModel;
 	}
@@ -254,11 +297,19 @@ public class CajeroBean {
 	}
 	
 	
-
+	/**
+	 * Metodo para obtener valor de mostrar la grafica
+	 * @return El valore de TRUE o FALSE 
+	 */
 	public boolean isGrafica() {
 		return grafica;
 	}
-
+	
+	/**
+	 * Metodo para asignar el valor a la variable grafica
+	 * @param grafica El parmtro grafica me permite asignar
+	 * true o false para mostrar la grafixa
+	 */
 	public void setGrafica(boolean grafica) {
 		this.grafica = grafica;
 	}
@@ -302,7 +353,11 @@ public class CajeroBean {
 		}
 		return " ";
 	}
-
+	
+	/**
+	 * Metodo para obtener el numero de cueta de un cliente
+	 * @return El numero de cuenta de un cliente
+	 */
 	public String numCuenta() {
 		
 		try {
@@ -437,10 +492,15 @@ public class CajeroBean {
 		return null;
 	}
 	
+	
+	/**
+	 * Metodo para cargar los Credito del Cliente
+	 * 
+	 * @return Una lista de Creditos y sus detalles correspondientes al cliente.
+	 */
 	public List<Credito> cargarCreditos() {
 		List<Credito> lisAux = new ArrayList<Credito>();
 		try {
-			System.out.println("Cargar Creditos ----- ");
 			List<Credito> lis = clienteON.listarCreditosCedula(cedulaAux);
 			
 			System.out.println(lis.size());
@@ -460,6 +520,11 @@ public class CajeroBean {
 		return lisAux;
 		
 	}
+	
+	/**
+	 * Metodo para cambiar el estado de la visualizacion de la ventana del pago de credito
+	 * 
+	 */
 	 public void activar() {
 		 try {
 			 editable = true;
@@ -471,6 +536,11 @@ public class CajeroBean {
 
 	 }
 	 
+	 /**
+	  * Metodo para cambiar el estado de pago de credito
+	  *  
+	  * @param cod El parametro cod me permite asignar el codigo del credito que se va a actualizar
+	  */
 	 public void cambioVar(int cod) {
 		 codigoAux = cod;
 		 editable = false;
@@ -478,6 +548,11 @@ public class CajeroBean {
 		 
 	 }
 	 
+	 /**
+	  * Metodo para obtener los Credito Pagados del cliente
+	  * 
+	  * @return
+	  */
 	 public List<DetalleCredito> verDealles(){
 		 List<DetalleCredito> list = clienteON.verCredito(codigoAux).getDetalles();
 		 List<DetalleCredito> list2 = new ArrayList<DetalleCredito>();
@@ -490,11 +565,12 @@ public class CajeroBean {
 		 return list2;
 	 }
 	 
+	 /**
+	  * Metodo para guradar la transaccion del pago de un credito
+	  */
 	 public void guardar() {
 		 try {
 			 
-			 System.out.println("PAGOOOOOOOOOOOOOO");
-			 System.out.println(codigoAux+"****"+transaccionAux.getMonto()+"********"+transaccionAux.getTipo()+"********"+codigoAux2+"***************"+cedulaAux);
 			 List<DetalleCredito> listt = clienteON.verCredito(codigoAux).getDetalles();
 			 if (transaccionAux.getTipo().equals("pagoC")) {
 				for(DetalleCredito credito: listt) {
@@ -576,9 +652,7 @@ public class CajeroBean {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 
-			 
-			 //verfico
+
 			 List<DetalleCredito> lisComprobar = clienteON.verCredito(codigoAux).getDetalles();
 			 int cont = 0;
 			 for(DetalleCredito credito: listt) {
@@ -592,20 +666,16 @@ public class CajeroBean {
 				 nv.setEstado("Pagado");
 				 clienteON.actualizarCredito(nv);
 			}
-			 /*try {
-					
-					FacesContext contex = FacesContext.getCurrentInstance();
-					contex.getExternalContext().redirect("PaginaPagoCredito.xhtml");
-				} catch (Exception e) {
-				}*/
-			 
-			
+	
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
 	 }
 	 
+	 /**
+	  * Metodo para generar el pastel de los tipos de clientes de la aplicacion
+	  */
 	 private void createPieModel() {
 		 String m = clienteON.getDatos();
 		 String[] parts = m.split(";");
@@ -618,9 +688,6 @@ public class CajeroBean {
 	        PieChartDataSet dataSet = new PieChartDataSet();
 	        List<Number> values = new ArrayList<>();
 	        
-	        /*for (int i = 0; i < parts.length; i++) {
-	        	values.add(Integer.parseInt(parts[i]));
-			}*/
 	        values.add(Integer.parseInt(part1));
 	        values.add(Integer.parseInt(part2));
 	        //values.add(100);
@@ -642,7 +709,10 @@ public class CajeroBean {
 	        pieModel.setData(data);
 	    }
 	 
-	 
+	 /**
+	  * Metodo para cargar la grafica
+	  * @param m El parametro m me permite cambiar la grafica de acuerdo al parametro
+	  */
 	 public void cambioGrafica(String m) {
 		 if (m.equals("A")) {
 			createPieModel();
@@ -650,6 +720,11 @@ public class CajeroBean {
 		}
 	 }
 	 
+	 /**
+	  * Metodo para mostras el mensaje en la pagina del cajero
+	  * @param summary El parametro sumary me permite asignar un valor a la pagina
+	  * @param detail El parametro detail permite establecer el mensaje de la pagina
+	  */
 	 public void addMessage(String summary, String detail) {   
 	        FacesContext context = FacesContext.getCurrentInstance();
 	        context.getExternalContext().getFlash().setKeepMessages(true);

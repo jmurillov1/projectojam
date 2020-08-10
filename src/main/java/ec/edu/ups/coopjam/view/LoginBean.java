@@ -113,67 +113,137 @@ public class LoginBean {
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
-
+	
+	/**
+	 * Metodo para obtener solicitudes
+	 * @return Una lista de solicitudes de Credito
+	 */
 	public List<SolicitudDeCredito> getSolicitudes() {
 		return solicitudes;
 	}
-
+	
+	/**
+	 * Asignar solicitudes de Credito
+	 * @param solicitudes El parametro solicitudes me permite asignar las
+	 * solicitudes de credito de la aplicacion
+	 */
 	public void setSolicitudes(List<SolicitudDeCredito> solicitudes) {
 		this.solicitudes = solicitudes;
 	}
-
+	
+	/**
+	 * Metodo para obter unasolicitud de credito
+	 * @return Una solicitud de credito
+	 */
 	public SolicitudDeCredito getSolicitudDeCredito() {
 		return solicitudDeCredito;
 	}
-
+	
+	/**
+	 * Asignar una solicitud de credito
+	 * @param solicitudDeCredito El parametro solicitudDeCredito me permite asignar los
+	 * valores del credito
+	 */
 	public void setSolicitudDeCredito(SolicitudDeCredito solicitudDeCredito) {
 		this.solicitudDeCredito = solicitudDeCredito;
 	}
-
+	
+	/**
+	 * Metodo para asiganr un booleano 
+	 * @return Un boleano con TRUE O FALSE
+	 */
 	public boolean isEditable() {
 		return editable;
 	}
-
+	
+	/**
+	 * Asignar el valor a editable
+	 * @param editable El parametro editable me permite asignar los valores de true o false
+	 */
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-
+	
+	/**
+	 * Metodo para asiganr un booleano 
+	 * @return Un boleano con TRUE O FALSE
+	 */
 	public boolean isEditabledos() {
 		return editabledos;
 	}
-
+	
+	/**
+	 * Asignar el valor a editable
+	 * @param editabledos El parametro editabledos me permite asignar los valores de true o false
+	 */
 	public void setEditabledos(boolean editabledos) {
 		this.editabledos = editabledos;
 	}
-
+	
+	/**
+	 * Metodo para obtener el motivo de credito
+	 * @return El motivo de rechazo del credito
+	 */
 	public String getMotivo() {
 		return motivo;
 	}
-
+	
+	/**
+	 * Asignar el motivo del credito
+	 * @param motivo El parametro motivo me permite asignar
+	 * el motivo del credito
+	 */
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
 	}
-
+	
+	/**
+	 * Metodo para obtener el empleado
+	 * @return
+	 */
 	public Empleado getEmpleado() {
 		return empleado;
 	}
-
+	
+	/**
+	 * Asignar un empleado
+	 * @param empleado El parametro empleado me permite asignar
+	 * el empleado que se encuentra conectado
+	 */
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-
+	
+	/**
+	 * Metodo para obtener el tipo de cliente
+	 * @return El tipo de cliente
+	 */
 	public String getTipoC() {
 		return tipoC;
 	}
-
+	
+	/**
+	 * Asignar el tipo de cliente
+	 * @param tipoC El parametro tipoC me permite asignar
+	 * el tipo de cliente
+	 */
 	public void setTipoC(String tipoC) {
 		this.tipoC = tipoC;
 	}
-
+	
+	/**
+	 * Metodo para obtener una solicitud de credito
+	 * @return Una solicitud de credito
+	 */
 	public SolicitudDeCredito getSolicitudDeCreditoAux() {
 		return solicitudDeCreditoAux;
 	}
-
+	
+	/**
+	 * Asignar una solicitud de credito
+	 * @param solicitudDeCreditoAux El parametro solicitudDeCreditoAux me permite
+	 * adignar los valores de una solicitud de Credito
+	 */
 	public void setSolicitudDeCreditoAux(SolicitudDeCredito solicitudDeCreditoAux) {
 		this.solicitudDeCreditoAux = solicitudDeCreditoAux;
 	}
@@ -224,7 +294,10 @@ public class LoginBean {
 		
 		return null;
 	}
-
+	
+	/**
+	 * Metodo para cargar las solicitudes de credito
+	 */
 	public void loadDataSol() {
 		solicitudes = new ArrayList<SolicitudDeCredito>();
 		System.out.println("ENTRAAAAAAAA EN LOADDATASOL");
@@ -240,6 +313,10 @@ public class LoginBean {
 		solicitudes = actual;
 	}
 	
+	/**
+	 * Metodo para obtener solicitudes en estado Solicitando
+	 * @return
+	 */
 	public List<SolicitudDeCredito> loTTT() {
 		System.out.println("ENTRAAAAAAAA EN LOADDATASOL");
 		// solicitudes = empleadoON.listadoSolicitudDeCreditos();
@@ -253,7 +330,13 @@ public class LoginBean {
 		}
 		return actual;
 	}
-
+	
+	/**
+	 * Metodo para carfar las solicitudes aprobadas segun el tipo de cliente
+	 * @param apr El parametro me permite devolver las listas de los
+	 * creditos segun el tipo de cliente
+	 * @return Lista de solicitudes de creditos
+	 */
 	public List<SolicitudDeCredito> loadDataSolAR(String apr) {
 		System.out.println("ENTRAAAAAAAA APROBADOS RECHAZADOS");
 		// solicitudes = empleadoON.listadoSolicitudDeCreditos();
@@ -276,7 +359,13 @@ public class LoginBean {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Metodo para obtenet la solicitud de credito que se desea visualizar
+	 * @param cod El parametro cod me permite devolver la solicitud de credito
+	 * con el codigo igual al parametro cod
+	 * @return Una solicitud de credito
+	 */
 	public String cargarSol(int cod) {
 		editable = true;
 		System.out.println("**********/****/--" + cod + editable);
@@ -289,7 +378,12 @@ public class LoginBean {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Metodo para cargar las solicitudes
+	 * @param cod El parametro codigo me permite obtener la solicitud
+	 * con el codigo igual al parametro cod
+	 */
 	public String cargarSolAR(int cod) {
 		editable = true;
 		System.out.println("**********/****/--" + cod + editable);
@@ -302,7 +396,12 @@ public class LoginBean {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Metodo para mostrar el mensaje del tipo de cliente
+	 * @param credito
+	 * @return
+	 */
 	public String tipoCliente(SolicitudDeCredito credito) {
 		String tipo = credito.getTipoCliente();
 		if (tipo.equals("1")) {
@@ -315,7 +414,12 @@ public class LoginBean {
 
 		return " ";
 	}
-
+	
+	/**
+	 * Metodo para actualizar el estado de una salicitud de credito
+	 * @param cod El parametro cod me permite actualizar la solicitud con el codigo igual al parametro cod
+	 * @return El nombre de la pagina del Jefe de credito
+	 */
 	public String aprobar(int cod) {
 		System.out.println("//////-/////////-/////" + empleado.getNombre());
 		for (SolicitudDeCredito sol : solicitudes) {
@@ -350,7 +454,11 @@ public class LoginBean {
 
 		return "PaginaJefeCredito";
 	}
-
+	
+	/**
+	 * Metodo para rechazar una solicitud de Credito
+	 * @return El nombre de la pagina del Jefe de credito
+	 */
 	public String rechazar() {
 		solicitudDeCredito.setEstadoCredito("Rechazado");
 
@@ -364,12 +472,17 @@ public class LoginBean {
 		loadDataSol();
 		return "PaginaJefeCredito";
 	}
-
+	
 	public void cambio() {
 		editable = false;
 		editabledos = true;
 	}
-
+	
+	/**
+	 * Metodo para visualizar los documentos de una solicitud
+	 * @param tipo El parametro tipo nos permite asignar el nombre del documento que se desea visualizar
+	 * @throws IOException Excepcion para errores de visualizacion
+	 */
 	public void ver(String tipo) throws IOException {
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
